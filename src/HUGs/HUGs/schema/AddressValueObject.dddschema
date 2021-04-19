@@ -1,0 +1,39 @@
+﻿kind: ValueObject
+name: Address
+properties:
+  - name: Street
+    type: string
+  - name: Street2
+    type: string
+    optional: true
+  - name: City
+    type: string
+  - name: Zip
+    type: string
+  - name: CountryId
+    type: CountryId
+
+# public partial class Address : ValueObject 
+# {
+#     public string Street { get; }
+#    public string? Street2 { get; }
+#     public string City { get; }
+#     public string Zip { get; }
+#     public CountryId CountryId { get; }
+# 
+#     public Addres(string street, string? street2, string city, string zip, CountryId countryId) 
+#     {
+#         Street = street;
+#         Street2 = street2;
+#         ...
+#     }
+# 
+#     protected override IEnumerable<object> GetAtomicValues() 
+#     {
+#         yield return Street;
+#         yield return Street2;
+#         yield return City;
+#         yield return Zip;
+#         yield return CountryId;
+#     }
+# }
