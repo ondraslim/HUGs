@@ -13,17 +13,11 @@ namespace Hugs.Generator.DDD
     [Generator]
     public class DddGenerator : ISourceGenerator
     {
-        private IDeserializer deserializer;
-
         public void Initialize(GeneratorInitializationContext context)
         {
 #if DEBUG
             if (!Debugger.IsAttached) Debugger.Launch();
 #endif
-
-            deserializer = new DeserializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                .Build();
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -42,8 +36,12 @@ namespace Hugs.Generator.DDD
                 .Where(file => Path.GetExtension(file.Path).Equals(".dddschema", StringComparison.OrdinalIgnoreCase));
         }
 
-        private DddModel BuildDddModel(IEnumerable<AdditionalText> schemaFiles)
+        private static DddModel BuildDddModel(IEnumerable<AdditionalText> schemaFiles)
         {
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .Build();
+
             var dddModel = new DddModel();
             foreach (var schemaFile in schemaFiles)
             {
