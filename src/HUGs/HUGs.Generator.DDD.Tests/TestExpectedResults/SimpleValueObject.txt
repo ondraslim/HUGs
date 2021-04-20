@@ -1,0 +1,15 @@
+﻿using System;
+using HUGs.Generator.DDD.Common.DDD.Base;
+
+namespace Hugs.DDD.Generated.ValueObject
+{
+    public partial class Simple : ValueObject
+    {
+        public string Text { get; }
+
+        public Simple(string Text)
+        {
+            this.Text = Text;
+        }
+    }
+}
