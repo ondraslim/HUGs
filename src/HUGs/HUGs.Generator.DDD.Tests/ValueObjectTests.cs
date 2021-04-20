@@ -77,7 +77,22 @@ namespace HUGs.Generator.DDD.Tests
             generatedFileTexts.Should().ContainIgnoringLineEndings(new List<string> { expected1, expected2 });
         }
 
+        [Test]
+        public void ValidSimpleValueObjectWithOptionalsSchema_GeneratorRun_GeneratesCorrectValueObject()
+        {
+            var schema = File.ReadAllText("../../../TestData/SimpleValueObjectWithOptional.dddschema");
+            var driver = SetupGeneratorDriver(schema);
 
+            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
+
+            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
+            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+
+            generatedFileTexts.Length.Should().Be(1);
+
+            var expected = File.ReadAllText("../../../TestExpectedResults/SimpleValueObjectWithOptional.txt");
+            generatedFileTexts.First().Should().BeIgnoringLineEndings(expected);
+        }
 
         private static GeneratorDriver SetupGeneratorDriver(string schema)
             => SetupGeneratorDriver(new List<string> { schema });

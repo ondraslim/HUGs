@@ -1,0 +1,21 @@
+﻿using System;
+using HUGs.Generator.DDD.Common.DDD.Base;
+
+namespace Hugs.DDD.Generated.ValueObject
+{
+    public partial class Simple : ValueObject
+    {
+        public string Text { get; }
+        public int Number { get; }
+        public string? TextOptional { get; }
+        public int? NumberOptional { get; }
+
+        public Simple(string Text, int Number, string? TextOptional, int? NumberOptional)
+        {
+            this.Text = Text;
+            this.Number = Number;
+            this.TextOptional = TextOptional;
+            this.NumberOptional = NumberOptional;
+        }
+    }
+}
