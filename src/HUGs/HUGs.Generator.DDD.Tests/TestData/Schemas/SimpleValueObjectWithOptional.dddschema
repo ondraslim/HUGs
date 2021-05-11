@@ -1,5 +1,5 @@
 ﻿kind: ValueObject
-name: Simple
+name: SimpleOptional
 properties:
   - name: Text
     type: string

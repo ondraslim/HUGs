@@ -15,7 +15,7 @@ namespace Playground.Mocks
             this.text = text;
         }
 
-        public TestAdditionalText(string text = "", Encoding? encoding = null, string path = "dummy")
+        public TestAdditionalText(string text = "", Encoding encoding = null, string path = "dummy")
             : this(path, new StringText(text, encoding))
         {
         }

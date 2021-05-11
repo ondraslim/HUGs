@@ -1,12 +1,11 @@
-﻿using Hugs.Generator.DDD;
-using HUGs.Generator.DDD.Common;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Playground.Mocks;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Reflection;
+using HUGs.Generator.DDD;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 

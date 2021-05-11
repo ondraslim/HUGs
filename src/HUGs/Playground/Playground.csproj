@@ -21,7 +21,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\HUGs.Generator.DDD.Common\HUGs.Generator.DDD.Common.csproj" />
 		<ProjectReference Include="..\HUGs.Generator.DDD\HUGs.Generator.DDD.csproj" />
 	</ItemGroup>
 </Project>

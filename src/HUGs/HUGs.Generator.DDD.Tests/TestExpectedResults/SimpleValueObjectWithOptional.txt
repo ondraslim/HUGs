@@ -1,21 +1,29 @@
 ﻿using System;
-using HUGs.Generator.DDD.Common.DDD.Base;
+using System.Collections.Generic;
 
-namespace Hugs.DDD.Generated.ValueObject
+namespace HUGs.DDD.Generated.ValueObject
 {
-    public partial class Simple : ValueObject
+    public partial class SimpleOptional : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
     {
         public string Text { get; }
         public int Number { get; }
         public string? TextOptional { get; }
         public int? NumberOptional { get; }
 
-        public Simple(string Text, int Number, string? TextOptional, int? NumberOptional)
+        public SimpleOptional(string Text, int Number, string? TextOptional, int? NumberOptional)
         {
             this.Text = Text;
             this.Number = Number;
             this.TextOptional = TextOptional;
             this.NumberOptional = NumberOptional;
+        }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return Text;
+            yield return Number;
+            yield return TextOptional;
+            yield return NumberOptional;
         }
     }
 }

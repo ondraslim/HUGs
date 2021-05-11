@@ -1,9 +1,9 @@
 ﻿using System;
-using HUGs.Generator.DDD.Common.DDD.Base;
+using System.Collections.Generic;
 
-namespace Hugs.DDD.Generated.ValueObject
+namespace HUGs.DDD.Generated.ValueObject
 {
-    public partial class Simple2 : ValueObject
+    public partial class Simple2 : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
     {
         public string Text { get; }
         public int Number { get; }
@@ -12,6 +12,12 @@ namespace Hugs.DDD.Generated.ValueObject
         {
             this.Text = Text;
             this.Number = Number;
+        }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return Text;
+            yield return Number;
         }
     }
 }

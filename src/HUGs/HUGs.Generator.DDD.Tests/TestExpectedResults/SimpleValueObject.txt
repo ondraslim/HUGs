@@ -1,15 +1,20 @@
 ﻿using System;
-using HUGs.Generator.DDD.Common.DDD.Base;
+using System.Collections.Generic;
 
-namespace Hugs.DDD.Generated.ValueObject
+namespace HUGs.DDD.Generated.ValueObject
 {
-    public partial class Simple : ValueObject
+    public partial class Simple1 : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
     {
         public string Text { get; }
 
-        public Simple(string Text)
+        public Simple1(string Text)
         {
             this.Text = Text;
+        }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return Text;
         }
     }
 }

@@ -7,23 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TestData\AddressValueObject.dddschema" />
-    <None Remove="TestData\SimpleValueObject.dddschema" />
-    <None Remove="TestData\SimpleValueObject2.dddschema" />
-    <None Remove="TestData\SimpleValueObjectWithOptional.dddschema" />
-    <None Remove="TestExpectedResults\SimpleValueObject.txt" />
-    <None Remove="TestExpectedResults\SimpleValueObject2.txt" />
-    <None Remove="TestExpectedResults\SimpleValueObjectWithOptional.txt" />
+    <None Remove="TestExpectedResults\AddressValueObject.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="TestData\SimpleValueObjectWithOptional.dddschema" />
-    <AdditionalFiles Include="TestData\SimpleValueObject2.dddschema" />
-    <AdditionalFiles Include="TestData\SimpleValueObject.dddschema" />
-    <AdditionalFiles Include="TestData\AddressValueObject.dddschema" />
-    <AdditionalFiles Include="TestExpectedResults\SimpleValueObjectWithOptional.txt" />
-    <AdditionalFiles Include="TestExpectedResults\SimpleValueObject2.txt" />
-    <AdditionalFiles Include="TestExpectedResults\SimpleValueObject.txt" />
+    <None Include="TestExpectedResults\SimpleValueObject.txt" />
+    <None Include="TestExpectedResults\SimpleValueObject2.txt" />
+    <None Include="TestExpectedResults\SimpleValueObjectWithOptional.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="TestData\Schemas\SimpleValueObjectWithOptional.dddschema" />
+    <AdditionalFiles Include="TestData\Schemas\SimpleValueObject2.dddschema" />
+    <AdditionalFiles Include="TestData\Schemas\SimpleValueObject.dddschema" />
+    <AdditionalFiles Include="TestData\Schemas\AddressValueObject.dddschema" />
+    <AdditionalFiles Include="TestExpectedResults\AddressValueObject.txt" />
   </ItemGroup>
 
   <ItemGroup>

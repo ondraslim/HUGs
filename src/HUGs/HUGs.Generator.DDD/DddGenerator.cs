@@ -1,5 +1,5 @@
-﻿using HUGs.Generator.DDD.Common;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +8,7 @@ using System.Text;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Hugs.Generator.DDD
+namespace HUGs.Generator.DDD
 {
     [Generator]
     public class DddGenerator : ISourceGenerator
@@ -25,12 +25,9 @@ namespace Hugs.Generator.DDD
             var dddModel = BuildDddModel(dddSchemas);
 
             GenerateDddModelSource(context, dddModel);
-            //var sb = new StringBuilder(@"");
-            // inject the created source into the users compilation
-            //context.AddSource("HelloWorldGenerated", SourceText.From(sb.ToString(), Encoding.UTF8));
         }
 
-        private void GenerateDddModelSource(GeneratorExecutionContext context, DddModel dddModel)
+        private static void GenerateDddModelSource(GeneratorExecutionContext context, DddModel dddModel)
         {
             foreach (var valueObject  in dddModel.ValueObjects)
             {
@@ -38,17 +35,32 @@ namespace Hugs.Generator.DDD
             }
         }
 
-        private void AddValueObjectSource(GeneratorExecutionContext context, DddObjectSchema valueObject)
+        private static void AddValueObjectSource(GeneratorExecutionContext context, DddObjectSchema valueObject)
         {
+            // TODO: add custom usings
             var sb = new StringBuilder($@"using System;
-using HUGs.Generator.DDD.Common.DDD.Base;
+using System.Collections.Generic;
 
-namespace Hugs.DDD.Generated.ValueObject
+namespace HUGs.DDD.Generated.ValueObject
 {{
-    public partial class {valueObject.Name} : ValueObject
+    public partial class {valueObject.Name} : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
     {{");
-            var properties = valueObject.Properties.Select(p => $"{p.Type}{(p.Optional ? "?" : "")} {p.Name}");
 
+            foreach (var tree in context.Compilation.SyntaxTrees)
+            {
+                var model = context.Compilation.GetSemanticModel(tree);
+                var knownTypes = tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>();
+
+                var classDeclarationSyntax = knownTypes.FirstOrDefault(n => n.Identifier.ValueText == "CountryId");
+                var typeInfo = model.GetTypeInfo(classDeclarationSyntax);
+                if (classDeclarationSyntax != default)
+                {
+                    var ns = typeInfo.Type?.ContainingNamespace;
+                }
+            }
+
+            var properties = valueObject.Properties.Select(p => $"{p.Type}{(p.Optional ? "?" : "")} {p.Name}").ToList();
+            
             foreach (var property in properties)
             {
                 sb.Append($@"
@@ -70,8 +82,21 @@ namespace Hugs.DDD.Generated.ValueObject
             sb.Append(@"
         }");
 
+            sb.AppendLine();
+
+            sb.Append(@"
+        protected override IEnumerable<object> GetAtomicValues()
+        {");
+
+            foreach (var property in valueObject.Properties)
+            {
+                sb.Append($@"
+            yield return {property.Name};");
+            }
+
 
             sb.AppendLine(@"
+        }
     }
 }");
 
@@ -98,9 +123,6 @@ namespace Hugs.DDD.Generated.ValueObject
                 if (string.IsNullOrWhiteSpace(schemaText)) continue;
 
                 var schema = deserializer.Deserialize<DddObjectSchema>(schemaText);
-
-                // TODO: validate schema
-                // TODO: add to specific type
                 if (schema is not null)
                 {
                     dddModel.AddValueObjectSchema(schema);
