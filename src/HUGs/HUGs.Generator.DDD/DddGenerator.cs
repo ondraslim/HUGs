@@ -46,18 +46,18 @@ namespace HUGs.DDD.Generated.ValueObject
     public partial class {valueObject.Name} : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
     {{");
 
-            foreach (var tree in context.Compilation.SyntaxTrees)
-            {
-                var model = context.Compilation.GetSemanticModel(tree);
-                var knownTypes = tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>();
+            //foreach (var tree in context.Compilation.SyntaxTrees)
+            //{
+            //    var model = context.Compilation.GetSemanticModel(tree);
+            //    var knownTypes = tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>();
 
-                var classDeclarationSyntax = knownTypes.FirstOrDefault(n => n.Identifier.ValueText == "CountryId");
-                var typeInfo = model.GetTypeInfo(classDeclarationSyntax);
-                if (classDeclarationSyntax != default)
-                {
-                    var ns = typeInfo.Type?.ContainingNamespace;
-                }
-            }
+            //    var classDeclarationSyntax = knownTypes.FirstOrDefault(n => n.Identifier.ValueText == "CountryId");
+            //    var typeInfo = model.GetTypeInfo(classDeclarationSyntax);
+            //    if (classDeclarationSyntax != default)
+            //    {
+            //        var ns = typeInfo.Type?.ContainingNamespace;
+            //    }
+            //}
 
             var properties = valueObject.Properties.Select(p => $"{p.Type}{(p.Optional ? "?" : "")} {p.Name}").ToList();
             

@@ -9,24 +9,36 @@ namespace HUGs.Generator.Common
     public class MethodBuilder
     {
         private SyntaxToken accessModifier;
-        private NameSyntax returnType;
+        private TypeSyntax returnType;
         private string name;
-        private readonly List<string> body = new(3);
+        private readonly List<ParameterSyntax> parameters = new();
+        private readonly List<string> body = new();
 
         public MethodBuilder SetAccessModifier(SyntaxKind accessModifierToken)
         {
-            accessModifier = SyntaxFactory.Token(accessModifierToken);
+            accessModifier = SyntaxFactory.Token(accessModifierToken).NormalizeWhitespace();
             return this;
         }
         public MethodBuilder SetReturnType(string type)
         {
-            returnType = SyntaxFactory.ParseName(type);
+            returnType = SyntaxFactory.ParseTypeName(type);
             return this;
         }
 
         public MethodBuilder SetName(string methodName)
         {
             name = methodName;
+            return this;
+        }
+
+        public MethodBuilder AddParameter(string paramName, string type)
+        {
+            var parameterSyntax = SyntaxFactory
+                .Parameter(SyntaxFactory.Identifier(paramName))
+                .WithType(SyntaxFactory.ParseTypeName(type));
+
+            parameters.Add(parameterSyntax);
+
             return this;
         }
 
@@ -39,11 +51,14 @@ namespace HUGs.Generator.Common
         public MethodDeclarationSyntax Build()
         {
             var statements = body.Select(b => SyntaxFactory.ParseStatement(b)).ToArray();
+            var methodBody = SyntaxFactory.Block(statements);
+            
             var methodDeclaration = SyntaxFactory.MethodDeclaration(returnType, name)
                 .AddModifiers(accessModifier)
-                .WithBody(SyntaxFactory.Block(statements));
+                .AddParameterListParameters(parameters.ToArray())
+                .WithBody(methodBody);
 
-            return methodDeclaration;
+            return methodDeclaration.NormalizeWhitespace();
         }
     }
 }

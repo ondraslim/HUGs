@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HUGs.Generator.DDD.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HUGs.Generator.DDD.Common", "HUGs.Generator.DDD.Common\HUGs.Generator.DDD.Common.csproj", "{764901DD-1EFC-4773-AB3E-AA7EABDBB03D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HUGs.Generator.Common", "HUGs.Generator.Common\HUGs.Generator.Common.csproj", "{21B1E1C6-C5F6-4B03-BCE3-6D98509532FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HUGs.Generator.Common", "HUGs.Generator.Common\HUGs.Generator.Common.csproj", "{21B1E1C6-C5F6-4B03-BCE3-6D98509532FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HUGs.Generator.Common.Tests", "HUGs.Generator.Common.Tests\HUGs.Generator.Common.Tests.csproj", "{715EE98D-B83E-481C-AD86-7BCC8946C51F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{21B1E1C6-C5F6-4B03-BCE3-6D98509532FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21B1E1C6-C5F6-4B03-BCE3-6D98509532FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21B1E1C6-C5F6-4B03-BCE3-6D98509532FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{715EE98D-B83E-481C-AD86-7BCC8946C51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{715EE98D-B83E-481C-AD86-7BCC8946C51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{715EE98D-B83E-481C-AD86-7BCC8946C51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{715EE98D-B83E-481C-AD86-7BCC8946C51F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
