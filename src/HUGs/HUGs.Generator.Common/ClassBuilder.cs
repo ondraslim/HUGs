@@ -9,9 +9,9 @@ namespace HUGs.Generator.Common
     {
         private ClassDeclarationSyntax classDeclaration;
         
-        private readonly List<FieldDeclarationSyntax> fields = new(2);
-        private readonly List<MemberDeclarationSyntax> properties = new(2);
-        private readonly List<MethodDeclarationSyntax> methods = new(2);
+        private readonly List<FieldDeclarationSyntax> fields = new();
+        private readonly List<MemberDeclarationSyntax> properties = new();
+        private readonly List<MethodDeclarationSyntax> methods = new();
 
         public ClassBuilder(string className)
         {
@@ -32,23 +32,24 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        public ClassBuilder AddField(string type, string name, SyntaxKind accessModifier)
+        public ClassBuilder AddField(string type, string name, params SyntaxKind[] accessModifiers)
         {
-            var variableDeclaration = SyntaxFactory.VariableDeclaration(SyntaxFactory.ParseTypeName(type))
+            var variableDeclaration = SyntaxFactory
+                .VariableDeclaration(SyntaxFactory.ParseTypeName(type))
                 .AddVariables(SyntaxFactory.VariableDeclarator(name));
 
             var fieldDeclaration = SyntaxFactory.FieldDeclaration(variableDeclaration)
-                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray());
 
             fields.Add(fieldDeclaration);
 
             return this;
         }
 
-        public ClassBuilder AddProperty(string type, string name, SyntaxKind accessModifier)
+        public ClassBuilder AddProperty(string type, string name, params SyntaxKind[] accessModifiers)
         {
             var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
-                .AddModifiers(SyntaxFactory.Token(accessModifier))
+                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
                 .AddAccessorListAccessors(
                     SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
                     SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));

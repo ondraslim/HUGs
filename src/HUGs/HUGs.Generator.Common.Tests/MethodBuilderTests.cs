@@ -8,6 +8,7 @@ namespace HUGs.Generator.Common.Tests
     public class MethodBuilderTests
     {
         private MethodBuilder builder;
+
         [SetUp]
         public void Setup()
         {
@@ -24,11 +25,11 @@ namespace HUGs.Generator.Common.Tests
                 .Build();
 
             var actualMethod = methodDeclaration.NormalizeWhitespace().ToFullString();
-            var expected = @"public void TestMethod()
+            const string expectedMethod = @"public void TestMethod()
 {
 }";
 
-            actualMethod.Should().Be(expected);
+            actualMethod.Should().Be(expectedMethod);
         }
 
         [Test]
@@ -42,12 +43,12 @@ namespace HUGs.Generator.Common.Tests
                 .Build();
 
             var actualMethod = methodDeclaration.NormalizeWhitespace().ToFullString();
-            var expected = @"public void TestMethod()
+            const string expectedMethod = @"public void TestMethod()
 {
     System.Console.WriteLine(""Hello World!"");
 }";
 
-            actualMethod.Should().Be(expected);
+            actualMethod.Should().Be(expectedMethod);
         }
 
         [Test]
@@ -62,13 +63,13 @@ namespace HUGs.Generator.Common.Tests
                 .Build();
 
             var actualMethod = methodDeclaration.NormalizeWhitespace().ToFullString();
-            var expected = @"public void TestMethod()
+            const string expectedMethod = @"public void TestMethod()
 {
     System.Console.WriteLine(""Hello World!"");
     System.Console.WriteLine(""Another Hello World!"");
 }";
 
-            actualMethod.Should().Be(expected);
+            actualMethod.Should().Be(expectedMethod);
         }
 
         [Test]
@@ -83,12 +84,12 @@ namespace HUGs.Generator.Common.Tests
                 .Build();
 
             var actualMethod = methodDeclaration.NormalizeWhitespace().ToFullString();
-            var expected = @"public void TestMethod(string helloText)
+            const string expectedMethod = @"public void TestMethod(string helloText)
 {
     System.Console.WriteLine(""Hello World!"");
 }";
 
-            actualMethod.Should().Be(expected);
+            actualMethod.Should().Be(expectedMethod);
         }
 
         [Test]
@@ -104,12 +105,12 @@ namespace HUGs.Generator.Common.Tests
                 .Build();
 
             var actualMethod = methodDeclaration.ToFullString();
-            var expected = @"public void TestMethod(string helloText, int helloCount)
+            const string expectedMethod = @"public void TestMethod(string helloText, int helloCount)
 {
     System.Console.WriteLine(""Hello World!"");
 }";
 
-            actualMethod.Should().Be(expected);
+            actualMethod.Should().Be(expectedMethod);
         }
     }
     
