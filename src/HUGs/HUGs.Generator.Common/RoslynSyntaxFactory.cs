@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HUGs.Generator.Common
 {
@@ -10,6 +11,7 @@ namespace HUGs.Generator.Common
         private CompilationUnitSyntax syntaxFactory;
         private NamespaceDeclarationSyntax @namespace;
         private readonly List<ClassDeclarationSyntax> classes = new();
+        private readonly List<UsingDirectiveSyntax> usings = new();
 
         public RoslynSyntaxFactory CreateBuilder()
         {
@@ -18,10 +20,12 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        public RoslynSyntaxFactory AddUsing(string name)
+        public RoslynSyntaxFactory AddUsing(params string[] names)
         {
-            var usingDirectiveSyntax = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(name));
-            syntaxFactory.AddUsings(usingDirectiveSyntax);
+            syntaxFactory = syntaxFactory.AddUsings(
+                names
+                    .Select(u => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(u)))
+                    .ToArray());
 
             return this;
         }
