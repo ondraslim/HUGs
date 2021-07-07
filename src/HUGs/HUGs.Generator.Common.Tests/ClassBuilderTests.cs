@@ -161,7 +161,7 @@ namespace HUGs.Generator.Common.Tests
         System.Console.WriteLine(""Hello World!"");
     }
 }";
-
+            // TODO: weird spacing between AmountProperty - TextProperty
             actualClass.Should().Be(expectedClass);
         }
     }
