@@ -1,23 +1,23 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using HUGs.Generator.Common.Helpers;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
-using HUGs.Generator.Common.Helpers;
 
 namespace HUGs.Generator.Common
 {
     public class MethodBuilder
     {
-        private SyntaxToken accessModifier;
+        private SyntaxToken[] accessModifiers;
         private TypeSyntax returnType;
         private string name;
         private readonly List<ParameterSyntax> parameters = new();
         private readonly List<string> body = new();
 
-        public MethodBuilder SetAccessModifier(SyntaxKind accessModifierToken)
+        public MethodBuilder SetAccessModifiers(params SyntaxKind[] modifiers)
         {
-            accessModifier = SyntaxFactory.Token(accessModifierToken).NormalizeWhitespace();
+            accessModifiers = modifiers.Select(SyntaxFactory.Token).ToArray();
             return this;
         }
         public MethodBuilder SetReturnType(string type)
@@ -50,7 +50,7 @@ namespace HUGs.Generator.Common
             var methodBody = SyntaxFactory.Block(statements);
             
             var methodDeclaration = SyntaxFactory.MethodDeclaration(returnType, name)
-                .AddModifiers(accessModifier)
+                .AddModifiers(accessModifiers)
                 .AddParameterListParameters(parameters.ToArray())
                 .WithBody(methodBody);
 

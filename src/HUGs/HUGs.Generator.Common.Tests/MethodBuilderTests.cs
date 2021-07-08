@@ -19,7 +19,7 @@ namespace HUGs.Generator.Common.Tests
         public void GivenEmptyMethod_CorrectlyGeneratesEmptyMethod()
         {
             var methodDeclaration = builder
-                .SetAccessModifier(SyntaxKind.PublicKeyword)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
                 .SetName("TestMethod")
                 .Build();
@@ -36,7 +36,7 @@ namespace HUGs.Generator.Common.Tests
         public void GivenMethodWithSimpleBody_CorrectlyGeneratesMethodWithBody()
         {
             var methodDeclaration = builder
-                .SetAccessModifier(SyntaxKind.PublicKeyword)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
                 .SetName("TestMethod")
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
@@ -55,7 +55,7 @@ namespace HUGs.Generator.Common.Tests
         public void GivenMethodWithBody_CorrectlyGeneratesMethodWithBody()
         {
             var methodDeclaration = builder
-                .SetAccessModifier(SyntaxKind.PublicKeyword)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
                 .SetName("TestMethod")
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
@@ -76,7 +76,7 @@ namespace HUGs.Generator.Common.Tests
         public void GivenMethodWithSimpleParam_CorrectlyGeneratesMethodWithParam()
         {
             var methodDeclaration = builder
-                .SetAccessModifier(SyntaxKind.PublicKeyword)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
                 .SetName("TestMethod")
                 .AddParameter("helloText", "string")
@@ -96,7 +96,7 @@ namespace HUGs.Generator.Common.Tests
         public void GivenMethodWithTwoParams_CorrectlyGeneratesMethodWithParams()
         {
             var methodDeclaration = builder
-                .SetAccessModifier(SyntaxKind.PublicKeyword)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.VirtualKeyword)
                 .SetReturnType("void")
                 .SetName("TestMethod")
                 .AddParameter("helloText", "string")
@@ -105,7 +105,7 @@ namespace HUGs.Generator.Common.Tests
                 .Build();
 
             var actualMethod = methodDeclaration.ToFullString();
-            const string expectedMethod = @"public void TestMethod(string helloText, int helloCount)
+            const string expectedMethod = @"public virtual void TestMethod(string helloText, int helloCount)
 {
     System.Console.WriteLine(""Hello World!"");
 }";

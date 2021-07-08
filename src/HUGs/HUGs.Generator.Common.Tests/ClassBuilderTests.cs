@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using HUGs.Generator.Common.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -25,7 +26,7 @@ namespace HUGs.Generator.Common.Tests
         public void GivenSimpleClassWithAccessModifier_CorrectlyGeneratesClass()
         {
             var builder = new ClassBuilder("TestClass");
-            
+
             builder.AddClassAccessModifiers(SyntaxKind.PublicKeyword);
             builder.AddClassAccessModifiers(SyntaxKind.AbstractKeyword);
 
@@ -43,7 +44,7 @@ namespace HUGs.Generator.Common.Tests
         public void GivenSimpleClassWithBaseClass_CorrectlyGeneratesClass()
         {
             var builder = new ClassBuilder("TestClass");
-            
+
             builder.AddClassBaseTypes("TestClassBase");
 
             var classDeclaration = builder.Build();
@@ -60,7 +61,7 @@ namespace HUGs.Generator.Common.Tests
         public void GivenSimpleClassWithField_CorrectlyGeneratesClass()
         {
             var builder = new ClassBuilder("TestClass");
-            
+
             builder.AddField("string", "TestField", SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword);
 
             var classDeclaration = builder.Build();
@@ -78,8 +79,8 @@ namespace HUGs.Generator.Common.Tests
         public void GivenSimpleClassWithProperty_CorrectlyGeneratesClass()
         {
             var builder = new ClassBuilder("TestClass");
-            
-            builder.AddProperty("string", "TestProperty", SyntaxKind.PublicKeyword);
+
+            builder.AddProperty("string", "TestProperty", getterOnly: false, SyntaxKind.PublicKeyword);
 
             var classDeclaration = builder.Build();
 
@@ -93,13 +94,86 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
+        public void GivenSimpleClassWithGetOnlyProperty_CorrectlyGeneratesClass()
+        {
+            var builder = new ClassBuilder("TestClass");
+
+            builder.AddProperty("string", "TestProperty", getterOnly: true, SyntaxKind.PublicKeyword);
+
+            var classDeclaration = builder.Build();
+
+            var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
+            const string expectedClass = @"class TestClass
+{
+    public string TestProperty { get; }
+}";
+
+            actualClass.Should().Be(expectedClass);
+        }
+
+        [Test]
+        public void GivenEmptyClassConstructor_CorrectlyGeneratesEmptyConstructor()
+        {
+            const string className = "TestClass";
+            var builder = new ClassBuilder(className);
+
+            var modifiers = new[] { SyntaxKind.ProtectedKeyword };
+            builder.AddConstructor(modifiers, className, new ParameterSyntax[] { }, new string[] { });
+
+            var classDeclaration = builder.Build();
+            var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
+            const string expectedClass = @"class TestClass
+{
+    protected TestClass()
+    {
+    }
+}";
+
+            actualClass.Should().Be(expectedClass);
+        }
+
+        [Test]
+        public void GivenClassConstructorWithParamsAndCode_CorrectlyGeneratesConstructor()
+        {
+            const string className = "TestClass";
+            var builder = new ClassBuilder(className);
+
+            var modifiers = new[] { SyntaxKind.PublicKeyword };
+            var parameters = new[]
+            {
+                RoslynSyntaxHelper.CreateParameterSyntax("string", "text"),
+                RoslynSyntaxHelper.CreateParameterSyntax("int", "number"),
+            };
+            var linesOfCode = new[]
+            {
+                "var numberTwice = number * 2;",
+                "var fullText = $\"{number}x {text}\";"
+            };
+
+            builder.AddConstructor(modifiers, className, parameters, linesOfCode);
+
+            var classDeclaration = builder.Build();
+            var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
+            const string expectedClass = @"class TestClass
+{
+    public TestClass(string text, int number)
+    {
+        var numberTwice = number * 2;
+        var fullText = $""{number}x {text}"";
+    }
+}";
+
+            actualClass.Should().Be(expectedClass);
+        }
+
+        [Test]
         public void GivenSimpleClassWithMethod_CorrectlyGeneratesClass()
         {
             var builder = new ClassBuilder("TestClass");
 
             var method = new MethodBuilder()
                 .SetName("TestMethod")
-                .SetAccessModifier(SyntaxKind.PublicKeyword)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
                 .Build();
@@ -133,12 +207,12 @@ namespace HUGs.Generator.Common.Tests
             builder
                 .AddField("int", "AmountField", SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword)
                 .AddField("string", "TextField", SyntaxKind.PublicKeyword)
-                .AddProperty("int", "AmountProperty", SyntaxKind.PrivateKeyword)
-                .AddProperty("string", "TextProperty", SyntaxKind.PublicKeyword);
+                .AddProperty("int", "AmountProperty", getterOnly: false, SyntaxKind.PrivateKeyword)
+                .AddProperty("string", "TextProperty", getterOnly: true, SyntaxKind.PublicKeyword);
 
             var method = new MethodBuilder()
                 .SetName("TestMethod")
-                .SetAccessModifier(SyntaxKind.PublicKeyword)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
                 .Build();
@@ -154,7 +228,7 @@ namespace HUGs.Generator.Common.Tests
     public string TextField;
     private int AmountProperty { get; set; }
 
-    public string TextProperty { get; set; }
+    public string TextProperty { get; }
 
     public void TestMethod()
     {

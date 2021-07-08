@@ -38,10 +38,9 @@ namespace HUGs.Generator.DDD
         private static void AddValueObjectSource(GeneratorExecutionContext context, DddObjectSchema valueObject)
         {
             // TODO: implement
-            //var valueObjectClass = PrepareValueObjectCode(valueObject);
+            //var valueObjectClass = ValueObjectGenerator.GenerateValueObjectCode(valueObject);
             //context.AddSource($"{valueObject.Name}ValueObject", valueObjectClass);
 
-            // TODO: add custom usings
             var sb = new StringBuilder($@"using System;
 using System.Collections.Generic;
 
@@ -106,13 +105,6 @@ namespace HUGs.DDD.Generated.ValueObject
 
             context.AddSource($"{valueObject.Name}ValueObject", sb.ToString());
         }
-
-        private static string PrepareValueObjectCode(DddObjectSchema valueObject)
-        {
-            throw new NotImplementedException();
-        }
-
-        
 
         private static IEnumerable<AdditionalText> GetDddSchemaFiles(GeneratorExecutionContext context)
         {

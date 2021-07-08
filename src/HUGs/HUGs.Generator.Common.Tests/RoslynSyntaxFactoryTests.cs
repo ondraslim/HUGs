@@ -49,7 +49,7 @@ namespace HUGs.Generator.Common.Tests
 
             var method = new MethodBuilder()
                 .SetName("TestMethod")
-                .SetAccessModifier(SyntaxKind.PublicKeyword)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
                 .AddBodyLine("Console.WriteLine(\"Hello World!\");")
                 .Build();

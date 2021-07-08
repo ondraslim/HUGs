@@ -8,7 +8,7 @@ namespace HUGs.Generator.Common
     public class ClassBuilder
     {
         private ClassDeclarationSyntax classDeclaration;
-        
+
         private readonly List<FieldDeclarationSyntax> fields = new();
         private readonly List<MemberDeclarationSyntax> properties = new();
         private readonly List<MethodDeclarationSyntax> methods = new();
@@ -47,13 +47,21 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        public ClassBuilder AddProperty(string type, string name, params SyntaxKind[] accessModifiers)
+        public ClassBuilder AddProperty(string type, string name, bool getterOnly, params SyntaxKind[] accessModifiers)
         {
             var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
                 .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
                 .AddAccessorListAccessors(
-                    SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
-                    SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+                    SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
+                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+
+            if (!getterOnly)
+            {
+                propertyDeclaration = propertyDeclaration
+                    .AddAccessorListAccessors(
+                        SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
+                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+            }
 
             properties.Add(propertyDeclaration);
 

@@ -1,11 +1,13 @@
-﻿using System.Linq;
-using HUGs.Generator.Common;
+﻿using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Common.DDD.Base;
 using Microsoft.CodeAnalysis.CSharp;
+using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HUGs.Generator.DDD
 {
+    // TODO: add tests
     public static class ValueObjectGenerator
     {
         public static string GenerateValueObjectCode(DddObjectSchema valueObject)
@@ -13,17 +15,40 @@ namespace HUGs.Generator.DDD
             var syntaxFactory = new RoslynSyntaxBuilder();
 
             syntaxFactory.AddNamespace("HUGs.DDD.Generated.ValueObject");
-            AddCommonUsings(syntaxFactory);
-
-            var classBuilder = PrepareValueObjectClassBuilder(valueObject);
-
-            // TODO: add properties
             
+            AddCommonUsings(syntaxFactory);
+            // TODO: add custom usings
+
+            var classBuilder = PrepareValueObjectClassBuilder(valueObject.Name);
+            AddProperties(classBuilder, valueObject);
             AddConstructor(classBuilder, valueObject);
 
-            // TODO: add GetAtomicValues()
+            classBuilder.AddMethod(GetGetAtomicValuesMethod(valueObject));
 
             return syntaxFactory.Build();
+        }
+
+        private static void AddCommonUsings(RoslynSyntaxBuilder syntaxBuilder)
+        {
+            syntaxBuilder.AddUsing("System");
+            syntaxBuilder.AddUsing("System.Collections.Generic");
+        }
+
+        private static ClassBuilder PrepareValueObjectClassBuilder(string className)
+        {
+            var classBuilder = new ClassBuilder(className);
+            classBuilder.AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword);
+            classBuilder.AddClassBaseTypes(typeof(ValueObject).FullName);
+
+            return classBuilder;
+        }
+
+        private static void AddProperties(ClassBuilder classBuilder, DddObjectSchema valueObject)
+        {
+            foreach (var prop in valueObject.Properties)
+            {
+                classBuilder.AddProperty(prop.FullType, prop.Name, getterOnly: true, SyntaxKind.PublicKeyword);
+            }
         }
 
         private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema valueObject)
@@ -32,30 +57,25 @@ namespace HUGs.Generator.DDD
             var parameters = valueObject.Properties
                 .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(p.FullType, p.Name))
                 .ToArray();
-            
+
             classBuilder.AddConstructor(accessModifiers, valueObject.Name, parameters, new string[] { });
         }
 
-        private static ClassBuilder PrepareValueObjectClassBuilder(DddObjectSchema valueObject)
+        private static MethodDeclarationSyntax GetGetAtomicValuesMethod(DddObjectSchema valueObject)
         {
-            var classBuilder = new ClassBuilder(valueObject.Name);
-            classBuilder.AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword);
-            classBuilder.AddClassBaseTypes(nameof(ValueObject));
+            var methodBuilder = new MethodBuilder();
+
+            methodBuilder
+                .SetAccessModifiers(SyntaxKind.ProtectedKeyword, SyntaxKind.OverrideKeyword)
+                .SetReturnType("IEnumerable<object>")
+                .SetName("GetAtomicValues");
 
             foreach (var prop in valueObject.Properties)
             {
-                var propType = $"{prop.Type}{(prop.Optional ? "?" : "")}";
-                classBuilder.AddProperty(propType, prop.Name, SyntaxKind.PublicKeyword);
+                methodBuilder.AddBodyLine($"yield return {prop.Name};");
             }
 
-            return classBuilder;
-        }
-
-
-        private static void AddCommonUsings(RoslynSyntaxBuilder syntaxBuilder)
-        {
-            syntaxBuilder.AddUsing("System");
-            syntaxBuilder.AddUsing("System.Collections.Generic");
+            return methodBuilder.Build();
         }
     }
 }
