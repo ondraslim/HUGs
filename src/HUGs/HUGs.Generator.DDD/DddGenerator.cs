@@ -1,5 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using HUGs.Generator.DDD.Common;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,6 +37,10 @@ namespace HUGs.Generator.DDD
 
         private static void AddValueObjectSource(GeneratorExecutionContext context, DddObjectSchema valueObject)
         {
+            // TODO: implement
+            //var valueObjectClass = PrepareValueObjectCode(valueObject);
+            //context.AddSource($"{valueObject.Name}ValueObject", valueObjectClass);
+
             // TODO: add custom usings
             var sb = new StringBuilder($@"using System;
 using System.Collections.Generic;
@@ -59,7 +63,7 @@ namespace HUGs.DDD.Generated.ValueObject
             //    }
             //}
 
-            var properties = valueObject.Properties.Select(p => $"{p.Type}{(p.Optional ? "?" : "")} {p.Name}").ToList();
+            var properties = valueObject.Properties.Select(p => $"{p.FullType} {p.Name}").ToList();
             
             foreach (var property in properties)
             {
@@ -102,6 +106,13 @@ namespace HUGs.DDD.Generated.ValueObject
 
             context.AddSource($"{valueObject.Name}ValueObject", sb.ToString());
         }
+
+        private static string PrepareValueObjectCode(DddObjectSchema valueObject)
+        {
+            throw new NotImplementedException();
+        }
+
+        
 
         private static IEnumerable<AdditionalText> GetDddSchemaFiles(GeneratorExecutionContext context)
         {

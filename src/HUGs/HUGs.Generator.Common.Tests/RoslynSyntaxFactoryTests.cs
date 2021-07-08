@@ -8,24 +8,24 @@ namespace HUGs.Generator.Common.Tests
 {
     public class RoslynSyntaxFactoryTests
     {
-        private RoslynSyntaxFactory factory;
+        private RoslynSyntaxBuilder builder;
 
         [SetUp]
         public void Setup()
         {
-            factory = new RoslynSyntaxFactory().CreateBuilder();
+            builder = new RoslynSyntaxBuilder().CreateBuilder();
         }
 
         [Test]
         public void GivenRoslynSyntaxFactory_WhenAllInfoIsFilled_CorrectlyGeneratesCode()
         {
-            factory.AddUsing("System");
-            factory.AddNamespace("HUGs.Generator.Common.Tests");
+            builder.AddUsing("System");
+            builder.AddNamespace("HUGs.Generator.Common.Tests");
 
             var sampleClass = PrepareSampleClassDeclarationSyntax();
-            factory.AddClass(sampleClass);
+            builder.AddClass(sampleClass);
 
-            var actualCode = factory.Build();
+            var actualCode = builder.Build();
             const string expectedCode = @"using System;
 
 namespace HUGs.Generator.Common.Tests

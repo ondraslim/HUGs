@@ -12,15 +12,16 @@ namespace HUGs.Generator.Common
         private readonly List<FieldDeclarationSyntax> fields = new();
         private readonly List<MemberDeclarationSyntax> properties = new();
         private readonly List<MethodDeclarationSyntax> methods = new();
+        private readonly List<ConstructorDeclarationSyntax> ctors = new();
 
         public ClassBuilder(string className)
         {
             classDeclaration = SyntaxFactory.ClassDeclaration(className);
         }
 
-        public ClassBuilder AddClassAccessModifier(SyntaxKind accessModifier)
+        public ClassBuilder AddClassAccessModifiers(params SyntaxKind[] accessModifiers)
         {
-            classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(accessModifier));
+            classDeclaration = classDeclaration.AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray());
             return this;
         }
 
@@ -59,6 +60,19 @@ namespace HUGs.Generator.Common
             return this;
         }
 
+        // TODO: add tests
+        public ClassBuilder AddConstructor(SyntaxKind[] accessModifiers, string identifierText, ParameterSyntax[] parameters, string[] linesOfCode)
+        {
+            var ctor = SyntaxFactory.ConstructorDeclaration(identifierText)
+                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
+                .AddParameterListParameters(parameters)
+                .AddBodyStatements(linesOfCode.Select(b => SyntaxFactory.ParseStatement(b)).ToArray());
+
+            ctors.Add(ctor);
+
+            return this;
+        }
+
         public ClassBuilder AddMethod(MethodDeclarationSyntax method)
         {
             methods.Add(method);
@@ -69,6 +83,7 @@ namespace HUGs.Generator.Common
         {
             classDeclaration = classDeclaration.AddMembers(fields.ToArray());
             classDeclaration = classDeclaration.AddMembers(properties.ToArray());
+            classDeclaration = classDeclaration.AddMembers(ctors.ToArray());
             classDeclaration = classDeclaration.AddMembers(methods.ToArray());
 
             return classDeclaration;

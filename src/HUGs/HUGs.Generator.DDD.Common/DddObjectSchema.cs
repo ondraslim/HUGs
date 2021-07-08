@@ -1,4 +1,4 @@
-﻿namespace HUGs.Generator.DDD.Common
+﻿namespace HUGs.Generator.DDD
 {
     public class DddObjectSchema
     {
@@ -13,5 +13,6 @@
         public string Name { get; set; }
         public string Type { get; set; }
         public bool Optional { get; set; }
+        public string FullType => $"{Type}{(Optional ? "?" : "")}";
     }
 }

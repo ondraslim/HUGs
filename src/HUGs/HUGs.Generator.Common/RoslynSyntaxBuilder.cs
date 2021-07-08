@@ -6,23 +6,22 @@ using System.Linq;
 
 namespace HUGs.Generator.Common
 {
-    public class RoslynSyntaxFactory
+    public class RoslynSyntaxBuilder
     {
-        private CompilationUnitSyntax syntaxFactory;
+        private CompilationUnitSyntax compilationUnitSyntax;
         private NamespaceDeclarationSyntax @namespace;
         private readonly List<ClassDeclarationSyntax> classes = new();
-        private readonly List<UsingDirectiveSyntax> usings = new();
 
-        public RoslynSyntaxFactory CreateBuilder()
+        public RoslynSyntaxBuilder CreateBuilder()
         {
-            syntaxFactory = SyntaxFactory.CompilationUnit();
+            compilationUnitSyntax = SyntaxFactory.CompilationUnit();
 
             return this;
         }
 
-        public RoslynSyntaxFactory AddUsing(params string[] names)
+        public RoslynSyntaxBuilder AddUsing(params string[] names)
         {
-            syntaxFactory = syntaxFactory.AddUsings(
+            compilationUnitSyntax = compilationUnitSyntax.AddUsings(
                 names
                     .Select(u => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(u)))
                     .ToArray());
@@ -30,13 +29,13 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        public RoslynSyntaxFactory AddNamespace(string ns)
+        public RoslynSyntaxBuilder AddNamespace(string ns)
         {
             @namespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(ns)).NormalizeWhitespace();
             return this;
         }
 
-        public RoslynSyntaxFactory AddClass(ClassDeclarationSyntax classDeclaration)
+        public RoslynSyntaxBuilder AddClass(ClassDeclarationSyntax classDeclaration)
         {
             classes.Add(classDeclaration);
             return this;
@@ -45,9 +44,9 @@ namespace HUGs.Generator.Common
         public string Build()
         {
             @namespace = @namespace.AddMembers(classes.ToArray());
-            syntaxFactory = syntaxFactory.AddMembers(@namespace);
+            compilationUnitSyntax = compilationUnitSyntax.AddMembers(@namespace);
 
-            return syntaxFactory.NormalizeWhitespace().ToFullString();
+            return compilationUnitSyntax.NormalizeWhitespace().ToFullString();
         }
     }
 }

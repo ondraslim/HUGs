@@ -26,8 +26,8 @@ namespace HUGs.Generator.Common.Tests
         {
             var builder = new ClassBuilder("TestClass");
             
-            builder.AddClassAccessModifier(SyntaxKind.PublicKeyword);
-            builder.AddClassAccessModifier(SyntaxKind.AbstractKeyword);
+            builder.AddClassAccessModifiers(SyntaxKind.PublicKeyword);
+            builder.AddClassAccessModifiers(SyntaxKind.AbstractKeyword);
 
             var classDeclaration = builder.Build();
 
@@ -126,8 +126,8 @@ namespace HUGs.Generator.Common.Tests
             var builder = new ClassBuilder("TestClass");
 
             builder
-                .AddClassAccessModifier(SyntaxKind.ProtectedKeyword)
-                .AddClassAccessModifier(SyntaxKind.AbstractKeyword)
+                .AddClassAccessModifiers(SyntaxKind.ProtectedKeyword)
+                .AddClassAccessModifiers(SyntaxKind.AbstractKeyword)
                 .AddClassBaseTypes("BaseType", "IRandomInterface");
 
             builder

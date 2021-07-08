@@ -11,6 +11,11 @@
 		<PackageReference Include="YamlDotNet" Version="11.1.1" GeneratePathProperty="true" PrivateAssets="all" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\HUGs.Generator.Common\HUGs.Generator.Common.csproj" />
+	  <ProjectReference Include="..\HUGs.Generator.DDD.Common\HUGs.Generator.DDD.Common.csproj" />
+	</ItemGroup>
+
 	<PropertyGroup>
 		<GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
 	</PropertyGroup>

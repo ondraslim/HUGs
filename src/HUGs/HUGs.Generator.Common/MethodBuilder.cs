@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
+using HUGs.Generator.Common.Helpers;
 
 namespace HUGs.Generator.Common
 {
@@ -33,12 +34,7 @@ namespace HUGs.Generator.Common
 
         public MethodBuilder AddParameter(string paramName, string type)
         {
-            var parameterSyntax = SyntaxFactory
-                .Parameter(SyntaxFactory.Identifier(paramName))
-                .WithType(SyntaxFactory.ParseTypeName(type));
-
-            parameters.Add(parameterSyntax);
-
+            parameters.Add(RoslynSyntaxHelper.CreateParameterSyntax(type, paramName));
             return this;
         }
 
