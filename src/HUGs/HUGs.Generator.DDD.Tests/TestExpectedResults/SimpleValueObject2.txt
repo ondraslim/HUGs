@@ -6,6 +6,7 @@ namespace HUGs.DDD.Generated.ValueObject
     public partial class Simple2 : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
     {
         public string Text { get; }
+
         public int Number { get; }
 
         public Simple2(string Text, int Number)

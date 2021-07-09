@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using HUGs.Generator.Common.Helpers;
+using HUGs.Generator.Tests.Tools.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -19,7 +20,7 @@ namespace HUGs.Generator.Common.Tests
 {
 }";
 
-            actualClass.Should().Be(expectedClass);
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
 
         [Test]
@@ -37,7 +38,7 @@ namespace HUGs.Generator.Common.Tests
 {
 }";
 
-            actualClass.Should().Be(expectedClass);
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
 
         [Test]
@@ -54,7 +55,7 @@ namespace HUGs.Generator.Common.Tests
 {
 }";
 
-            actualClass.Should().Be(expectedClass);
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
 
         [Test]
@@ -72,7 +73,7 @@ namespace HUGs.Generator.Common.Tests
     private readonly string TestField;
 }";
 
-            actualClass.Should().Be(expectedClass);
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
 
         [Test]
@@ -90,7 +91,7 @@ namespace HUGs.Generator.Common.Tests
     public string TestProperty { get; set; }
 }";
 
-            actualClass.Should().Be(expectedClass);
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
 
         [Test]
@@ -108,7 +109,7 @@ namespace HUGs.Generator.Common.Tests
     public string TestProperty { get; }
 }";
 
-            actualClass.Should().Be(expectedClass);
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
 
         [Test]
@@ -129,7 +130,7 @@ namespace HUGs.Generator.Common.Tests
     }
 }";
 
-            actualClass.Should().Be(expectedClass);
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
 
         [Test]
@@ -163,7 +164,7 @@ namespace HUGs.Generator.Common.Tests
     }
 }";
 
-            actualClass.Should().Be(expectedClass);
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
 
         [Test]
@@ -191,7 +192,7 @@ namespace HUGs.Generator.Common.Tests
     }
 }";
 
-            actualClass.Should().Be(expectedClass);
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
 
         [Test]
@@ -236,7 +237,7 @@ namespace HUGs.Generator.Common.Tests
     }
 }";
             // TODO: weird spacing between AmountProperty - TextProperty
-            actualClass.Should().Be(expectedClass);
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
     }
 }

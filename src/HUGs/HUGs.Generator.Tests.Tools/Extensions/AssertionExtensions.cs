@@ -4,7 +4,7 @@ using FluentAssertions.Primitives;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HUGs.Generator.DDD.Tests.Extensions
+namespace HUGs.Generator.Tests.Tools.Extensions
 {
     public static class AssertionExtensions
     {

@@ -8,16 +8,9 @@ namespace HUGs.Generator.Common
 {
     public class RoslynSyntaxBuilder
     {
-        private CompilationUnitSyntax compilationUnitSyntax;
+        private CompilationUnitSyntax compilationUnitSyntax = SyntaxFactory.CompilationUnit();
         private NamespaceDeclarationSyntax @namespace;
         private readonly List<ClassDeclarationSyntax> classes = new();
-
-        public RoslynSyntaxBuilder CreateBuilder()
-        {
-            compilationUnitSyntax = SyntaxFactory.CompilationUnit();
-
-            return this;
-        }
 
         public RoslynSyntaxBuilder AddUsing(params string[] names)
         {

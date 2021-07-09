@@ -2,21 +2,20 @@
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Common.DDD.Base;
 using Microsoft.CodeAnalysis.CSharp;
-using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 
 namespace HUGs.Generator.DDD
 {
-    // TODO: add tests
     public static class ValueObjectGenerator
     {
         public static string GenerateValueObjectCode(DddObjectSchema valueObject)
         {
-            var syntaxFactory = new RoslynSyntaxBuilder();
+            var syntaxBuilder = new RoslynSyntaxBuilder();
 
-            syntaxFactory.AddNamespace("HUGs.DDD.Generated.ValueObject");
+            syntaxBuilder.AddNamespace("HUGs.DDD.Generated.ValueObject");
             
-            AddCommonUsings(syntaxFactory);
+            AddCommonUsings(syntaxBuilder);
             // TODO: add custom usings
 
             var classBuilder = PrepareValueObjectClassBuilder(valueObject.Name);
@@ -24,8 +23,9 @@ namespace HUGs.Generator.DDD
             AddConstructor(classBuilder, valueObject);
 
             classBuilder.AddMethod(GetGetAtomicValuesMethod(valueObject));
+            syntaxBuilder.AddClass(classBuilder.Build());
 
-            return syntaxFactory.Build();
+            return syntaxBuilder.Build();
         }
 
         private static void AddCommonUsings(RoslynSyntaxBuilder syntaxBuilder)
@@ -57,8 +57,9 @@ namespace HUGs.Generator.DDD
             var parameters = valueObject.Properties
                 .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(p.FullType, p.Name))
                 .ToArray();
+            var linesOfCode = valueObject.Properties.Select(p => $"this.{p.Name} = {p.Name};").ToArray();
 
-            classBuilder.AddConstructor(accessModifiers, valueObject.Name, parameters, new string[] { });
+            classBuilder.AddConstructor(accessModifiers, valueObject.Name, parameters, linesOfCode);
         }
 
         private static MethodDeclarationSyntax GetGetAtomicValuesMethod(DddObjectSchema valueObject)

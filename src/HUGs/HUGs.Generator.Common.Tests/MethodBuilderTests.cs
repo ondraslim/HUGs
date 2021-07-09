@@ -1,4 +1,5 @@
 using FluentAssertions;
+using HUGs.Generator.Tests.Tools.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ namespace HUGs.Generator.Common.Tests
 {
 }";
 
-            actualMethod.Should().Be(expectedMethod);
+            actualMethod.Should().BeIgnoringLineEndings(expectedMethod);
         }
 
         [Test]
@@ -48,7 +49,7 @@ namespace HUGs.Generator.Common.Tests
     System.Console.WriteLine(""Hello World!"");
 }";
 
-            actualMethod.Should().Be(expectedMethod);
+            actualMethod.Should().BeIgnoringLineEndings(expectedMethod);
         }
 
         [Test]
@@ -69,7 +70,7 @@ namespace HUGs.Generator.Common.Tests
     System.Console.WriteLine(""Another Hello World!"");
 }";
 
-            actualMethod.Should().Be(expectedMethod);
+            actualMethod.Should().BeIgnoringLineEndings(expectedMethod);
         }
 
         [Test]
@@ -89,7 +90,7 @@ namespace HUGs.Generator.Common.Tests
     System.Console.WriteLine(""Hello World!"");
 }";
 
-            actualMethod.Should().Be(expectedMethod);
+            actualMethod.Should().BeIgnoringLineEndings(expectedMethod);
         }
 
         [Test]
@@ -110,7 +111,7 @@ namespace HUGs.Generator.Common.Tests
     System.Console.WriteLine(""Hello World!"");
 }";
 
-            actualMethod.Should().Be(expectedMethod);
+            actualMethod.Should().BeIgnoringLineEndings(expectedMethod);
         }
     }
     

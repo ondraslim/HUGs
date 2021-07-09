@@ -1,23 +1,23 @@
 ﻿using FluentAssertions;
-using Microsoft.CodeAnalysis;
+using HUGs.Generator.Tests.Tools.Extensions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace HUGs.Generator.Common.Tests
 {
-    public class RoslynSyntaxFactoryTests
+    public class RoslynSyntaxBuilderTests
     {
         private RoslynSyntaxBuilder builder;
 
         [SetUp]
         public void Setup()
         {
-            builder = new RoslynSyntaxBuilder().CreateBuilder();
+            builder = new RoslynSyntaxBuilder();
         }
 
         [Test]
-        public void GivenRoslynSyntaxFactory_WhenAllInfoIsFilled_CorrectlyGeneratesCode()
+        public void GivenRoslynSyntaxBuilder_WhenAllInfoIsFilled_CorrectlyGeneratesCode()
         {
             builder.AddUsing("System");
             builder.AddNamespace("HUGs.Generator.Common.Tests");
@@ -32,6 +32,10 @@ namespace HUGs.Generator.Common.Tests
 {
     class TestClass
     {
+        public TestClass()
+        {
+        }
+
         public void TestMethod()
         {
             Console.WriteLine(""Hello World!"");
@@ -39,13 +43,19 @@ namespace HUGs.Generator.Common.Tests
     }
 }";
 
-            actualCode.Should().Be(expectedCode);
+            actualCode.Should().BeIgnoringLineEndings(expectedCode);
         }
 
 
-        private ClassDeclarationSyntax PrepareSampleClassDeclarationSyntax()
+        private static ClassDeclarationSyntax PrepareSampleClassDeclarationSyntax()
         {
             var builder = new ClassBuilder("TestClass");
+
+            builder.AddConstructor(
+                new[] { SyntaxKind.PublicKeyword }, 
+                "TestClass",
+                new ParameterSyntax[] { },
+                new string[] { });
 
             var method = new MethodBuilder()
                 .SetName("TestMethod")

@@ -6,9 +6,13 @@ namespace HUGs.DDD.Generated.ValueObject
     public partial class Address : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
     {
         public string Street { get; }
+
         public string? Street2 { get; }
+
         public string City { get; }
+
         public string Zip { get; }
+
         public CountryId CountryId { get; }
 
         public Address(string Street, string? Street2, string City, string Zip, CountryId CountryId)

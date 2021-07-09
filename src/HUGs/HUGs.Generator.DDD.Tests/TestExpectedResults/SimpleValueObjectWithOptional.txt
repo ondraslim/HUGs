@@ -6,8 +6,11 @@ namespace HUGs.DDD.Generated.ValueObject
     public partial class SimpleOptional : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
     {
         public string Text { get; }
+
         public int Number { get; }
+
         public string? TextOptional { get; }
+
         public int? NumberOptional { get; }
 
         public SimpleOptional(string Text, int Number, string? TextOptional, int? NumberOptional)

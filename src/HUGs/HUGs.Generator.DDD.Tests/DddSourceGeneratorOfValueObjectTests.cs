@@ -1,7 +1,6 @@
-using System;
 using FluentAssertions;
-using HUGs.Generator.DDD.Tests.Extensions;
 using HUGs.Generator.DDD.Tests.Mocks;
+using HUGs.Generator.Tests.Tools.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
@@ -13,7 +12,7 @@ using System.Reflection;
 
 namespace HUGs.Generator.DDD.Tests
 {
-    public class ValueObjectTests
+    public class DddSourceGeneratorOfValueObjectTests
     {
         private Compilation emptyInputCompilation;
 
