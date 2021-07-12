@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace HUGs.Generator.DDD
 {
-    public static class ValueObjectGenerator
+    internal static class ValueObjectGenerator
     {
         public static string GenerateValueObjectCode(DddObjectSchema valueObject)
         {
@@ -16,7 +16,6 @@ namespace HUGs.Generator.DDD
             syntaxBuilder.AddNamespace("HUGs.DDD.Generated.ValueObject");
             
             AddCommonUsings(syntaxBuilder);
-            // TODO: add custom usings
 
             var classBuilder = PrepareValueObjectClassBuilder(valueObject.Name);
             AddProperties(classBuilder, valueObject);

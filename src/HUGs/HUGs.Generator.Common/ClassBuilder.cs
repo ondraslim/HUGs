@@ -68,7 +68,6 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        // TODO: add tests
         public ClassBuilder AddConstructor(SyntaxKind[] accessModifiers, string identifierText, ParameterSyntax[] parameters, string[] linesOfCode)
         {
             var ctor = SyntaxFactory.ConstructorDeclaration(identifierText)
