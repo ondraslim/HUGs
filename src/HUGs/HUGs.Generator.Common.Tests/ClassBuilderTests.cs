@@ -119,7 +119,7 @@ namespace HUGs.Generator.Common.Tests
             var builder = new ClassBuilder(className);
 
             var modifiers = new[] { SyntaxKind.ProtectedKeyword };
-            builder.AddConstructor(modifiers, className, new ParameterSyntax[] { }, new string[] { });
+            builder.AddConstructor(modifiers, className, new ParameterSyntax[] { });
 
             var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
@@ -174,12 +174,12 @@ namespace HUGs.Generator.Common.Tests
             var builder = new ClassBuilder(className);
 
             var modifiers = new[] { SyntaxKind.PublicKeyword };
-            var paramsForBase = RoslynSyntaxHelper.CreateParameterSyntax("string", "paramForBase");
+            var paramForBase = RoslynSyntaxHelper.CreateParameterSyntax("string", "paramForBase");
             var parameters = new[]
             {
                 RoslynSyntaxHelper.CreateParameterSyntax("string", "text"),
                 RoslynSyntaxHelper.CreateParameterSyntax("int", "number"),
-                paramsForBase
+                paramForBase
             };
             var linesOfCode = new[]
             {
@@ -187,7 +187,7 @@ namespace HUGs.Generator.Common.Tests
                 "var fullText = $\"{number}x {text}\";"
             };
 
-            builder.AddConstructor(modifiers, className, parameters, linesOfCode, new[] { paramsForBase });
+            builder.AddConstructor(modifiers, className, parameters, linesOfCode, new[] { paramForBase });
 
             var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();

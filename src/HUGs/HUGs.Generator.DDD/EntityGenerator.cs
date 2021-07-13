@@ -2,6 +2,7 @@
 using HUGs.Generator.Common.Helpers;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
@@ -21,7 +22,7 @@ namespace HUGs.Generator.DDD
 
             var classBuilder = PrepareEntityClassBuilder(entity.Name, entityIdClass.Identifier.ValueText);
             AddProperties(classBuilder, entity);
-            AddConstructor(classBuilder, entity);
+            AddConstructor(classBuilder, entity, entityIdClass.Identifier.ValueText);
 
             classBuilder.AddMethod(GetOnInitializedMethod());
             syntaxBuilder.AddClass(classBuilder.Build());
@@ -37,7 +38,7 @@ namespace HUGs.Generator.DDD
 
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
             var parameters = new[] { RoslynSyntaxHelper.CreateParameterSyntax(SyntaxKind.StringKeyword.ToString(), "value") };
-            classBuilder.AddConstructor(accessModifiers, entityName, parameters, new string[] { });
+            classBuilder.AddConstructor(accessModifiers, entityName, parameters);
 
             return classBuilder.Build();
         }
@@ -48,11 +49,19 @@ namespace HUGs.Generator.DDD
             syntaxBuilder.AddUsing("System.Collections.Generic");
         }
 
-        private static ClassBuilder PrepareEntityClassBuilder(string entityName, string entityClassIdentifier)
+        private static ClassBuilder PrepareEntityClassBuilder(string entityName, string entityIdClassIdentifier)
         {
-            var classBuilder = new ClassBuilder(entityName);
-            classBuilder.AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword);
-            classBuilder.AddClassBaseTypes($"Aggregate<{entityClassIdentifier}>");
+            var ctorParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "value") };
+            var classBuilder = new ClassBuilder(entityName)
+                .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
+                .AddClassBaseTypes($"Aggregate<{entityIdClassIdentifier}>")
+                .AddConstructor(
+                    new[] { SyntaxKind.PublicKeyword },
+                    entityIdClassIdentifier,
+                    ctorParams,
+                    new string[] { },
+                    ctorParams
+                    );
 
             return classBuilder;
         }
@@ -73,9 +82,13 @@ namespace HUGs.Generator.DDD
             }
         }
 
-        private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema entity)
+        private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema entity, string entityIdClassIdentifier)
         {
-            throw new System.NotImplementedException();
+            var accessModifiers = new[] { SyntaxKind.PublicKeyword };
+            var parameters = entity.Properties
+                .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(p.FullType, p.Name))
+                .ToArray();
+            var linesOfCode = entity.Properties.Select(p => $"this.{p.Name} = {p.Name};").ToArray();
         }
 
         private static MethodDeclarationSyntax GetOnInitializedMethod()

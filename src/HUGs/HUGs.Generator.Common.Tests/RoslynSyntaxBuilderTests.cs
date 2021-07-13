@@ -54,8 +54,7 @@ namespace HUGs.Generator.Common.Tests
             builder.AddConstructor(
                 new[] { SyntaxKind.PublicKeyword }, 
                 "TestClass",
-                new ParameterSyntax[] { },
-                new string[] { });
+                new ParameterSyntax[] { });
 
             var method = new MethodBuilder()
                 .SetName("TestMethod")

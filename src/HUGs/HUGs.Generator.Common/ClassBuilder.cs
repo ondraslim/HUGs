@@ -81,12 +81,12 @@ namespace HUGs.Generator.Common
             SyntaxKind[] accessModifiers,
             string identifierText,
             ParameterSyntax[] parameters,
-            string[] linesOfCode,
+            string[] linesOfCode = null,
             ParameterSyntax[] baseCtorParams = null)
         {
             var ctor = SyntaxFactory.ConstructorDeclaration(identifierText);
 
-            if (baseCtorParams is not null && baseCtorParams.Any())
+            if (baseCtorParams is not null)
             {
                 ctor = AddCtorBaseCall(ctor, baseCtorParams);
             }
@@ -94,7 +94,10 @@ namespace HUGs.Generator.Common
             ctor = ctor
                 .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
                 .AddParameterListParameters(parameters)
-                .AddBodyStatements(linesOfCode.Select(b => SyntaxFactory.ParseStatement(b)).ToArray());
+                .AddBodyStatements(
+                    (linesOfCode ?? new string[] { })
+                    .Select(b => SyntaxFactory.ParseStatement(b))
+                    .ToArray());
 
             ctors.Add(ctor);
 
