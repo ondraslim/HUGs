@@ -168,6 +168,42 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
+        public void GivenClassConstructorWithParamsForBase_CorrectlyGeneratesConstructor()
+        {
+            const string className = "TestClass";
+            var builder = new ClassBuilder(className);
+
+            var modifiers = new[] { SyntaxKind.PublicKeyword };
+            var paramsForBase = RoslynSyntaxHelper.CreateParameterSyntax("string", "paramForBase");
+            var parameters = new[]
+            {
+                RoslynSyntaxHelper.CreateParameterSyntax("string", "text"),
+                RoslynSyntaxHelper.CreateParameterSyntax("int", "number"),
+                paramsForBase
+            };
+            var linesOfCode = new[]
+            {
+                "var numberTwice = number * 2;",
+                "var fullText = $\"{number}x {text}\";"
+            };
+
+            builder.AddConstructor(modifiers, className, parameters, linesOfCode, new[] { paramsForBase });
+
+            var classDeclaration = builder.Build();
+            var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
+            const string expectedClass = @"class TestClass
+{
+    public TestClass(string text, int number, string paramForBase): base(paramForBase)
+    {
+        var numberTwice = number * 2;
+        var fullText = $""{number}x {text}"";
+    }
+}";
+
+            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+        }
+
+        [Test]
         public void GivenSimpleClassWithMethod_CorrectlyGeneratesClass()
         {
             var builder = new ClassBuilder("TestClass");

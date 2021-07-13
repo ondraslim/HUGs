@@ -76,16 +76,22 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        public ClassBuilder AddConstructor(SyntaxKind[] accessModifiers, string identifierText, ParameterSyntax[] parameters, string[] linesOfCode)
+        // TODO: refactor to custom ParameterSyntax class with method ToRoslynSyntax(), add option for IsInBaseCall
+        public ClassBuilder AddConstructor(
+            SyntaxKind[] accessModifiers,
+            string identifierText,
+            ParameterSyntax[] parameters,
+            string[] linesOfCode,
+            ParameterSyntax[] baseCtorParams = null)
         {
-            // TODO: add base ctor call - ctor(x) : base(x)
-            var ctor = SyntaxFactory.ConstructorDeclaration(identifierText)
-                //.WithInitializer(
-                //    SyntaxFactory.ConstructorInitializer(SyntaxKind.BaseConstructorInitializer)
-                //        .AddArgumentListArguments(
-                //            SyntaxFactory.Argument(SyntaxFactory.IdentifierName("entryPoint"))
-                //        )
-                //    )
+            var ctor = SyntaxFactory.ConstructorDeclaration(identifierText);
+
+            if (baseCtorParams is not null && baseCtorParams.Any())
+            {
+                ctor = AddCtorBaseCall(ctor, baseCtorParams);
+            }
+
+            ctor = ctor
                 .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
                 .AddParameterListParameters(parameters)
                 .AddBodyStatements(linesOfCode.Select(b => SyntaxFactory.ParseStatement(b)).ToArray());
@@ -93,6 +99,22 @@ namespace HUGs.Generator.Common
             ctors.Add(ctor);
 
             return this;
+        }
+
+        private static ConstructorDeclarationSyntax AddCtorBaseCall(
+            ConstructorDeclarationSyntax ctor,
+            IEnumerable<ParameterSyntax> baseCtorParams)
+        {
+            ctor = ctor.WithInitializer(
+                SyntaxFactory.ConstructorInitializer(SyntaxKind.BaseConstructorInitializer)
+                    .AddArgumentListArguments(
+                        baseCtorParams
+                            .Select(p => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(p.Identifier)))
+                            .ToArray()
+
+                    )
+            );
+            return ctor;
         }
 
         public ClassBuilder AddMethod(MethodDeclarationSyntax method)
