@@ -47,21 +47,29 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        public ClassBuilder AddProperty(string type, string name, bool getterOnly, params SyntaxKind[] accessModifiers)
+        // TODO: add option for private set!
+        public ClassBuilder AddFullProperty(string type, string name, SyntaxKind[] accessModifiers)
+        {
+            var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
+                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
+                .AddAccessorListAccessors(
+                    SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
+                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+                    SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
+                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+
+            properties.Add(propertyDeclaration);
+
+            return this;
+        }
+
+        public ClassBuilder AddGetOnlyProperty(string type, string name, SyntaxKind[] accessModifiers)
         {
             var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
                 .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
                 .AddAccessorListAccessors(
                     SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
                         .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
-
-            if (!getterOnly)
-            {
-                propertyDeclaration = propertyDeclaration
-                    .AddAccessorListAccessors(
-                        SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
-                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
-            }
 
             properties.Add(propertyDeclaration);
 
@@ -70,7 +78,14 @@ namespace HUGs.Generator.Common
 
         public ClassBuilder AddConstructor(SyntaxKind[] accessModifiers, string identifierText, ParameterSyntax[] parameters, string[] linesOfCode)
         {
+            // TODO: add base ctor call - ctor(x) : base(x)
             var ctor = SyntaxFactory.ConstructorDeclaration(identifierText)
+                //.WithInitializer(
+                //    SyntaxFactory.ConstructorInitializer(SyntaxKind.BaseConstructorInitializer)
+                //        .AddArgumentListArguments(
+                //            SyntaxFactory.Argument(SyntaxFactory.IdentifierName("entryPoint"))
+                //        )
+                //    )
                 .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
                 .AddParameterListParameters(parameters)
                 .AddBodyStatements(linesOfCode.Select(b => SyntaxFactory.ParseStatement(b)).ToArray());

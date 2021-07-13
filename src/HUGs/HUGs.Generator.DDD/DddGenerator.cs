@@ -45,9 +45,15 @@ namespace HUGs.Generator.DDD
                 if (string.IsNullOrWhiteSpace(schemaText)) continue;
 
                 var schema = deserializer.Deserialize<DddObjectSchema>(schemaText);
-                if (schema is not null)
+                if (schema is null) continue; // TODO: raise diagnostics exception
+
+                if (schema.Kind.Equals("ValueObject", StringComparison.InvariantCultureIgnoreCase))
                 {
                     dddModel.AddValueObjectSchema(schema);
+                }
+                else if (schema.Kind.Equals("Entity", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    dddModel.AddEntitySchema(schema);
                 }
             }
 
@@ -60,12 +66,23 @@ namespace HUGs.Generator.DDD
             {
                 AddValueObjectSource(context, valueObject);
             }
+
+            foreach (var entity in dddModel.Entities)
+            {
+                AddValueObjectSource(context, entity);
+            }
         }
 
         private static void AddValueObjectSource(GeneratorExecutionContext context, DddObjectSchema valueObject)
         {
             var valueObjectClass = ValueObjectGenerator.GenerateValueObjectCode(valueObject);
             context.AddSource($"{valueObject.Name}ValueObject", valueObjectClass);
+        }
+
+        private static void AddEntitySource(GeneratorExecutionContext context, DddObjectSchema entity)
+        {
+            var entityClass = EntityGenerator.GenerateEntityCode(entity);
+            context.AddSource($"{entity.Name}Entity", entityClass);
         }
     }
 }

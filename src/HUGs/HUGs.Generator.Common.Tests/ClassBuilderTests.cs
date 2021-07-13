@@ -81,7 +81,7 @@ namespace HUGs.Generator.Common.Tests
         {
             var builder = new ClassBuilder("TestClass");
 
-            builder.AddProperty("string", "TestProperty", getterOnly: false, SyntaxKind.PublicKeyword);
+            builder.AddFullProperty("string", "TestProperty", new[] { SyntaxKind.PublicKeyword });
 
             var classDeclaration = builder.Build();
 
@@ -99,7 +99,7 @@ namespace HUGs.Generator.Common.Tests
         {
             var builder = new ClassBuilder("TestClass");
 
-            builder.AddProperty("string", "TestProperty", getterOnly: true, SyntaxKind.PublicKeyword);
+            builder.AddGetOnlyProperty("string", "TestProperty", new[] { SyntaxKind.PublicKeyword });
 
             var classDeclaration = builder.Build();
 
@@ -208,8 +208,8 @@ namespace HUGs.Generator.Common.Tests
             builder
                 .AddField("int", "AmountField", SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword)
                 .AddField("string", "TextField", SyntaxKind.PublicKeyword)
-                .AddProperty("int", "AmountProperty", getterOnly: false, SyntaxKind.PrivateKeyword)
-                .AddProperty("string", "TextProperty", getterOnly: true, SyntaxKind.PublicKeyword);
+                .AddFullProperty("int", "AmountProperty", new[] { SyntaxKind.PrivateKeyword })
+                .AddGetOnlyProperty("string", "TextProperty", new[] { SyntaxKind.PublicKeyword });
 
             var method = new MethodBuilder()
                 .SetName("TestMethod")

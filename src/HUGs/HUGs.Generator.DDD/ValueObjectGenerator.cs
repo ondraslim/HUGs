@@ -4,7 +4,10 @@ using HUGs.Generator.DDD.Common.DDD.Base;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
+
+[assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD
 {
     internal static class ValueObjectGenerator
@@ -14,7 +17,7 @@ namespace HUGs.Generator.DDD
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
             syntaxBuilder.AddNamespace("HUGs.DDD.Generated.ValueObject");
-            
+
             AddCommonUsings(syntaxBuilder);
 
             var classBuilder = PrepareValueObjectClassBuilder(valueObject.Name);
@@ -33,9 +36,9 @@ namespace HUGs.Generator.DDD
             syntaxBuilder.AddUsing("System.Collections.Generic");
         }
 
-        private static ClassBuilder PrepareValueObjectClassBuilder(string className)
+        private static ClassBuilder PrepareValueObjectClassBuilder(string valueObjectName)
         {
-            var classBuilder = new ClassBuilder(className);
+            var classBuilder = new ClassBuilder(valueObjectName);
             classBuilder.AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword);
             classBuilder.AddClassBaseTypes(typeof(ValueObject).FullName);
 
@@ -46,7 +49,7 @@ namespace HUGs.Generator.DDD
         {
             foreach (var prop in valueObject.Properties)
             {
-                classBuilder.AddProperty(prop.FullType, prop.Name, getterOnly: true, SyntaxKind.PublicKeyword);
+                classBuilder.AddGetOnlyProperty(prop.FullType, prop.Name, new[] { SyntaxKind.PublicKeyword });
             }
         }
 
