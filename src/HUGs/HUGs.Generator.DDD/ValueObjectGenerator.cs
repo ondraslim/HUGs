@@ -12,6 +12,7 @@ namespace HUGs.Generator.DDD
 {
     internal static class ValueObjectGenerator
     {
+        // TODO: add check if kind == valueObject (diagnostics)
         public static string GenerateValueObjectCode(DddObjectSchema valueObject)
         {
             var syntaxBuilder = new RoslynSyntaxBuilder();

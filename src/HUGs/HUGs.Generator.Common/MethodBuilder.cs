@@ -44,15 +44,18 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        public MethodDeclarationSyntax Build()
+        public MethodDeclarationSyntax Build(bool methodHeaderOnly = false)
         {
             var statements = body.Select(b => SyntaxFactory.ParseStatement(b)).ToArray();
             var methodBody = SyntaxFactory.Block(statements);
             
             var methodDeclaration = SyntaxFactory.MethodDeclaration(returnType, name)
                 .AddModifiers(accessModifiers)
-                .AddParameterListParameters(parameters.ToArray())
-                .WithBody(methodBody);
+                .AddParameterListParameters(parameters.ToArray());
+
+            methodDeclaration = methodHeaderOnly
+                ? methodDeclaration.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+                : methodDeclaration.WithBody(methodBody);
 
             return methodDeclaration.NormalizeWhitespace();
         }

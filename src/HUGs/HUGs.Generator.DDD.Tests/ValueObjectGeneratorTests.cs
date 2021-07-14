@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.Tests.Tools.Extensions;
 using NUnit.Framework;
 

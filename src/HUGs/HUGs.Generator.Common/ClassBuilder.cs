@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace HUGs.Generator.Common
 {
@@ -47,7 +48,6 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        // TODO: add option for private set!
         public ClassBuilder AddFullProperty(string type, string name, SyntaxKind[] accessModifiers)
         {
             var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
@@ -57,7 +57,6 @@ namespace HUGs.Generator.Common
                         .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
                     SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
                         .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
-
             properties.Add(propertyDeclaration);
 
             return this;
@@ -70,6 +69,22 @@ namespace HUGs.Generator.Common
                 .AddAccessorListAccessors(
                     SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
                         .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+
+            properties.Add(propertyDeclaration);
+
+            return this;
+        }
+
+        public ClassBuilder AddPropertyWithPrivateSetter(string type, string name, SyntaxKind[] accessModifiers)
+        {
+            var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
+                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
+                .AddAccessorListAccessors(
+                    SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
+                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+                SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
+                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+                    .WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PrivateKeyword))));
 
             properties.Add(propertyDeclaration);
 
