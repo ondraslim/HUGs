@@ -32,7 +32,7 @@ namespace HUGs.DDD.Generated.Entity
 
     public partial class {inputEntity.Name} : Aggregate<{inputEntity.Name}Id>
     {{
-        public {inputEntity.Name}(string value): base(value)
+        public {inputEntity.Name}({inputEntity.Name}Id id): base(id)
         {{
         }}
 
@@ -76,7 +76,7 @@ namespace HUGs.DDD.Generated.Entity
 
         public double? Number {{ get; private set; }}
 
-        public {inputEntity.Name}(string value, string Text, double? Number): base(value)
+        public {inputEntity.Name}({inputEntity.Name}Id id, string Text, double? Number): base(id)
         {{
             this.Text = Text;
             this.Number = Number;
@@ -119,7 +119,7 @@ namespace HUGs.DDD.Generated.Entity
     {{
         private List<OrderItem> _Items;
         public IReadOnlyList<OrderItem> Items => _Items;
-        public {inputEntity.Name}(string value, IReadOnlyList<OrderItem> Items): base(value)
+        public {inputEntity.Name}({inputEntity.Name}Id id, IReadOnlyList<OrderItem> Items): base(id)
         {{
             this._Items = Items;
         }}
@@ -167,7 +167,7 @@ namespace HUGs.DDD.Generated.Entity
         public IReadOnlyList<OrderItem> Items => _Items;
         public double? Number {{ get; private set; }}
 
-        public {inputEntity.Name}(string value, string Text, IReadOnlyList<OrderItem> Items, double? Number): base(value)
+        public {inputEntity.Name}({inputEntity.Name}Id id, string Text, IReadOnlyList<OrderItem> Items, double? Number): base(id)
         {{
             this.Text = Text;
             this._Items = Items;

@@ -26,7 +26,7 @@ namespace HUGs.Generator.DDD
             AddEntityProperties(classBuilder, entity);
             AddEntityConstructor(classBuilder, entity, entityIdClass.Identifier.ValueText);
 
-            classBuilder.AddMethod(GetOnInitializedMethod());
+            classBuilder.AddMethod(BuildOnInitializedMethod());
             syntaxBuilder.AddClass(classBuilder.Build());
 
             return syntaxBuilder.Build();
@@ -90,7 +90,7 @@ namespace HUGs.Generator.DDD
                     p.Name))
                 .ToArray();
 
-            var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "value") };
+            var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax(entityIdClassIdentifier, "id") };
             var ctorParams = ctorBaseParams.Concat(properties).ToArray();
             var linesOfCode = entity.Properties
                 .Select(p => p.IsArrayProperty 
@@ -107,7 +107,7 @@ namespace HUGs.Generator.DDD
             );
         }
 
-        private static MethodDeclarationSyntax GetOnInitializedMethod()
+        private static MethodDeclarationSyntax BuildOnInitializedMethod()
         {
             var methodBuilder = new MethodBuilder()
                 .SetAccessModifiers(SyntaxKind.PrivateKeyword, SyntaxKind.PartialKeyword)
