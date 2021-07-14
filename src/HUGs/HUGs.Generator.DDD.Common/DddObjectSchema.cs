@@ -2,7 +2,7 @@
 {
     public class DddObjectSchema
     {
-        // TODO: specify kind (supported)
+        // TODO: specify supported kinds
         public string Kind { get; set; }
         public string Name { get; set; }
         public Property[] Properties { get; set; }

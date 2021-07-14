@@ -53,13 +53,14 @@ namespace HUGs.Generator.Common
         // TODO: refactor - following methods prepare accessors, property creation logic shared in another private method
         public ClassBuilder AddFullProperty(string type, string name, SyntaxKind[] accessModifiers)
         {
-            var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
-                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
-                .AddAccessorListAccessors(
-                    SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
-                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
-                    SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
-                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+            var accessors = new[] {
+                SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
+                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)), 
+                SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
+                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+            };
+
+            var propertyDeclaration = CreatePropertyDeclaration(type, name, accessModifiers, accessors);
             properties.Add(propertyDeclaration);
 
             return this;
@@ -67,12 +68,13 @@ namespace HUGs.Generator.Common
 
         public ClassBuilder AddGetOnlyProperty(string type, string name, SyntaxKind[] accessModifiers)
         {
-            var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
-                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
-                .AddAccessorListAccessors(
-                    SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
-                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+            var accessors = new[]
+            {
+                SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
+                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+            };
 
+            var propertyDeclaration = CreatePropertyDeclaration(type, name, accessModifiers, accessors);
             properties.Add(propertyDeclaration);
 
             return this;
@@ -80,15 +82,16 @@ namespace HUGs.Generator.Common
 
         public ClassBuilder AddPropertyWithPrivateSetter(string type, string name, SyntaxKind[] accessModifiers)
         {
-            var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
-                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
-                .AddAccessorListAccessors(
-                    SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
-                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+            var accessors = new[]
+            {
+                SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
+                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
                 SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
                     .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
-                    .WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PrivateKeyword))));
-
+                    .WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PrivateKeyword)))
+            }; 
+            
+            var propertyDeclaration = CreatePropertyDeclaration(type, name, accessModifiers, accessors);
             properties.Add(propertyDeclaration);
 
             return this;
@@ -109,6 +112,19 @@ namespace HUGs.Generator.Common
             properties.Add(propertyDeclaration);
 
             return this;
+        }
+
+        private static PropertyDeclarationSyntax CreatePropertyDeclaration(
+            string type,
+            string name,
+            IEnumerable<SyntaxKind> accessModifiers,
+            AccessorDeclarationSyntax[] accessors)
+        {
+            var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
+                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
+                .AddAccessorListAccessors(accessors);
+
+            return propertyDeclaration;
         }
 
         // TODO: refactor to custom ParameterSyntax class with method ToRoslynSyntax(), add option for IsInBaseCall
