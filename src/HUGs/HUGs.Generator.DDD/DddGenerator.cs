@@ -69,7 +69,7 @@ namespace HUGs.Generator.DDD
 
             foreach (var entity in dddModel.Entities)
             {
-                AddValueObjectSource(context, entity);
+                AddEntitySource(context, entity);
             }
         }
 
