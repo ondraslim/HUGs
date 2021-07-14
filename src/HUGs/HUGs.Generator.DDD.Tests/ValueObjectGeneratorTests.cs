@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using HUGs.Generator.DDD.Common;
 using HUGs.Generator.Tests.Tools.Extensions;
 using NUnit.Framework;
 

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using HUGs.Generator.Common.Helpers;
+using HUGs.Generator.DDD.Common;
 using HUGs.Generator.Tests.Tools.Extensions;
 using NUnit.Framework;
 
@@ -117,13 +117,61 @@ namespace HUGs.DDD.Generated.Entity
 
     public partial class {inputEntity.Name} : Aggregate<{inputEntity.Name}Id>
     {{
-        private List<OrderItem> _items;
-
-        public IReadOnyList<OrderItem> Items => _items;
-
-        public {inputEntity.Name}(string value, IReadOnlyList<OrderItem> Items, double? Number): base(value)
+        private List<OrderItem> _Items;
+        public IReadOnlyList<OrderItem> Items => _Items;
+        public {inputEntity.Name}(string value, IReadOnlyList<OrderItem> Items): base(value)
         {{
-            this._items = items;
+            this._Items = Items;
+        }}
+
+        private partial void OnInitialized();
+    }}
+}}";
+
+            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+        }
+
+        [Test]
+        public void GivenEntitySchemaWithVariousProperties_CorrectlyGeneratesEntityClasses()
+        {
+            var inputEntity = new DddObjectSchema
+            {
+                Kind = "Entity",
+                Name = "ArrayPropertyEntity",
+                Properties = new Property[]
+                {
+                    new() { Name = "Text", Type = "string" },
+                    new() { Name = "Items", Type = "OrderItem[]" },
+                    new() { Name = "Number", Optional = true, Type = "double" }
+                }
+            };
+
+            var actualCode = EntityGenerator.GenerateEntityCode(inputEntity);
+            var expectedCode = $@"using System;
+using System.Collections.Generic;
+
+namespace HUGs.DDD.Generated.Entity
+{{
+    public class {inputEntity.Name}Id : EntityId<{inputEntity.Name}>
+    {{
+        public {inputEntity.Name}Id(string value)
+        {{
+        }}
+    }}
+
+    public partial class {inputEntity.Name} : Aggregate<{inputEntity.Name}Id>
+    {{
+        private List<OrderItem> _Items;
+        public string Text {{ get; private set; }}
+
+        public IReadOnlyList<OrderItem> Items => _Items;
+        public double? Number {{ get; private set; }}
+
+        public {inputEntity.Name}(string value, string Text, IReadOnlyList<OrderItem> Items, double? Number): base(value)
+        {{
+            this.Text = Text;
+            this._Items = Items;
+            this.Number = Number;
         }}
 
         private partial void OnInitialized();

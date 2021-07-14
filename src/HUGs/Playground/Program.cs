@@ -6,6 +6,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Reflection;
 using HUGs.Generator.DDD;
+using HUGs.Generator.DDD.Common;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 

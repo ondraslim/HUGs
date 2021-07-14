@@ -1,5 +1,6 @@
 ﻿using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
+using HUGs.Generator.DDD.Common;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
@@ -64,10 +65,13 @@ namespace HUGs.Generator.DDD
         {
             foreach (var prop in entity.Properties)
             {
-                if (prop.Type.TrimEnd().EndsWith("[]"))
+                if (prop.IsArrayProperty)
                 {
-                    // TODO: add private readonly field for T[],
-                    // TODO: add Get only - IReadOnlyList<T> as the collection
+                    classBuilder.AddField($"List<{prop.TypeWithoutArray}>", prop.PrivateName, SyntaxKind.PrivateKeyword);
+                    classBuilder.AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{prop.TypeWithoutArray}>", prop.Name, prop.PrivateName, new[]
+                    {
+                        SyntaxKind.PublicKeyword
+                    });
                 }
                 else
                 {
@@ -81,13 +85,19 @@ namespace HUGs.Generator.DDD
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
 
             var properties = entity.Properties
-                .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(p.FullType, p.Name))
+                .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(
+                    p.IsArrayProperty ? $"IReadOnlyList<{p.FullType}>" : p.FullType,
+                    p.Name))
                 .ToArray();
 
             var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "value") };
             var ctorParams = ctorBaseParams.Concat(properties).ToArray();
-            var linesOfCode = entity.Properties.Select(p => $"this.{p.Name} = {p.Name};").ToArray();
-            
+            var linesOfCode = entity.Properties
+                .Select(p => p.IsArrayProperty 
+                    ? $"this.{p.PrivateName} = {p.Name};" 
+                    : $"this.{p.Name} = {p.Name};")
+                .ToArray();
+
             classBuilder.AddConstructor(
                 accessModifiers,
                 entity.Name,

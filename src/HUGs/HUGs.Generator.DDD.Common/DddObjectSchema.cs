@@ -1,4 +1,4 @@
-﻿namespace HUGs.Generator.DDD
+﻿namespace HUGs.Generator.DDD.Common
 {
     public class DddObjectSchema
     {
@@ -13,6 +13,10 @@
         public string Name { get; set; }
         public string Type { get; set; }
         public bool Optional { get; set; }
-        public string FullType => $"{Type}{(Optional ? "?" : "")}";
+
+        public bool IsArrayProperty => Type.EndsWith("[]");
+        public string TypeWithoutArray => Type.Replace("[]", "");
+        public string FullType => $"{TypeWithoutArray}{(Optional ? "?" : "")}";
+        public string PrivateName => $"_{Name}";
     }
 }

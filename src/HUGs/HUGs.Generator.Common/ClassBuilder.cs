@@ -2,6 +2,8 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using HUGs.Generator.Common.Helpers;
 using Microsoft.CodeAnalysis;
 
 namespace HUGs.Generator.Common
@@ -48,6 +50,7 @@ namespace HUGs.Generator.Common
             return this;
         }
 
+        // TODO: refactor - following methods prepare accessors, property creation logic shared in another private method
         public ClassBuilder AddFullProperty(string type, string name, SyntaxKind[] accessModifiers)
         {
             var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
@@ -85,6 +88,23 @@ namespace HUGs.Generator.Common
                 SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
                     .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
                     .WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PrivateKeyword))));
+
+            properties.Add(propertyDeclaration);
+
+            return this;
+        }
+
+        public ClassBuilder AddGetOnlyPropertyWithBackingField(
+            string type,
+            string name,
+            string backingFieldName,
+            SyntaxKind[] accessModifiers)
+        {
+            var propertyDeclaration = SyntaxFactory
+                .PropertyDeclaration(SyntaxFactory.ParseTypeName(type), SyntaxFactory.Identifier(name))
+                .WithModifiers(SyntaxFactory.TokenList(accessModifiers.Select(SyntaxFactory.Token)))
+                .WithExpressionBody(SyntaxFactory.ArrowExpressionClause(SyntaxFactory.IdentifierName(backingFieldName)))
+                .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
             properties.Add(propertyDeclaration);
 
