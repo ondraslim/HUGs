@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HUGs.DDD.Generated.ValueObject
 {
-    public partial class Simple1 : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
+    public partial class Simple1 : HUGs.Generator.DDD.BaseModels.ValueObject
     {
         public string Text { get; }
 

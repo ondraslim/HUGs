@@ -1,7 +1,7 @@
 ﻿using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
+using HUGs.Generator.DDD.BaseModels;
 using HUGs.Generator.DDD.Common;
-using HUGs.Generator.DDD.Common.DDD.Base;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;

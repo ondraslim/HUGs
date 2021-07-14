@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace HUGs.Generator.DDD.Common.DDD.Base
+namespace HUGs.Generator.DDD.BaseModels
 {
     /// <summary>
     /// Referenced from https://github.com/dotnet-architecture/eShopOnContainers/blob/dev/src/Services/Ordering/Ordering.Domain/SeedWork/ValueObject.cs

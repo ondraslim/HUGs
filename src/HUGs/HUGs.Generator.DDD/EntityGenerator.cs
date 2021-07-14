@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using HUGs.Generator.DDD.BaseModels;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD
@@ -37,7 +38,7 @@ namespace HUGs.Generator.DDD
             var className = $"{entityName}Id";
             var classBuilder = new ClassBuilder(className);
             classBuilder.AddClassAccessModifiers(SyntaxKind.PublicKeyword);
-            classBuilder.AddClassBaseTypes($"EntityId<{entityName}>");
+            classBuilder.AddClassBaseTypes($"{typeof(EntityId<>).Namespace}.EntityId<{entityName}>");
 
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
             var parameters = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "value") };
@@ -55,8 +56,8 @@ namespace HUGs.Generator.DDD
         private static ClassBuilder PrepareEntityClassBuilder(string entityName, string entityIdClassIdentifier)
         {
             var classBuilder = new ClassBuilder(entityName)
-                .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
-                .AddClassBaseTypes($"Aggregate<{entityIdClassIdentifier}>");
+                    .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
+                    .AddClassBaseTypes($"{typeof(Entity<>).Namespace}.Entity<{entityIdClassIdentifier}>");
 
             return classBuilder;
         }
@@ -93,8 +94,8 @@ namespace HUGs.Generator.DDD
             var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax(entityIdClassIdentifier, "id") };
             var ctorParams = ctorBaseParams.Concat(properties).ToArray();
             var linesOfCode = entity.Properties
-                .Select(p => p.IsArrayProperty 
-                    ? $"this.{p.PrivateName} = {p.Name};" 
+                .Select(p => p.IsArrayProperty
+                    ? $"this.{p.PrivateName} = {p.Name};"
                     : $"this.{p.Name} = {p.Name};")
                 .ToArray();
 

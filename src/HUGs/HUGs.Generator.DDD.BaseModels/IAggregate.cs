@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HUGs.Generator.DDD.Common.DDD.Base
+namespace HUGs.Generator.DDD.BaseModels
 {
     public interface IAggregate<TKey> : IEntity<TKey>
     {

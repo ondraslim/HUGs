@@ -23,7 +23,7 @@ using System.Collections.Generic;
 
 namespace HUGs.DDD.Generated.ValueObject
 {{
-    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
+    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.BaseModels.ValueObject
     {{
         public {inputValueObject.Name}()
         {{
@@ -54,7 +54,7 @@ using System.Collections.Generic;
 
 namespace HUGs.DDD.Generated.ValueObject
 {{
-    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
+    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.BaseModels.ValueObject
     {{
         public int Number {{ get; }}
 
@@ -74,7 +74,7 @@ namespace HUGs.DDD.Generated.ValueObject
         }
 
         [Test]
-        public void GivenValueObjectSchemaWithMutipleProperties_CorrectlyGeneratesValueObjectClass()
+        public void GivenValueObjectSchemaWithMultipleProperties_CorrectlyGeneratesValueObjectClass()
         {
             var inputValueObject = new DddObjectSchema
             {
@@ -94,7 +94,7 @@ using System.Collections.Generic;
 
 namespace HUGs.DDD.Generated.ValueObject
 {{
-    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.Common.DDD.Base.ValueObject
+    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.BaseModels.ValueObject
     {{
         public int Number {{ get; }}
 
