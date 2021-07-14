@@ -15,8 +15,7 @@ namespace HUGs.Generator.Common
         public RoslynSyntaxBuilder AddUsing(params string[] names)
         {
             compilationUnitSyntax = compilationUnitSyntax.AddUsings(
-                names
-                    .Select(u => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(u)))
+                names.Select(u => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(u)))
                     .ToArray());
 
             return this;

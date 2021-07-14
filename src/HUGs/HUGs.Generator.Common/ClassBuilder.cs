@@ -1,10 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using HUGs.Generator.Common.Helpers;
-using Microsoft.CodeAnalysis;
 
 namespace HUGs.Generator.Common
 {
@@ -50,7 +48,6 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        // TODO: refactor - following methods prepare accessors, property creation logic shared in another private method
         public ClassBuilder AddFullProperty(string type, string name, SyntaxKind[] accessModifiers)
         {
             var accessors = new[] {
@@ -122,12 +119,12 @@ namespace HUGs.Generator.Common
         {
             var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
                 .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
-                .AddAccessorListAccessors(accessors);
+                .AddAccessorListAccessors(accessors)
+                .WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed);
 
             return propertyDeclaration;
         }
 
-        // TODO: refactor to custom ParameterSyntax class with method ToRoslynSyntax(), add option for IsInBaseCall
         public ClassBuilder AddConstructor(
             SyntaxKind[] accessModifiers,
             string identifierText,

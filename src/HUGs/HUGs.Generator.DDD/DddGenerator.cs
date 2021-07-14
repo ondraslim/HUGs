@@ -47,11 +47,11 @@ namespace HUGs.Generator.DDD
                 var schema = deserializer.Deserialize<DddObjectSchema>(schemaText);
                 if (schema is null) continue; // TODO: raise diagnostics exception
 
-                if (schema.Kind.Equals("ValueObject", StringComparison.InvariantCultureIgnoreCase))
+                if (schema.IsValueObjectSchema)
                 {
                     dddModel.AddValueObjectSchema(schema);
                 }
-                else if (schema.Kind.Equals("Entity", StringComparison.InvariantCultureIgnoreCase))
+                else if (schema.IsEntitySchema)
                 {
                     dddModel.AddEntitySchema(schema);
                 }

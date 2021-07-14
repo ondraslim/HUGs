@@ -5,4 +5,8 @@
 	  <LangVersion>9</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HUGs.Generator.Common\HUGs.Generator.Common.csproj" />
+  </ItemGroup>
+
 </Project>
