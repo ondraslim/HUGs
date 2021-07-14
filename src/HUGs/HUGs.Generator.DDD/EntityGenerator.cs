@@ -18,7 +18,7 @@ namespace HUGs.Generator.DDD
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
             syntaxBuilder.AddNamespace("HUGs.DDD.Generated.Entity");
-            AddCommonUsings(syntaxBuilder);
+            AddUsings(syntaxBuilder);
 
             var entityIdClass = PrepareEntityIdClass(entity.Name);
             syntaxBuilder.AddClass(entityIdClass);
@@ -38,7 +38,7 @@ namespace HUGs.Generator.DDD
             var className = $"{entityName}Id";
             var classBuilder = new ClassBuilder(className);
             classBuilder.AddClassAccessModifiers(SyntaxKind.PublicKeyword);
-            classBuilder.AddClassBaseTypes($"{typeof(EntityId<>).Namespace}.EntityId<{entityName}>");
+            classBuilder.AddClassBaseTypes($"EntityId<{entityName}>");
 
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
             var parameters = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "value") };
@@ -47,17 +47,18 @@ namespace HUGs.Generator.DDD
             return classBuilder.Build();
         }
 
-        private static void AddCommonUsings(RoslynSyntaxBuilder syntaxBuilder)
+        private static void AddUsings(RoslynSyntaxBuilder syntaxBuilder)
         {
             syntaxBuilder.AddUsing("System");
             syntaxBuilder.AddUsing("System.Collections.Generic");
+            syntaxBuilder.AddUsing("HUGs.Generator.DDD.BaseModels");
         }
 
         private static ClassBuilder PrepareEntityClassBuilder(string entityName, string entityIdClassIdentifier)
         {
             var classBuilder = new ClassBuilder(entityName)
                     .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
-                    .AddClassBaseTypes($"{typeof(Entity<>).Namespace}.Entity<{entityIdClassIdentifier}>");
+                    .AddClassBaseTypes($"Entity<{entityIdClassIdentifier}>");
 
             return classBuilder;
         }

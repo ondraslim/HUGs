@@ -36,13 +36,14 @@ namespace HUGs.Generator.DDD
         {
             syntaxBuilder.AddUsing("System");
             syntaxBuilder.AddUsing("System.Collections.Generic");
+            syntaxBuilder.AddUsing("HUGs.Generator.DDD.BaseModels");
         }
 
         private static ClassBuilder PrepareValueObjectClassBuilder(string valueObjectName)
         {
             var classBuilder = new ClassBuilder(valueObjectName);
             classBuilder.AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword);
-            classBuilder.AddClassBaseTypes(typeof(ValueObject).FullName);
+            classBuilder.AddClassBaseTypes(nameof(ValueObject));
 
             return classBuilder;
         }

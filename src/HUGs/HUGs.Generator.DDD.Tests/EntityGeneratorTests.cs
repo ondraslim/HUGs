@@ -20,17 +20,18 @@ namespace HUGs.Generator.DDD.Tests
             var actualCode = EntityGenerator.GenerateEntityCode(inputEntity);
             var expectedCode = $@"using System;
 using System.Collections.Generic;
+using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.Entity
 {{
-    public class {inputEntity.Name}Id : HUGs.Generator.DDD.BaseModels.EntityId<{inputEntity.Name}>
+    public class {inputEntity.Name}Id : EntityId<{inputEntity.Name}>
     {{
         public {inputEntity.Name}Id(string value)
         {{
         }}
     }}
 
-    public partial class {inputEntity.Name} : HUGs.Generator.DDD.BaseModels.Entity<{inputEntity.Name}Id>
+    public partial class {inputEntity.Name} : Entity<{inputEntity.Name}Id>
     {{
         public {inputEntity.Name}({inputEntity.Name}Id id): base(id)
         {{
@@ -60,17 +61,18 @@ namespace HUGs.DDD.Generated.Entity
             var actualCode = EntityGenerator.GenerateEntityCode(inputEntity);
             var expectedCode = $@"using System;
 using System.Collections.Generic;
+using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.Entity
 {{
-    public class {inputEntity.Name}Id : HUGs.Generator.DDD.BaseModels.EntityId<{inputEntity.Name}>
+    public class {inputEntity.Name}Id : EntityId<{inputEntity.Name}>
     {{
         public {inputEntity.Name}Id(string value)
         {{
         }}
     }}
 
-    public partial class {inputEntity.Name} : HUGs.Generator.DDD.BaseModels.Entity<{inputEntity.Name}Id>
+    public partial class {inputEntity.Name} : Entity<{inputEntity.Name}Id>
     {{
         public string Text {{ get; private set; }}
 
@@ -105,17 +107,18 @@ namespace HUGs.DDD.Generated.Entity
             var actualCode = EntityGenerator.GenerateEntityCode(inputEntity);
             var expectedCode = $@"using System;
 using System.Collections.Generic;
+using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.Entity
 {{
-    public class {inputEntity.Name}Id : HUGs.Generator.DDD.BaseModels.EntityId<{inputEntity.Name}>
+    public class {inputEntity.Name}Id : EntityId<{inputEntity.Name}>
     {{
         public {inputEntity.Name}Id(string value)
         {{
         }}
     }}
 
-    public partial class {inputEntity.Name} : HUGs.Generator.DDD.BaseModels.Entity<{inputEntity.Name}Id>
+    public partial class {inputEntity.Name} : Entity<{inputEntity.Name}Id>
     {{
         private List<OrderItem> _Items;
         public IReadOnlyList<OrderItem> Items => _Items;
@@ -149,17 +152,18 @@ namespace HUGs.DDD.Generated.Entity
             var actualCode = EntityGenerator.GenerateEntityCode(inputEntity);
             var expectedCode = $@"using System;
 using System.Collections.Generic;
+using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.Entity
 {{
-    public class {inputEntity.Name}Id : HUGs.Generator.DDD.BaseModels.EntityId<{inputEntity.Name}>
+    public class {inputEntity.Name}Id : EntityId<{inputEntity.Name}>
     {{
         public {inputEntity.Name}Id(string value)
         {{
         }}
     }}
 
-    public partial class {inputEntity.Name} : HUGs.Generator.DDD.BaseModels.Entity<{inputEntity.Name}Id>
+    public partial class {inputEntity.Name} : Entity<{inputEntity.Name}Id>
     {{
         private List<OrderItem> _Items;
         public string Text {{ get; private set; }}

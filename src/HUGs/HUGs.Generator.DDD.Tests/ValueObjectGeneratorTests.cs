@@ -20,10 +20,11 @@ namespace HUGs.Generator.DDD.Tests
             var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
             var expectedCode = $@"using System;
 using System.Collections.Generic;
+using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.ValueObject
 {{
-    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.BaseModels.ValueObject
+    public partial class {inputValueObject.Name} : ValueObject
     {{
         public {inputValueObject.Name}()
         {{
@@ -51,10 +52,11 @@ namespace HUGs.DDD.Generated.ValueObject
             var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
             var expectedCode = $@"using System;
 using System.Collections.Generic;
+using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.ValueObject
 {{
-    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.BaseModels.ValueObject
+    public partial class {inputValueObject.Name} : ValueObject
     {{
         public int Number {{ get; }}
 
@@ -91,10 +93,11 @@ namespace HUGs.DDD.Generated.ValueObject
             var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
             var expectedCode = $@"using System;
 using System.Collections.Generic;
+using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.ValueObject
 {{
-    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.BaseModels.ValueObject
+    public partial class {inputValueObject.Name} : ValueObject
     {{
         public int Number {{ get; }}
 
