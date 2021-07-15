@@ -4,7 +4,7 @@ namespace HUGs.Generator.DDD.Common
 {
     public class DddObjectSchema
     {
-        // TODO: specify supported kinds
+        // TODO: Parse as Enum type
         public string Kind { get; set; }
         public string Name { get; set; }
         public Property[] Properties { get; set; }

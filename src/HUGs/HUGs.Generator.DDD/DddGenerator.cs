@@ -44,17 +44,10 @@ namespace HUGs.Generator.DDD
 
                 if (string.IsNullOrWhiteSpace(schemaText)) continue;
 
-                var schema = deserializer.Deserialize<DddObjectSchema>(schemaText);
-                if (schema is null) continue; // TODO: raise diagnostics exception
+                var dddSchema = deserializer.Deserialize<DddObjectSchema>(schemaText);
+                if (dddSchema is null) continue; // TODO: raise diagnostics exception
 
-                if (schema.IsValueObjectSchema)
-                {
-                    dddModel.AddValueObjectSchema(schema);
-                }
-                else if (schema.IsEntitySchema)
-                {
-                    dddModel.AddEntitySchema(schema);
-                }
+                dddModel.AddObjectSchema(dddSchema);
             }
 
             return dddModel;
@@ -81,7 +74,7 @@ namespace HUGs.Generator.DDD
 
         private static void AddEntitySource(GeneratorExecutionContext context, DddObjectSchema entity)
         {
-            var entityClass = EntityGenerator.GenerateEntityCode(entity);
+            var entityClass = IdentifiableGenerator.GenerateEntityCode(entity);
             context.AddSource($"{entity.Name}Entity", entityClass);
         }
     }
