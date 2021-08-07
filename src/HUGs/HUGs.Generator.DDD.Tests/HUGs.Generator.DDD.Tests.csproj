@@ -11,17 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="TestExpectedResults\SimpleValueObject.txt" />
-    <None Include="TestExpectedResults\SimpleValueObject2.txt" />
-    <None Include="TestExpectedResults\SimpleValueObjectWithOptional.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="TestData\Schemas\SimpleValueObjectWithOptional.dddschema" />
-    <AdditionalFiles Include="TestData\Schemas\SimpleValueObject2.dddschema" />
-    <AdditionalFiles Include="TestData\Schemas\SimpleValueObject.dddschema" />
-    <AdditionalFiles Include="TestData\Schemas\AddressValueObject.dddschema" />
-    <AdditionalFiles Include="TestExpectedResults\AddressValueObject.txt" />
+    <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObjectWithOptional.dddschema" />
+    <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObject2.dddschema" />
+    <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObject.dddschema" />
+    <AdditionalFiles Include="TestData\Schemas\ValueObjects\AddressValueObject.dddschema" />
+    <AdditionalFiles Include="TestExpectedResults\ValueObjects\AddressValueObject.txt" />
   </ItemGroup>
 
   <ItemGroup>

@@ -25,7 +25,7 @@ namespace HUGs.Generator.DDD.Tests
         [Test]
         public void ValidSimpleValueObjectSchema_GeneratorRun_GeneratesCorrectValueObject()
         {
-            var schema = File.ReadAllText("../../../TestData/Schemas/SimpleValueObject.dddschema");
+            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
@@ -35,14 +35,14 @@ namespace HUGs.Generator.DDD.Tests
 
             generatedFileTexts.Length.Should().Be(1);
 
-            var expected = File.ReadAllText("../../../TestExpectedResults/SimpleValueObject.txt");
+            var expected = File.ReadAllText("../../../TestExpectedResults/ValueObjects/SimpleValueObject.txt");
             generatedFileTexts.First().Should().BeIgnoringLineEndings(expected);
         }
 
         [Test]
         public void ValidSimpleValueObjectSchema2_GeneratorRun_GeneratesCorrectValueObject()
         {
-            var schema = File.ReadAllText("../../../TestData/Schemas/SimpleValueObject2.dddschema");
+            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject2.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
@@ -52,15 +52,15 @@ namespace HUGs.Generator.DDD.Tests
 
             generatedFileTexts.Length.Should().Be(1);
 
-            var expected = File.ReadAllText("../../../TestExpectedResults/SimpleValueObject2.txt");
+            var expected = File.ReadAllText("../../../TestExpectedResults/ValueObjects/SimpleValueObject2.txt");
             generatedFileTexts.First().Should().BeIgnoringLineEndings(expected);
         }
 
         [Test]
         public void TwoValidSimpleValueObjectSchemas_GeneratorRun_GeneratesCorrectValueObjects()
         {
-            var schema1 = File.ReadAllText("../../../TestData/Schemas/SimpleValueObject.dddschema");
-            var schema2 = File.ReadAllText("../../../TestData/Schemas/SimpleValueObject2.dddschema");
+            var schema1 = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
+            var schema2 = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject2.dddschema");
             var driver = SetupGeneratorDriver(new List<string> { schema1, schema2 });
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
@@ -70,8 +70,8 @@ namespace HUGs.Generator.DDD.Tests
 
             generatedFileTexts.Length.Should().Be(2);
 
-            var expected1 = File.ReadAllText("../../../TestExpectedResults/SimpleValueObject.txt");
-            var expected2 = File.ReadAllText("../../../TestExpectedResults/SimpleValueObject2.txt");
+            var expected1 = File.ReadAllText("../../../TestExpectedResults/ValueObjects/SimpleValueObject.txt");
+            var expected2 = File.ReadAllText("../../../TestExpectedResults/ValueObjects/SimpleValueObject2.txt");
 
             generatedFileTexts.Should().ContainIgnoringLineEndings(new List<string> { expected1, expected2 });
         }
@@ -79,7 +79,7 @@ namespace HUGs.Generator.DDD.Tests
         [Test]
         public void ValidSimpleValueObjectWithOptionalsSchema_GeneratorRun_GeneratesCorrectValueObject()
         {
-            var schema = File.ReadAllText("../../../TestData/Schemas/SimpleValueObjectWithOptional.dddschema");
+            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObjectWithOptional.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
@@ -89,14 +89,14 @@ namespace HUGs.Generator.DDD.Tests
 
             generatedFileTexts.Length.Should().Be(1);
 
-            var expected = File.ReadAllText("../../../TestExpectedResults/SimpleValueObjectWithOptional.txt");
+            var expected = File.ReadAllText("../../../TestExpectedResults/ValueObjects/SimpleValueObjectWithOptional.txt");
             generatedFileTexts.First().Should().BeIgnoringLineEndings(expected);
         }
 
         [Test]
-        public void ValidComposityAdressValueObjectSchema_GeneratorRun_GeneratesCorrectValueObject()
+        public void ValidCompositeAddressValueObjectSchema_GeneratorRun_GeneratesCorrectValueObject()
         {
-            var schema = File.ReadAllText("../../../TestData/Schemas/AddressValueObject.dddschema");
+            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/AddressValueObject.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
             var compilationWithCountryId = CreateCompilation(@"
@@ -123,7 +123,7 @@ namespace Test.Country
 
             generatedFileTexts.Length.Should().Be(1);
 
-            var expected = File.ReadAllText("../../../TestExpectedResults/AddressValueObject.txt");
+            var expected = File.ReadAllText("../../../TestExpectedResults/ValueObjects/AddressValueObject.txt");
             generatedFileTexts.First().Should().BeIgnoringLineEndings(expected);
         }
 
