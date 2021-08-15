@@ -1,5 +1,4 @@
-﻿
-using HUGs.DDD.Generated.ValueObject;
+﻿using HUGs.DDD.Generated.ValueObject;
 
 namespace HUGs
 {

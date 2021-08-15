@@ -64,6 +64,16 @@ namespace HUGs.Generator.DDD
             {
                 AddEntitySource(context, entity);
             }
+
+            foreach (var aggregate in dddModel.Aggregates)
+            {
+                AddAggregateSource(context, aggregate);
+            }
+
+            //foreach (var enumeration in dddModel.Enumerations)
+            //{
+            //    AddEnumerationSource(context, enumeration);
+            //}
         }
 
         private static void AddValueObjectSource(GeneratorExecutionContext context, DddObjectSchema valueObject)
@@ -76,6 +86,18 @@ namespace HUGs.Generator.DDD
         {
             var entityClass = IdentifiableGenerator.GenerateEntityCode(entity);
             context.AddSource($"{entity.Name}Entity", entityClass);
+        }
+
+        private static void AddAggregateSource(GeneratorExecutionContext context, DddObjectSchema aggregate)
+        {
+            var aggregateClass = IdentifiableGenerator.GenerateAggregateCode(aggregate);
+            context.AddSource($"{aggregate.Name}Aggregate", aggregateClass);
+        }
+
+        private static void AddEnumerationSource(GeneratorExecutionContext context, DddObjectSchema enumeration)
+        {
+            var enumerationClass = EnumerationGenerator.GenerateEnumerationCode(enumeration);
+            context.AddSource($"{enumeration.Name}Enumeration", enumerationClass);
         }
     }
 }

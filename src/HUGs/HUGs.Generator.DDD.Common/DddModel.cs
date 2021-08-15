@@ -7,12 +7,15 @@ namespace HUGs.Generator.DDD.Common
         public IList<DddObjectSchema> ValueObjects { get; } = new List<DddObjectSchema>();
         public IList<DddObjectSchema> Entities { get; } = new List<DddObjectSchema>();
         public IList<DddObjectSchema> Aggregates { get; } = new List<DddObjectSchema>();
+        public IList<DddObjectSchema> Enumerations { get; } = new List<DddObjectSchema>();
 
-        public void AddObjectSchema(DddObjectSchema schema)
+        public void AddObjectSchema(DddObjectSchema objectSchema)
         {
-            if (schema.IsValueObjectSchema) ValueObjects.Add(schema);
-            else if (schema.IsEntitySchema) Entities.Add(schema);
-            else if (schema.IsAggregateSchema) Aggregates.Add(schema);
+            // TODO: when parsed as enum, change to switch on schema.kind
+            if (objectSchema.IsValueObjectSchema) ValueObjects.Add(objectSchema);
+            else if (objectSchema.IsEntitySchema) Entities.Add(objectSchema);
+            else if (objectSchema.IsAggregateSchema) Aggregates.Add(objectSchema);
+            else if (objectSchema.IsEnumerationSchema) Enumerations.Add(objectSchema);
         }
     }
 }
