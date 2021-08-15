@@ -1,6 +1,6 @@
 ﻿namespace HUGs.Generator.DDD.Common
 {
-    public class Property
+    public class DddObjectProperty
     {
         public string Name { get; set; }
         public string Type { get; set; }

@@ -16,7 +16,7 @@ namespace HUGs.Generator.DDD.Tests
             {
                 Kind = identifiableKind,
                 Name = $"Simple{identifiableKind}",
-                Properties = new Property[] { }
+                Properties = new DddObjectProperty[] { }
             };
 
             var actualCode = objectSchema.IsEntitySchema ?
@@ -58,7 +58,7 @@ namespace HUGs.DDD.Generated.{identifiableKind}
             {
                 Kind = identifiableKind,
                 Name = $"Properties{identifiableKind}",
-                Properties = new Property[]
+                Properties = new DddObjectProperty[]
                 {
                     new() { Name = "Text", Type = "string" },
                     new() { Name = "Number", Optional = true, Type = "double" }
@@ -110,7 +110,7 @@ namespace HUGs.DDD.Generated.{identifiableKind}
             {
                 Kind = identifiableKind,
                 Name = $"ArrayProperty{identifiableKind}",
-                Properties = new Property[]
+                Properties = new DddObjectProperty[]
                 {
                     new() { Name = "Items", Type = "OrderItem[]" },
                 }
@@ -158,7 +158,7 @@ namespace HUGs.DDD.Generated.{identifiableKind}
             {
                 Kind = identifiableKind,
                 Name = $"ArrayProperty{identifiableKind}",
-                Properties = new Property[]
+                Properties = new DddObjectProperty[]
                 {
                     new() { Name = "Text", Type = "string" },
                     new() { Name = "Items", Type = "OrderItem[]" },

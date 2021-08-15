@@ -14,7 +14,7 @@ namespace HUGs.Generator.DDD.Tests
             {
                 Kind = "ValueObject",
                 Name = "SimpleClass",
-                Properties = new Property[] { }
+                Properties = new DddObjectProperty[] { }
             };
 
             var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
@@ -46,7 +46,7 @@ namespace HUGs.DDD.Generated.ValueObject
             {
                 Kind = "ValueObject",
                 Name = "SimpleClass",
-                Properties = new Property[] { new() { Name = "Number", Optional = false, Type = "int" } }
+                Properties = new DddObjectProperty[] { new() { Name = "Number", Optional = false, Type = "int" } }
             };
 
             var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
@@ -82,7 +82,7 @@ namespace HUGs.DDD.Generated.ValueObject
             {
                 Kind = "ValueObject",
                 Name = "SimpleClass",
-                Properties = new Property[]
+                Properties = new DddObjectProperty[]
                 {
                     new() { Name = "Number", Optional = false, Type = "int" },
                     new() { Name = "Number2", Optional = true, Type = "int" },

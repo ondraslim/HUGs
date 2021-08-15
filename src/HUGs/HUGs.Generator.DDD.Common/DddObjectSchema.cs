@@ -7,7 +7,7 @@ namespace HUGs.Generator.DDD.Common
         // TODO: Parse as Enum type
         public string Kind { get; set; }
         public string Name { get; set; }
-        public Property[] Properties { get; set; }
+        public DddObjectProperty[] Properties { get; set; }
 
         public bool IsEntitySchema => Kind.Equals("Entity", StringComparison.InvariantCultureIgnoreCase);
         public bool IsAggregateSchema => Kind.Equals("Aggregate", StringComparison.InvariantCultureIgnoreCase);
