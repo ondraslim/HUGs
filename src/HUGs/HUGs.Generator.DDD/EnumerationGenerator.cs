@@ -1,13 +1,11 @@
-﻿using System;
-using HUGs.Generator.Common;
+﻿using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.BaseModels;
 using HUGs.Generator.DDD.Common;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD
@@ -23,6 +21,7 @@ namespace HUGs.Generator.DDD
             AddCommonUsings(syntaxBuilder);
 
             var classBuilder = PrepareEnumerationClassBuilder(enumeration.Name);
+            AddProperties(classBuilder, enumeration.Properties);
             AddConstructor(classBuilder, enumeration);
             AddEnumerationFields(classBuilder, enumeration);
 
@@ -42,10 +41,18 @@ namespace HUGs.Generator.DDD
         private static ClassBuilder PrepareEnumerationClassBuilder(string enumerationName)
         {
             var classBuilder = new ClassBuilder(enumerationName)
-                .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.PartialKeyword)
+                .AddClassAccessModifiers(SyntaxKind.PublicKeyword)
                 .AddClassBaseTypes(nameof(Enumeration));
 
             return classBuilder;
+        }
+
+        private static void AddProperties(ClassBuilder classBuilder, DddObjectProperty[] properties)
+        {
+            foreach (var property in properties)
+            {
+                classBuilder.AddGetOnlyProperty(property.FullType, property.Name, SyntaxKind.PublicKeyword);
+            }
         }
 
         private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema enumeration)
@@ -73,52 +80,56 @@ namespace HUGs.Generator.DDD
             var accessModifiers = new[] { SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword };
             foreach (var value in enumeration.Values)
             {
-                var enumFieldValue = value.Properties.FirstOrDefault()?.Name;
-                if (enumFieldValue is null)
-                {
-                    // TODO: diagnostics error
-                    throw new Exception();
-                }
-                var objectCreationSyntax = PrepareEnumFieldObjectCreationSyntax(enumeration.Name, value.Name, enumFieldValue);
+                var objectCreationSyntax = PrepareEnumFieldObjectCreationSyntax(enumeration, value);
                 classBuilder.AddFieldWithInitialization(enumeration.Name, value.Name, accessModifiers, objectCreationSyntax);
             }
         }
 
-        private static ObjectCreationExpressionSyntax PrepareEnumFieldObjectCreationSyntax(string enumClassName, string fieldName, string enumValue)
+        private static ObjectCreationExpressionSyntax PrepareEnumFieldObjectCreationSyntax(
+            DddObjectSchema enumeration,
+            DddObjectValue value)
         {
-            return SyntaxFactory
-                .ObjectCreationExpression(SyntaxFactory.IdentifierName(enumClassName))
-                .WithArgumentList(
-                    SyntaxFactory.ArgumentList(
-                        SyntaxFactory.SeparatedList<ArgumentSyntax>(
-                            new SyntaxNodeOrToken[] 
-                            {
-                                SyntaxFactory.Argument(
-                                    SyntaxFactory.InvocationExpression(
-                                            SyntaxFactory.IdentifierName(
-                                                SyntaxFactory.Identifier(
-                                                    SyntaxFactory.TriviaList(),
-                                                    SyntaxKind.NameOfKeyword,
-                                                    "nameof",
-                                                    "nameof",
-                                                    SyntaxFactory.TriviaList())
-                                                )
-                                            )
-                                        .WithArgumentList(
-                                            SyntaxFactory.ArgumentList(
-                                                SyntaxFactory.SingletonSeparatedList(
-                                                    SyntaxFactory.Argument(SyntaxFactory.IdentifierName(fieldName)))
-                                                )
-                                            )
-                                    ),
-                                SyntaxFactory.Token(SyntaxKind.CommaToken),
-                                SyntaxFactory.Argument(
-                                    SyntaxFactory.LiteralExpression(
-                                        SyntaxKind.StringLiteralExpression,
-                                        SyntaxFactory.Literal(enumValue)))
-                            })
+            var nameofArgument = SyntaxFactory.Argument(
+                SyntaxFactory.InvocationExpression(
+                        SyntaxFactory.IdentifierName(
+                            SyntaxFactory.Identifier(
+                                SyntaxFactory.TriviaList(),
+                                SyntaxKind.NameOfKeyword,
+                                "nameof",
+                                "nameof",
+                                SyntaxFactory.TriviaList())
                         )
-                    );
+                    )
+                    .WithArgumentList(
+                        SyntaxFactory.ArgumentList(
+                            SyntaxFactory.SingletonSeparatedList(
+                                SyntaxFactory.Argument(SyntaxFactory.IdentifierName(value.Name)))
+                        )
+                    )
+            );
+            
+            var prepareEnumFieldObjectCreationSyntax = SyntaxFactory
+                .ObjectCreationExpression(SyntaxFactory.IdentifierName(enumeration.Name))
+                .AddArgumentListArguments(nameofArgument)
+                .AddArgumentListArguments(value.PropertyInitialization.Select(i => ArgumentSyntax(i, enumeration)).ToArray());
+
+            return prepareEnumFieldObjectCreationSyntax;
+        }
+
+        private static ArgumentSyntax ArgumentSyntax(
+            DddPropertyInitialization propertyInitialization,
+            DddObjectSchema enumeration)
+        {
+
+            if (enumeration.Properties.Any(p => p.Name == propertyInitialization.PropertyName && p.Type == "string"))
+            {
+                return SyntaxFactory.Argument(
+                    SyntaxFactory.LiteralExpression(
+                        SyntaxKind.StringLiteralExpression,
+                        SyntaxFactory.Literal(propertyInitialization.PropertyValue)));
+            }
+
+            return SyntaxFactory.Argument(SyntaxFactory.IdentifierName(propertyInitialization.PropertyValue));
         }
     }
 }

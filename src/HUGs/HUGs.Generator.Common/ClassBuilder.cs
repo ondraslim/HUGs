@@ -13,7 +13,7 @@ namespace HUGs.Generator.Common
         private readonly List<FieldDeclarationSyntax> fields = new();
         private readonly List<MemberDeclarationSyntax> properties = new();
         private readonly List<MethodDeclarationSyntax> methods = new();
-        private readonly List<ConstructorDeclarationSyntax> ctors = new();
+        private readonly List<ConstructorDeclarationSyntax> constructors = new();
 
         public ClassBuilder(string className)
         {
@@ -77,7 +77,7 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        public ClassBuilder AddGetOnlyProperty(string type, string name, SyntaxKind[] accessModifiers)
+        public ClassBuilder AddGetOnlyProperty(string type, string name, params SyntaxKind[] accessModifiers)
         {
             var accessors = new[]
             {
@@ -161,7 +161,7 @@ namespace HUGs.Generator.Common
                     .Select(b => SyntaxFactory.ParseStatement(b))
                     .ToArray());
 
-            ctors.Add(ctor);
+            constructors.Add(ctor);
 
             return this;
         }
@@ -175,10 +175,9 @@ namespace HUGs.Generator.Common
                     .AddArgumentListArguments(
                         baseCtorParams
                             .Select(p => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(p.Identifier)))
-                            .ToArray()
-
-                    )
+                            .ToArray())
             );
+
             return ctor;
         }
 
@@ -192,7 +191,7 @@ namespace HUGs.Generator.Common
         {
             classDeclaration = classDeclaration.AddMembers(fields.ToArray());
             classDeclaration = classDeclaration.AddMembers(properties.ToArray());
-            classDeclaration = classDeclaration.AddMembers(ctors.ToArray());
+            classDeclaration = classDeclaration.AddMembers(constructors.ToArray());
             classDeclaration = classDeclaration.AddMembers(methods.ToArray());
 
             return classDeclaration;
