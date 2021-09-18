@@ -46,9 +46,10 @@ namespace HUGs.Generator.DDD
         private static ClassDeclarationSyntax PrepareEntityIdClass(string objectName)
         {
             var className = $"{objectName}Id";
-            var classBuilder = new ClassBuilder(className);
-            classBuilder.AddClassAccessModifiers(SyntaxKind.PublicKeyword);
-            classBuilder.AddClassBaseTypes($"EntityId<{objectName}>");
+            
+            var classBuilder = new ClassBuilder(className)
+                .AddClassAccessModifiers(SyntaxKind.PublicKeyword)
+                .AddClassBaseTypes($"EntityId<{objectName}>");
 
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
             var parameters = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "value") };
@@ -59,9 +60,10 @@ namespace HUGs.Generator.DDD
 
         private static void AddUsings(RoslynSyntaxBuilder syntaxBuilder)
         {
-            syntaxBuilder.AddUsing("System");
-            syntaxBuilder.AddUsing("System.Collections.Generic");
-            syntaxBuilder.AddUsing("HUGs.Generator.DDD.BaseModels");
+            syntaxBuilder.AddUsing(
+                "System", 
+                "System.Collections.Generic", 
+                "HUGs.Generator.DDD.BaseModels");
         }
 
         private static ClassBuilder PrepareIdentifiableClassBuilder(DddObjectSchema objectSchema, string entityIdClassIdentifier)
@@ -79,11 +81,12 @@ namespace HUGs.Generator.DDD
             {
                 if (prop.IsArrayProperty)
                 {
-                    classBuilder.AddField($"List<{prop.TypeWithoutArray}>", prop.PrivateName, SyntaxKind.PrivateKeyword);
-                    classBuilder.AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{prop.TypeWithoutArray}>", prop.Name, prop.PrivateName, new[]
-                    {
-                        SyntaxKind.PublicKeyword
-                    });
+                    classBuilder
+                        .AddField($"List<{prop.TypeWithoutArray}>", prop.PrivateName, SyntaxKind.PrivateKeyword)
+                        .AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{prop.TypeWithoutArray}>", prop.Name, prop.PrivateName, new[] 
+                        {
+                            SyntaxKind.PublicKeyword
+                        });
                 }
                 else
                 {

@@ -36,12 +36,26 @@ namespace HUGs.Generator.Common
 
         public ClassBuilder AddField(string type, string name, params SyntaxKind[] accessModifiers)
         {
+            return AddFieldWithInitialization(type, name, accessModifiers, null);
+        }
+
+        public ClassBuilder AddFieldWithInitialization(string type, string name, SyntaxKind[] accessModifiers, ObjectCreationExpressionSyntax objectCreationExpressionSyntax)
+        {
+            var variable = SyntaxFactory.VariableDeclarator(name);
+            if (objectCreationExpressionSyntax is not null)
+            {
+                variable = variable.WithInitializer(SyntaxFactory.EqualsValueClause(objectCreationExpressionSyntax));
+            }
+
             var variableDeclaration = SyntaxFactory
                 .VariableDeclaration(SyntaxFactory.ParseTypeName(type))
-                .AddVariables(SyntaxFactory.VariableDeclarator(name));
+                .AddVariables(variable);
 
-            var fieldDeclaration = SyntaxFactory.FieldDeclaration(variableDeclaration)
-                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray());
+            var fieldDeclaration = SyntaxFactory.FieldDeclaration(variableDeclaration);
+            if (accessModifiers is not null)
+            {
+                fieldDeclaration = fieldDeclaration.AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray());
+            }
 
             fields.Add(fieldDeclaration);
 

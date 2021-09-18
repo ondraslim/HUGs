@@ -275,5 +275,7 @@ namespace HUGs.Generator.Common.Tests
             // TODO: weird spacing between AmountProperty - TextProperty
             actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
+
+        // TODO: add tests - field with initialization
     }
 }

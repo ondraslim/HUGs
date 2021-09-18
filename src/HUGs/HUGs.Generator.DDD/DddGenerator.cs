@@ -70,10 +70,10 @@ namespace HUGs.Generator.DDD
                 AddAggregateSource(context, aggregate);
             }
 
-            //foreach (var enumeration in dddModel.Enumerations)
-            //{
-            //    AddEnumerationSource(context, enumeration);
-            //}
+            foreach (var enumeration in dddModel.Enumerations)
+            {
+                AddEnumerationSource(context, enumeration);
+            }
         }
 
         private static void AddValueObjectSource(GeneratorExecutionContext context, DddObjectSchema valueObject)

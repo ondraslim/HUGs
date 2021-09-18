@@ -34,16 +34,17 @@ namespace HUGs.Generator.DDD
 
         private static void AddCommonUsings(RoslynSyntaxBuilder syntaxBuilder)
         {
-            syntaxBuilder.AddUsing("System");
-            syntaxBuilder.AddUsing("System.Collections.Generic");
-            syntaxBuilder.AddUsing("HUGs.Generator.DDD.BaseModels");
+            syntaxBuilder.AddUsing(
+                "System",
+                "System.Collections.Generic",
+                "HUGs.Generator.DDD.BaseModels");
         }
 
         private static ClassBuilder PrepareValueObjectClassBuilder(string valueObjectName)
         {
-            var classBuilder = new ClassBuilder(valueObjectName);
-            classBuilder.AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword);
-            classBuilder.AddClassBaseTypes(nameof(ValueObject));
+            var classBuilder = new ClassBuilder(valueObjectName)
+                .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
+                .AddClassBaseTypes(nameof(ValueObject));
 
             return classBuilder;
         }
