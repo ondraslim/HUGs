@@ -24,7 +24,7 @@ using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.ValueObject
 {{
-    public partial class {inputValueObject.Name} : ValueObject
+    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.BaseModels.ValueObject
     {{
         public {inputValueObject.Name}()
         {{
@@ -56,7 +56,7 @@ using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.ValueObject
 {{
-    public partial class {inputValueObject.Name} : ValueObject
+    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.BaseModels.ValueObject
     {{
         public int Number {{ get; }}
 
@@ -97,7 +97,7 @@ using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.ValueObject
 {{
-    public partial class {inputValueObject.Name} : ValueObject
+    public partial class {inputValueObject.Name} : HUGs.Generator.DDD.BaseModels.ValueObject
     {{
         public int Number {{ get; }}
 
