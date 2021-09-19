@@ -44,7 +44,7 @@ namespace HUGs.Generator.DDD
         {
             var classBuilder = new ClassBuilder(valueObjectName)
                 .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
-                .AddClassBaseTypes(nameof(ValueObject));
+                .AddClassBaseTypes(typeof(ValueObject).FullName);
 
             return classBuilder;
         }

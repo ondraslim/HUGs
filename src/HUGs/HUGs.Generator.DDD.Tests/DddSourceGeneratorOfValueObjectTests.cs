@@ -9,12 +9,14 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using CheckTestOutput;
 
 namespace HUGs.Generator.DDD.Tests
 {
     public class DddSourceGeneratorOfValueObjectTests
     {
         private Compilation emptyInputCompilation;
+        private readonly OutputChecker check = new("TestExpectedResults/ValueObjects");
 
         [SetUp]
         public void Setup()
@@ -33,10 +35,8 @@ namespace HUGs.Generator.DDD.Tests
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
-            generatedFileTexts.Length.Should().Be(1);
-
-            var expected = File.ReadAllText("../../../TestExpectedResults/ValueObjects/SimpleValueObject.txt");
-            generatedFileTexts.First().Should().BeIgnoringLineEndings(expected);
+            generatedFileTexts.Should().HaveCount(1);
+            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }
 
         [Test]
@@ -50,17 +50,15 @@ namespace HUGs.Generator.DDD.Tests
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
-            generatedFileTexts.Length.Should().Be(1);
-
-            var expected = File.ReadAllText("../../../TestExpectedResults/ValueObjects/SimpleValueObject2.txt");
-            generatedFileTexts.First().Should().BeIgnoringLineEndings(expected);
+            generatedFileTexts.Should().HaveCount(1);
+            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }
 
         [Test]
         public void TwoValidSimpleValueObjectSchemas_GeneratorRun_GeneratesCorrectValueObjects()
         {
-            var schema1 = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
-            var schema2 = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject2.dddschema");
+            var schema1 = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObjectMultiple.dddschema");
+            var schema2 = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObjectMultiple2.dddschema");
             var driver = SetupGeneratorDriver(new List<string> { schema1, schema2 });
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
@@ -68,12 +66,9 @@ namespace HUGs.Generator.DDD.Tests
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
-            generatedFileTexts.Length.Should().Be(2);
-
-            var expected1 = File.ReadAllText("../../../TestExpectedResults/ValueObjects/SimpleValueObject.txt");
-            var expected2 = File.ReadAllText("../../../TestExpectedResults/ValueObjects/SimpleValueObject2.txt");
-
-            generatedFileTexts.Should().ContainIgnoringLineEndings(new List<string> { expected1, expected2 });
+            generatedFileTexts.Should().HaveCount(2);
+            check.CheckString(generatedFileTexts.First(), checkName: "SimpleValueObject1", fileExtension: "cs");
+            check.CheckString(generatedFileTexts.Last(), checkName: "SimpleValueObject2", fileExtension: "cs");
         }
 
         [Test]
@@ -87,10 +82,8 @@ namespace HUGs.Generator.DDD.Tests
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
-            generatedFileTexts.Length.Should().Be(1);
-
-            var expected = File.ReadAllText("../../../TestExpectedResults/ValueObjects/SimpleValueObjectWithOptional.txt");
-            generatedFileTexts.First().Should().BeIgnoringLineEndings(expected);
+            generatedFileTexts.Should().HaveCount(1);
+            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }
 
         [Test]
@@ -121,10 +114,8 @@ namespace Test.Country
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !compilationWithCountryId.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
-            generatedFileTexts.Length.Should().Be(1);
-
-            var expected = File.ReadAllText("../../../TestExpectedResults/ValueObjects/AddressValueObject.txt");
-            generatedFileTexts.First().Should().BeIgnoringLineEndings(expected);
+            generatedFileTexts.Should().HaveCount(1);
+            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }
 
         private static GeneratorDriver SetupGeneratorDriver(string schema)
