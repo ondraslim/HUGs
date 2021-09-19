@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace HUGs.Generator.DDD.Common
 {
@@ -11,11 +12,23 @@ namespace HUGs.Generator.DDD.Common
 
         public void AddObjectSchema(DddObjectSchema objectSchema)
         {
-            // TODO: when parsed as enum, change to switch on schema.kind
-            if (objectSchema.IsValueObjectSchema) ValueObjects.Add(objectSchema);
-            else if (objectSchema.IsEntitySchema) Entities.Add(objectSchema);
-            else if (objectSchema.IsAggregateSchema) Aggregates.Add(objectSchema);
-            else if (objectSchema.IsEnumerationSchema) Enumerations.Add(objectSchema);
+            switch (objectSchema.Kind)
+            {
+                case DddObjectKind.ValueObject: 
+                    ValueObjects.Add(objectSchema);
+                    break;
+                case DddObjectKind.Entity:
+                    Entities.Add(objectSchema);
+                    break;
+                case DddObjectKind.Aggregate:
+                    Aggregates.Add(objectSchema);
+                    break;
+                case DddObjectKind.Enumeration:
+                    Enumerations.Add(objectSchema);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

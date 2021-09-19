@@ -107,7 +107,7 @@ namespace HUGs.Generator.DDD
                         )
                     )
             );
-            
+
             var prepareEnumFieldObjectCreationSyntax = SyntaxFactory
                 .ObjectCreationExpression(SyntaxFactory.IdentifierName(enumeration.Name))
                 .AddArgumentListArguments(nameofArgument)

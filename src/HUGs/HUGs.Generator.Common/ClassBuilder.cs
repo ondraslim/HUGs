@@ -150,7 +150,7 @@ namespace HUGs.Generator.Common
 
             if (baseCtorParams is not null)
             {
-                ctor = AddCtorBaseCall(ctor, baseCtorParams);
+                ctor = AddConstructorBaseCall(ctor, baseCtorParams);
             }
 
             ctor = ctor
@@ -166,7 +166,7 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        private static ConstructorDeclarationSyntax AddCtorBaseCall(
+        private static ConstructorDeclarationSyntax AddConstructorBaseCall(
             ConstructorDeclarationSyntax ctor,
             IEnumerable<ParameterSyntax> baseCtorParams)
         {
@@ -175,8 +175,8 @@ namespace HUGs.Generator.Common
                     .AddArgumentListArguments(
                         baseCtorParams
                             .Select(p => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(p.Identifier)))
-                            .ToArray())
-            );
+                            .ToArray()
+                    ));
 
             return ctor;
         }
@@ -189,10 +189,11 @@ namespace HUGs.Generator.Common
 
         public ClassDeclarationSyntax Build()
         {
-            classDeclaration = classDeclaration.AddMembers(fields.ToArray());
-            classDeclaration = classDeclaration.AddMembers(properties.ToArray());
-            classDeclaration = classDeclaration.AddMembers(constructors.ToArray());
-            classDeclaration = classDeclaration.AddMembers(methods.ToArray());
+            classDeclaration = classDeclaration
+                .AddMembers(fields.ToArray())
+                .AddMembers(properties.ToArray())
+                .AddMembers(constructors.ToArray())
+                .AddMembers(methods.ToArray());
 
             return classDeclaration;
         }

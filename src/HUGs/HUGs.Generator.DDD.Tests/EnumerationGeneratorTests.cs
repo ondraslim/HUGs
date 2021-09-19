@@ -12,7 +12,7 @@ namespace HUGs.Generator.DDD.Tests
         {
             var inputEnumerationObject = new DddObjectSchema
             {
-                Kind = "Enumeration",
+                Kind = DddObjectKind.Enumeration,
                 Name = "SimpleClass",
                 Properties = new DddObjectProperty[] { },
                 Values = new DddObjectValue[] { }
@@ -41,7 +41,7 @@ namespace HUGs.DDD.Generated.Enumeration
         {
             var inputEnumerationObject = new DddObjectSchema
             {
-                Kind = "Enumeration",
+                Kind = DddObjectKind.Enumeration,
                 Name = "OrderState",
                 Properties = new DddObjectProperty[] { new() { Name = "Name", Type = "string" } },
                 Values = new DddObjectValue[]
@@ -87,7 +87,7 @@ namespace HUGs.DDD.Generated.Enumeration
         {
             var inputEnumerationObject = new DddObjectSchema
             {
-                Kind = "Enumeration",
+                Kind = DddObjectKind.Enumeration,
                 Name = "OrderState",
                 Properties = new DddObjectProperty[]
                 {

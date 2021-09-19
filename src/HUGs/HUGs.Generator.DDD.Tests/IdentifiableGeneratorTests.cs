@@ -8,9 +8,9 @@ namespace HUGs.Generator.DDD.Tests
     public class IdentifiableGeneratorTests
     {
         [Test]
-        [TestCase("Entity")]
-        [TestCase("Aggregate")]
-        public void GivenEmptyIdentifiableSchema_CorrectlyGeneratesIdentifiableClasses(string identifiableKind)
+        [TestCase(DddObjectKind.Entity)]
+        [TestCase(DddObjectKind.Aggregate)]
+        public void GivenEmptyIdentifiableSchema_CorrectlyGeneratesIdentifiableClasses(DddObjectKind identifiableKind)
         {
             var objectSchema = new DddObjectSchema
             {
@@ -19,8 +19,8 @@ namespace HUGs.Generator.DDD.Tests
                 Properties = new DddObjectProperty[] { }
             };
 
-            var actualCode = objectSchema.IsEntitySchema ?
-                IdentifiableGenerator.GenerateEntityCode(objectSchema)
+            var actualCode = objectSchema.Kind == DddObjectKind.Entity 
+                ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
                 : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
 
             var expectedCode = $@"using System;
@@ -50,9 +50,9 @@ namespace HUGs.DDD.Generated.{identifiableKind}
         }
 
         [Test]
-        [TestCase("Entity")]
-        [TestCase("Aggregate")]
-        public void GivenIdentifiableSchemaWithProperties_CorrectlyGeneratesIdentifiableClasses(string identifiableKind)
+        [TestCase(DddObjectKind.Entity)]
+        [TestCase(DddObjectKind.Aggregate)]
+        public void GivenIdentifiableSchemaWithProperties_CorrectlyGeneratesIdentifiableClasses(DddObjectKind identifiableKind)
         {
             var objectSchema = new DddObjectSchema
             {
@@ -65,8 +65,8 @@ namespace HUGs.DDD.Generated.{identifiableKind}
                 }
             };
 
-            var actualCode = objectSchema.IsEntitySchema ?
-                IdentifiableGenerator.GenerateEntityCode(objectSchema)
+            var actualCode = objectSchema.Kind == DddObjectKind.Entity
+                ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
                 : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
 
             var expectedCode = $@"using System;
@@ -102,9 +102,9 @@ namespace HUGs.DDD.Generated.{identifiableKind}
         }
 
         [Test]
-        [TestCase("Entity")]
-        [TestCase("Aggregate")]
-        public void GivenIdentifiableSchemaWithArrayProperty_CorrectlyGeneratesIdentifiableClasses(string identifiableKind)
+        [TestCase(DddObjectKind.Entity)]
+        [TestCase(DddObjectKind.Aggregate)]
+        public void GivenIdentifiableSchemaWithArrayProperty_CorrectlyGeneratesIdentifiableClasses(DddObjectKind identifiableKind)
         {
             var objectSchema = new DddObjectSchema
             {
@@ -116,8 +116,8 @@ namespace HUGs.DDD.Generated.{identifiableKind}
                 }
             };
 
-            var actualCode = objectSchema.IsEntitySchema ?
-                IdentifiableGenerator.GenerateEntityCode(objectSchema)
+            var actualCode = objectSchema.Kind == DddObjectKind.Entity
+                ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
                 : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
 
             var expectedCode = $@"using System;
@@ -150,9 +150,9 @@ namespace HUGs.DDD.Generated.{identifiableKind}
         }
 
         [Test]
-        [TestCase("Entity")]
-        [TestCase("Aggregate")]
-        public void GivenIdentifiableSchemaWithVariousProperties_CorrectlyGeneratesIdentifiableClasses(string identifiableKind)
+        [TestCase(DddObjectKind.Entity)]
+        [TestCase(DddObjectKind.Aggregate)]
+        public void GivenIdentifiableSchemaWithVariousProperties_CorrectlyGeneratesIdentifiableClasses(DddObjectKind identifiableKind)
         {
             var objectSchema = new DddObjectSchema
             {
@@ -166,8 +166,8 @@ namespace HUGs.DDD.Generated.{identifiableKind}
                 }
             };
 
-            var actualCode = objectSchema.IsEntitySchema ?
-                IdentifiableGenerator.GenerateEntityCode(objectSchema)
+            var actualCode = objectSchema.Kind == DddObjectKind.Entity
+                ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
                 : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
 
             var expectedCode = $@"using System;

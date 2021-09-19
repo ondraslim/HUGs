@@ -12,7 +12,7 @@ namespace HUGs.Generator.DDD.Tests
         {
             var inputValueObject = new DddObjectSchema
             {
-                Kind = "ValueObject",
+                Kind = DddObjectKind.ValueObject,
                 Name = "SimpleClass",
                 Properties = new DddObjectProperty[] { }
             };
@@ -44,7 +44,7 @@ namespace HUGs.DDD.Generated.ValueObject
         {
             var inputValueObject = new DddObjectSchema
             {
-                Kind = "ValueObject",
+                Kind = DddObjectKind.ValueObject,
                 Name = "SimpleClass",
                 Properties = new DddObjectProperty[] { new() { Name = "Number", Optional = false, Type = "int" } }
             };
@@ -80,7 +80,7 @@ namespace HUGs.DDD.Generated.ValueObject
         {
             var inputValueObject = new DddObjectSchema
             {
-                Kind = "ValueObject",
+                Kind = DddObjectKind.ValueObject,
                 Name = "SimpleClass",
                 Properties = new DddObjectProperty[]
                 {

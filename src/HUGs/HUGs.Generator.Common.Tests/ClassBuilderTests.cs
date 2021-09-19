@@ -200,6 +200,7 @@ namespace HUGs.Generator.Common.Tests
     }
 }";
 
+            // TODO: weird spacing between ctor and base ctor
             actualClass.Should().BeIgnoringLineEndings(expectedClass);
         }
 
