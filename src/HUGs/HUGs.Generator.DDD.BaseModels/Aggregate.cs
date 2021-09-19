@@ -19,7 +19,9 @@ namespace HUGs.Generator.DDD.BaseModels
 
         private List<object> Events { get; set; }
 
-        public abstract void CheckState();
+        public virtual void CheckState()
+        {
+        }
 
         public override bool Equals(object other)
         {

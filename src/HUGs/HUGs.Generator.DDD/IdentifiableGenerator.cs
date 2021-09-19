@@ -46,14 +46,14 @@ namespace HUGs.Generator.DDD
         private static ClassDeclarationSyntax PrepareEntityIdClass(string objectName)
         {
             var className = $"{objectName}Id";
-            
+
             var classBuilder = new ClassBuilder(className)
                 .AddClassAccessModifiers(SyntaxKind.PublicKeyword)
                 .AddClassBaseTypes($"EntityId<{objectName}>");
 
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
             var parameters = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "value") };
-            classBuilder.AddConstructor(accessModifiers, className, parameters);
+            classBuilder.AddConstructor(accessModifiers, className, parameters, baseCtorParams: parameters);
 
             return classBuilder.Build();
         }
@@ -61,8 +61,8 @@ namespace HUGs.Generator.DDD
         private static void AddUsings(RoslynSyntaxBuilder syntaxBuilder)
         {
             syntaxBuilder.AddUsing(
-                "System", 
-                "System.Collections.Generic", 
+                "System",
+                "System.Collections.Generic",
                 "HUGs.Generator.DDD.BaseModels");
         }
 
@@ -70,7 +70,7 @@ namespace HUGs.Generator.DDD
         {
             var classBuilder = new ClassBuilder(objectSchema.Name)
                     .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
-                    .AddClassBaseTypes($"{objectSchema.Kind}<{entityIdClassIdentifier}>");
+                    .AddClassBaseTypes($"HUGs.Generator.DDD.BaseModels.{objectSchema.Kind}<{entityIdClassIdentifier}>");
 
             return classBuilder;
         }
@@ -82,8 +82,9 @@ namespace HUGs.Generator.DDD
                 if (prop.IsArrayProperty)
                 {
                     classBuilder
-                        .AddField($"List<{prop.TypeWithoutArray}>", prop.PrivateName, SyntaxKind.PrivateKeyword)
-                        .AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{prop.TypeWithoutArray}>", prop.Name, prop.PrivateName, new[] 
+                        // TODO: originally List<>, not works, is it necessary?
+                        .AddField($"IReadOnlyList<{prop.TypeWithoutArray}>", prop.PrivateName, SyntaxKind.PrivateKeyword)
+                        .AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{prop.TypeWithoutArray}>", prop.Name, prop.PrivateName, new[]
                         {
                             SyntaxKind.PublicKeyword
                         });
@@ -105,32 +106,32 @@ namespace HUGs.Generator.DDD
                     p.Name))
                 .ToArray();
 
-            var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax(entityIdClassIdentifier, "id") };
+            var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax($"IId<{entityIdClassIdentifier}>", "id") };
             var ctorParams = ctorBaseParams.Concat(properties).ToArray();
-            var linesOfCode = objectSchema.Properties
-                .Select(p => p.IsArrayProperty
-                    ? $"this.{p.PrivateName} = {p.Name};"
-                    : $"this.{p.Name} = {p.Name};")
+            var linesOfCode = new[] { "Id = id;" }
+                .Concat(objectSchema.Properties
+                    .Select(p => p.IsArrayProperty
+                        ? $"this.{p.PrivateName} = {p.Name};"
+                        : $"this.{p.Name} = {p.Name};"))
+                .Append("OnInitialized();")
                 .ToArray();
 
             classBuilder.AddConstructor(
                 accessModifiers,
                 objectSchema.Name,
                 ctorParams,
-                linesOfCode,
-                ctorBaseParams
+                linesOfCode
             );
         }
 
         private static MethodDeclarationSyntax BuildOnInitializedMethod()
         {
             var methodBuilder = new MethodBuilder()
-                .SetAccessModifiers(SyntaxKind.PrivateKeyword, SyntaxKind.PartialKeyword)
+                .SetAccessModifiers(SyntaxKind.PartialKeyword)
                 .SetReturnType("void")
                 .SetName("OnInitialized");
 
             return methodBuilder.Build(methodHeaderOnly: true);
         }
-
     }
 }

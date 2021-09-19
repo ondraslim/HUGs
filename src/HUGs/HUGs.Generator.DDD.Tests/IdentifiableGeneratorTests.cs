@@ -58,7 +58,7 @@ namespace HUGs.Generator.DDD.Tests
             var objectSchema = new DddObjectSchema
             {
                 Kind = identifiableKind,
-                Name = $"ArrayProperty{identifiableKind}",
+                Name = $"SimpleArrayProperty{identifiableKind}",
                 Properties = new DddObjectProperty[]
                 {
                     new() { Name = "Items", Type = "OrderItem[]" },

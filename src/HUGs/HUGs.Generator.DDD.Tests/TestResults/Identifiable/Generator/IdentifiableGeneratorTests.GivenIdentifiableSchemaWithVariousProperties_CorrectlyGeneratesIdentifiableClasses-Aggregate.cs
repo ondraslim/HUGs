@@ -6,26 +6,28 @@ namespace HUGs.DDD.Generated.Aggregate
 {
     public class ArrayPropertyAggregateId : EntityId<ArrayPropertyAggregate>
     {
-        public ArrayPropertyAggregateId(string value)
+        public ArrayPropertyAggregateId(string value): base(value)
         {
         }
     }
 
-    public partial class ArrayPropertyAggregate : Aggregate<ArrayPropertyAggregateId>
+    public partial class ArrayPropertyAggregate : HUGs.Generator.DDD.BaseModels.Aggregate<ArrayPropertyAggregateId>
     {
-        private List<OrderItem> _Items;
+        private IReadOnlyList<OrderItem> _Items;
         public string Text { get; private set; }
 
         public IReadOnlyList<OrderItem> Items => _Items;
         public double? Number { get; private set; }
 
-        public ArrayPropertyAggregate(ArrayPropertyAggregateId id, string Text, IReadOnlyList<OrderItem> Items, double? Number): base(id)
+        public ArrayPropertyAggregate(IId<ArrayPropertyAggregateId> id, string Text, IReadOnlyList<OrderItem> Items, double? Number)
         {
+            Id = id;
             this.Text = Text;
             this._Items = Items;
             this.Number = Number;
+            OnInitialized();
         }
 
-        private partial void OnInitialized();
+        partial void OnInitialized();
     }
 }

@@ -6,17 +6,19 @@ namespace HUGs.DDD.Generated.Entity
 {
     public class SimpleEntityId : EntityId<SimpleEntity>
     {
-        public SimpleEntityId(string value)
+        public SimpleEntityId(string value): base(value)
         {
         }
     }
 
-    public partial class SimpleEntity : Entity<SimpleEntityId>
+    public partial class SimpleEntity : HUGs.Generator.DDD.BaseModels.Entity<SimpleEntityId>
     {
-        public SimpleEntity(SimpleEntityId id): base(id)
+        public SimpleEntity(IId<SimpleEntityId> id)
         {
+            Id = id;
+            OnInitialized();
         }
 
-        private partial void OnInitialized();
+        partial void OnInitialized();
     }
 }

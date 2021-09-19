@@ -4,22 +4,24 @@ using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.Aggregate
 {
-    public class ArrayPropertyAggregateId : EntityId<ArrayPropertyAggregate>
+    public class SimpleArrayPropertyAggregateId : EntityId<SimpleArrayPropertyAggregate>
     {
-        public ArrayPropertyAggregateId(string value)
+        public SimpleArrayPropertyAggregateId(string value): base(value)
         {
         }
     }
 
-    public partial class ArrayPropertyAggregate : Aggregate<ArrayPropertyAggregateId>
+    public partial class SimpleArrayPropertyAggregate : HUGs.Generator.DDD.BaseModels.Aggregate<SimpleArrayPropertyAggregateId>
     {
-        private List<OrderItem> _Items;
+        private IReadOnlyList<OrderItem> _Items;
         public IReadOnlyList<OrderItem> Items => _Items;
-        public ArrayPropertyAggregate(ArrayPropertyAggregateId id, IReadOnlyList<OrderItem> Items): base(id)
+        public SimpleArrayPropertyAggregate(IId<SimpleArrayPropertyAggregateId> id, IReadOnlyList<OrderItem> Items)
         {
+            Id = id;
             this._Items = Items;
+            OnInitialized();
         }
 
-        private partial void OnInitialized();
+        partial void OnInitialized();
     }
 }

@@ -6,17 +6,19 @@ namespace HUGs.DDD.Generated.Aggregate
 {
     public class SimpleAggregateId : EntityId<SimpleAggregate>
     {
-        public SimpleAggregateId(string value)
+        public SimpleAggregateId(string value): base(value)
         {
         }
     }
 
-    public partial class SimpleAggregate : Aggregate<SimpleAggregateId>
+    public partial class SimpleAggregate : HUGs.Generator.DDD.BaseModels.Aggregate<SimpleAggregateId>
     {
-        public SimpleAggregate(SimpleAggregateId id): base(id)
+        public SimpleAggregate(IId<SimpleAggregateId> id)
         {
+            Id = id;
+            OnInitialized();
         }
 
-        private partial void OnInitialized();
+        partial void OnInitialized();
     }
 }
