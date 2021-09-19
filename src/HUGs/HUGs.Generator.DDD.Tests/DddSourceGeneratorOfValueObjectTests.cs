@@ -16,7 +16,7 @@ namespace HUGs.Generator.DDD.Tests
     public class DddSourceGeneratorOfValueObjectTests
     {
         private Compilation emptyInputCompilation;
-        private readonly OutputChecker check = new("TestExpectedResults/ValueObjects");
+        private readonly OutputChecker check = new("TestResults/ValueObjects");
 
         [SetUp]
         public void Setup()

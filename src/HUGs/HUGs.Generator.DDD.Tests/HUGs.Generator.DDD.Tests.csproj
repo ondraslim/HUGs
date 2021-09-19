@@ -31,6 +31,6 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Compile Remove="TestExpectedResults\ValueObjects\*.cs" />
+		<Compile Remove="TestResults\ValueObjects\*.cs" />
 	</ItemGroup>
 </Project>
