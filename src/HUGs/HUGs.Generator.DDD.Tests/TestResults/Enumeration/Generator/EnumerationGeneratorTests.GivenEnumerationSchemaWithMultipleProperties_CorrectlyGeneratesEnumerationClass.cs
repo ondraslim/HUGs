@@ -4,7 +4,7 @@ using HUGs.Generator.DDD.BaseModels;
 
 namespace HUGs.DDD.Generated.Enumeration
 {
-    public class OrderState2 : Enumeration
+    public class OrderState2 : HUGs.Generator.DDD.BaseModels.Enumeration
     {
         public static readonly OrderState2 Created = new OrderState2(nameof(Created), "Vytvořeno", 1);
         public static readonly OrderState2 Canceled = new OrderState2(nameof(Canceled), "Zrušeno", 42);

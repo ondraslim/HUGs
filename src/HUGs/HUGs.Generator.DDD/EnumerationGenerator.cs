@@ -42,7 +42,7 @@ namespace HUGs.Generator.DDD
         {
             var classBuilder = new ClassBuilder(enumerationName)
                 .AddClassAccessModifiers(SyntaxKind.PublicKeyword)
-                .AddClassBaseTypes(nameof(Enumeration));
+                .AddClassBaseTypes(typeof(Enumeration).FullName);
 
             return classBuilder;
         }
