@@ -31,8 +31,8 @@
     <ProjectReference Include="..\HUGs.Generator.Tests.Tools\HUGs.Generator.Tests.Tools.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Compile Remove="TestResults\ValueObjects\*.cs" />
-	</ItemGroup>
+	<!--<ItemGroup>
+		<Compile Remove="TestResults\**\*.cs" />
+	</ItemGroup>-->
 
 </Project>
