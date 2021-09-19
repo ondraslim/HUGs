@@ -1,6 +1,6 @@
+using CheckTestOutput;
 using FluentAssertions;
 using HUGs.Generator.DDD.Tests.Mocks;
-using HUGs.Generator.Tests.Tools.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
@@ -9,7 +9,6 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using CheckTestOutput;
 
 namespace HUGs.Generator.DDD.Tests
 {

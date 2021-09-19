@@ -15,6 +15,7 @@
     <AdditionalFiles Include="TestData\Schemas\ValueObjects\AddressValueObject.dddschema" />
   </ItemGroup>
 
+
   <ItemGroup>
     <PackageReference Include="CheckTestOutput" Version="0.4.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
@@ -33,4 +34,5 @@
 	<ItemGroup>
 		<Compile Remove="TestResults\ValueObjects\*.cs" />
 	</ItemGroup>
+
 </Project>
