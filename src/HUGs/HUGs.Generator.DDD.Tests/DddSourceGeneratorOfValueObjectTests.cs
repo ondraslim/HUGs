@@ -122,7 +122,7 @@ namespace Test.Country
 
         private static GeneratorDriver SetupGeneratorDriver(IEnumerable<string> schemas)
         {
-            var generator = new DddGenerator();
+            var generator = new Generator();
 
             return CSharpGeneratorDriver.Create(
                 new List<ISourceGenerator> { generator },

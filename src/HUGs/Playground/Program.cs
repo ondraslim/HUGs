@@ -37,7 +37,7 @@ namespace MyCode
 }
 ");
 
-            var generator = new DddGenerator();
+            var generator = new Generator();
 
             // Create the driver that will control the generation, passing in our generator
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new List<ISourceGenerator> { generator });
@@ -60,7 +60,7 @@ namespace MyCode
 
         private static void TryRunGeneratorWithoutDependencies()
         {
-            var generator = new DddGenerator();
+            var generator = new Generator();
             
             generator.Initialize(new GeneratorInitializationContext());
             generator.Execute(new GeneratorExecutionContext());

@@ -7,17 +7,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
-namespace HUGs.Generator.DDD
+namespace HUGs.Generator.DDD.Ddd
 {
     internal class IdentifiableGenerator
     {
-        // TODO: add check if kind == aggregate
         public static string GenerateAggregateCode(DddObjectSchema aggregate)
         {
             return GenerateIdentifiableObjectCode(aggregate);
         }
 
-        // TODO: add check if kind == entity
         public static string GenerateEntityCode(DddObjectSchema entity)
         {
             return GenerateIdentifiableObjectCode(entity);
@@ -28,7 +26,7 @@ namespace HUGs.Generator.DDD
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
             syntaxBuilder.AddNamespace($"HUGs.DDD.Generated.{identifiable.Kind}");
-            AddUsings(syntaxBuilder);
+            DddGeneratorCommon.AddCommonUsings(syntaxBuilder);
 
             var entityIdClass = PrepareEntityIdClass(identifiable.Name);
             syntaxBuilder.AddClass(entityIdClass);
@@ -56,15 +54,6 @@ namespace HUGs.Generator.DDD
             classBuilder.AddConstructor(accessModifiers, className, parameters, baseCtorParams: parameters);
 
             return classBuilder.Build();
-        }
-
-        private static void AddUsings(RoslynSyntaxBuilder syntaxBuilder)
-        {
-            syntaxBuilder.AddUsing(
-                "System",
-                "System.Linq",
-                "System.Collections.Generic",
-                "HUGs.Generator.DDD.BaseModels");
         }
 
         private static ClassBuilder PrepareIdentifiableClassBuilder(DddObjectSchema objectSchema, string entityIdClassIdentifier)
@@ -100,19 +89,13 @@ namespace HUGs.Generator.DDD
         {
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
 
-            var properties = objectSchema.Properties
-                .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(
-                    p.IsArrayProperty ? $"IEnumerable<{p.FullType}>" : p.FullType,
-                    p.Name))
-                .ToArray();
-
+            var propertyParams = DddGeneratorCommon.CreateParametersFromProperties(objectSchema.Properties);
             var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax($"IId<{entityIdClassIdentifier}>", "id") };
-            var ctorParams = ctorBaseParams.Concat(properties).ToArray();
-            var linesOfCode = new[] { "Id = id;" }
-                .Concat(objectSchema.Properties
-                    .Select(p => p.IsArrayProperty
-                        ? $"this.{p.PrivateName} = {p.Name}.ToList();"
-                        : $"this.{p.Name} = {p.Name};"))
+            var ctorParams = ctorBaseParams.Concat(propertyParams).ToArray();
+
+            var propertyAssignments = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(objectSchema.Properties);
+            var ctorBody = new[] { "Id = id;" }
+                .Concat(propertyAssignments)
                 .Append("OnInitialized();")
                 .ToArray();
 
@@ -120,7 +103,7 @@ namespace HUGs.Generator.DDD
                 accessModifiers,
                 objectSchema.Name,
                 ctorParams,
-                linesOfCode
+                ctorBody
             );
         }
 

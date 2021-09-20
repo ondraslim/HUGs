@@ -1,14 +1,14 @@
-﻿using HUGs.Generator.Common;
+﻿using System.Linq;
+using System.Runtime.CompilerServices;
+using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.BaseModels;
 using HUGs.Generator.DDD.Common;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
-namespace HUGs.Generator.DDD
+namespace HUGs.Generator.DDD.Ddd
 {
     internal static class EnumerationGenerator
     {
@@ -18,7 +18,7 @@ namespace HUGs.Generator.DDD
 
             syntaxBuilder.AddNamespace("HUGs.DDD.Generated.Enumeration");
 
-            AddCommonUsings(syntaxBuilder);
+            DddGeneratorCommon.AddCommonUsings(syntaxBuilder);
 
             var classBuilder = PrepareEnumerationClassBuilder(enumeration.Name);
             AddProperties(classBuilder, enumeration.Properties);
@@ -28,15 +28,6 @@ namespace HUGs.Generator.DDD
             syntaxBuilder.AddClass(classBuilder.Build());
 
             return syntaxBuilder.Build();
-        }
-
-        private static void AddCommonUsings(RoslynSyntaxBuilder syntaxBuilder)
-        {
-            syntaxBuilder.AddUsing(
-                "System",
-                "System.Linq",
-                "System.Collections.Generic",
-                "HUGs.Generator.DDD.BaseModels");
         }
 
         private static ClassBuilder PrepareEnumerationClassBuilder(string enumerationName)
@@ -59,20 +50,18 @@ namespace HUGs.Generator.DDD
         private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema enumeration)
         {
             var accessModifiers = new[] { SyntaxKind.PrivateKeyword };
+            
             var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "internalName") };
-            var properties = enumeration.Properties
-                .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(p.FullType, p.Name))
-                .ToArray();
-            var ctorParams = ctorBaseParams.Concat(properties).ToArray();
-            var linesOfCode = enumeration.Properties
-                .Select(p => $"this.{p.Name} = {p.Name};")
-                .ToArray();
+            var propertyParams = DddGeneratorCommon.CreateParametersFromProperties(enumeration.Properties);
+            var ctorParams = ctorBaseParams.Concat(propertyParams).ToArray();
+
+            var ctorBody = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(enumeration.Properties);
 
             classBuilder.AddConstructor(
                 accessModifiers,
                 enumeration.Name,
                 ctorParams,
-                linesOfCode,
+                ctorBody,
                 ctorBaseParams);
         }
 
@@ -130,7 +119,6 @@ namespace HUGs.Generator.DDD
             }
 
             return SyntaxFactory.Argument(SyntaxFactory.ParseExpression(propertyInitialization.PropertyValue));
-
         }
     }
 }
