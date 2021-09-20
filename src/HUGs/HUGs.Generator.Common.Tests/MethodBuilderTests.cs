@@ -1,3 +1,4 @@
+using CheckTestOutput;
 using FluentAssertions;
 using HUGs.Generator.Tests.Tools.Extensions;
 using Microsoft.CodeAnalysis;
@@ -9,6 +10,7 @@ namespace HUGs.Generator.Common.Tests
     public class MethodBuilderTests
     {
         private MethodBuilder builder;
+        private readonly OutputChecker check = new("TestResults/MethodBuilder");
 
         [SetUp]
         public void Setup()
@@ -22,15 +24,11 @@ namespace HUGs.Generator.Common.Tests
             var methodDeclaration = builder
                 .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
-                .SetName("TestMethod")
+                .SetName("TestMethod1")
                 .Build();
 
             var actualMethod = methodDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedMethod = @"public void TestMethod()
-{
-}";
-
-            actualMethod.Should().BeIgnoringLineEndings(expectedMethod);
+            check.CheckString(actualMethod, fileExtension: "cs");
         }
 
         [Test]
@@ -39,17 +37,12 @@ namespace HUGs.Generator.Common.Tests
             var methodDeclaration = builder
                 .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
-                .SetName("TestMethod")
+                .SetName("TestMethod2")
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
                 .Build();
 
             var actualMethod = methodDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedMethod = @"public void TestMethod()
-{
-    System.Console.WriteLine(""Hello World!"");
-}";
-
-            actualMethod.Should().BeIgnoringLineEndings(expectedMethod);
+            check.CheckString(actualMethod, fileExtension: "cs");
         }
 
         [Test]
@@ -58,19 +51,13 @@ namespace HUGs.Generator.Common.Tests
             var methodDeclaration = builder
                 .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
-                .SetName("TestMethod")
+                .SetName("TestMethod3")
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
                 .AddBodyLine("System.Console.WriteLine(\"Another Hello World!\");")
                 .Build();
 
             var actualMethod = methodDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedMethod = @"public void TestMethod()
-{
-    System.Console.WriteLine(""Hello World!"");
-    System.Console.WriteLine(""Another Hello World!"");
-}";
-
-            actualMethod.Should().BeIgnoringLineEndings(expectedMethod);
+            check.CheckString(actualMethod, fileExtension: "cs");
         }
 
         [Test]
@@ -79,18 +66,13 @@ namespace HUGs.Generator.Common.Tests
             var methodDeclaration = builder
                 .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
-                .SetName("TestMethod")
+                .SetName("TestMethod4")
                 .AddParameter("helloText", "string")
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
                 .Build();
 
             var actualMethod = methodDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedMethod = @"public void TestMethod(string helloText)
-{
-    System.Console.WriteLine(""Hello World!"");
-}";
-
-            actualMethod.Should().BeIgnoringLineEndings(expectedMethod);
+            check.CheckString(actualMethod, fileExtension: "cs");
         }
 
         [Test]
@@ -99,19 +81,14 @@ namespace HUGs.Generator.Common.Tests
             var methodDeclaration = builder
                 .SetAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.VirtualKeyword)
                 .SetReturnType("void")
-                .SetName("TestMethod")
+                .SetName("TestMethod5")
                 .AddParameter("helloText", "string")
                 .AddParameter("helloCount", "int")
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
                 .Build();
 
             var actualMethod = methodDeclaration.ToFullString();
-            const string expectedMethod = @"public virtual void TestMethod(string helloText, int helloCount)
-{
-    System.Console.WriteLine(""Hello World!"");
-}";
-
-            actualMethod.Should().BeIgnoringLineEndings(expectedMethod);
+            check.CheckString(actualMethod, fileExtension: "cs");
         }
     }
     
