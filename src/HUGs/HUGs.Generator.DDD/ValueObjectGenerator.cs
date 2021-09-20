@@ -36,6 +36,7 @@ namespace HUGs.Generator.DDD
         {
             syntaxBuilder.AddUsing(
                 "System",
+                "System.Linq",
                 "System.Collections.Generic",
                 "HUGs.Generator.DDD.BaseModels");
         }
@@ -44,7 +45,7 @@ namespace HUGs.Generator.DDD
         {
             var classBuilder = new ClassBuilder(valueObjectName)
                 .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
-                .AddClassBaseTypes(nameof(ValueObject));
+                .AddClassBaseTypes(typeof(ValueObject).FullName);
 
             return classBuilder;
         }
@@ -53,7 +54,7 @@ namespace HUGs.Generator.DDD
         {
             foreach (var prop in valueObject.Properties)
             {
-                classBuilder.AddGetOnlyProperty(prop.FullType, prop.Name, new[] { SyntaxKind.PublicKeyword });
+                classBuilder.AddGetOnlyProperty(prop.FullType, prop.Name, SyntaxKind.PublicKeyword);
             }
         }
 

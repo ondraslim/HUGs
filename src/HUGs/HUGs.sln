@@ -23,7 +23,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{534EEE92
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ddd", "Ddd", "{892B3634-E193-4830-AE98-3E9312444A85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HUGs.Generator.DDD.BaseModels", "HUGs.Generator.DDD.BaseModels\HUGs.Generator.DDD.BaseModels.csproj", "{9E2BF812-ADBC-4D66-BF9A-BE0E261080F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HUGs.Generator.DDD.BaseModels", "HUGs.Generator.DDD.BaseModels\HUGs.Generator.DDD.BaseModels.csproj", "{9E2BF812-ADBC-4D66-BF9A-BE0E261080F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E16DB05B-DD01-4A42-9C24-F52A69C20529}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

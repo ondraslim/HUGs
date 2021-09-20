@@ -1,6 +1,5 @@
-﻿using FluentAssertions;
+﻿using CheckTestOutput;
 using HUGs.Generator.Common.Helpers;
-using HUGs.Generator.Tests.Tools.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,135 +9,97 @@ namespace HUGs.Generator.Common.Tests
 {
     public class ClassBuilderTests
     {
+        private readonly OutputChecker check = new("TestResults/ClassBuilder");
+
         [Test]
         public void GivenEmptyClass_CorrectlyGeneratesEmptyClass()
         {
-            var classDeclaration = new ClassBuilder("TestClass").Build();
-
+            var classDeclaration = new ClassBuilder("TestClass1").Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"class TestClass
-{
-}";
 
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         [Test]
         public void GivenSimpleClassWithAccessModifier_CorrectlyGeneratesClass()
         {
-            var builder = new ClassBuilder("TestClass");
-
+            var builder = new ClassBuilder("TestClass2");
             builder.AddClassAccessModifiers(SyntaxKind.PublicKeyword);
             builder.AddClassAccessModifiers(SyntaxKind.AbstractKeyword);
 
             var classDeclaration = builder.Build();
-
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"public abstract class TestClass
-{
-}";
 
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         [Test]
         public void GivenSimpleClassWithBaseClass_CorrectlyGeneratesClass()
         {
-            var builder = new ClassBuilder("TestClass");
-
+            var builder = new ClassBuilder("TestClass3");
             builder.AddClassBaseTypes("TestClassBase");
 
             var classDeclaration = builder.Build();
-
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"class TestClass : TestClassBase
-{
-}";
 
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         [Test]
         public void GivenSimpleClassWithField_CorrectlyGeneratesClass()
         {
-            var builder = new ClassBuilder("TestClass");
-
+            var builder = new ClassBuilder("TestClass4");
             builder.AddField("string", "TestField", SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword);
 
             var classDeclaration = builder.Build();
-
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"class TestClass
-{
-    private readonly string TestField;
-}";
 
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         [Test]
         public void GivenSimpleClassWithProperty_CorrectlyGeneratesClass()
         {
-            var builder = new ClassBuilder("TestClass");
-
+            var builder = new ClassBuilder("TestClass5");
             builder.AddFullProperty("string", "TestProperty", new[] { SyntaxKind.PublicKeyword });
 
             var classDeclaration = builder.Build();
-
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"class TestClass
-{
-    public string TestProperty { get; set; }
-}";
 
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         [Test]
         public void GivenSimpleClassWithGetOnlyProperty_CorrectlyGeneratesClass()
         {
-            var builder = new ClassBuilder("TestClass");
-
+            var builder = new ClassBuilder("TestClass6");
             builder.AddGetOnlyProperty("string", "TestProperty", new[] { SyntaxKind.PublicKeyword });
 
             var classDeclaration = builder.Build();
-
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"class TestClass
-{
-    public string TestProperty { get; }
-}";
 
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         [Test]
         public void GivenEmptyClassConstructor_CorrectlyGeneratesEmptyConstructor()
         {
-            const string className = "TestClass";
-            var builder = new ClassBuilder(className);
-
+            const string className = "TestClass7";
             var modifiers = new[] { SyntaxKind.ProtectedKeyword };
+
+            var builder = new ClassBuilder(className);
             builder.AddConstructor(modifiers, className, new ParameterSyntax[] { });
 
             var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"class TestClass
-{
-    protected TestClass()
-    {
-    }
-}";
 
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         [Test]
         public void GivenClassConstructorWithParamsAndCode_CorrectlyGeneratesConstructor()
         {
-            const string className = "TestClass";
-            var builder = new ClassBuilder(className);
-
+            const string className = "TestClass8";
             var modifiers = new[] { SyntaxKind.PublicKeyword };
             var parameters = new[]
             {
@@ -151,28 +112,19 @@ namespace HUGs.Generator.Common.Tests
                 "var fullText = $\"{number}x {text}\";"
             };
 
+            var builder = new ClassBuilder(className);
             builder.AddConstructor(modifiers, className, parameters, linesOfCode);
 
             var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"class TestClass
-{
-    public TestClass(string text, int number)
-    {
-        var numberTwice = number * 2;
-        var fullText = $""{number}x {text}"";
-    }
-}";
 
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         [Test]
         public void GivenClassConstructorWithParamsForBase_CorrectlyGeneratesConstructor()
         {
-            const string className = "TestClass";
-            var builder = new ClassBuilder(className);
-
+            const string className = "TestClass9";
             var modifiers = new[] { SyntaxKind.PublicKeyword };
             var paramForBase = RoslynSyntaxHelper.CreateParameterSyntax("string", "paramForBase");
             var parameters = new[]
@@ -187,28 +139,19 @@ namespace HUGs.Generator.Common.Tests
                 "var fullText = $\"{number}x {text}\";"
             };
 
+            var builder = new ClassBuilder(className);
             builder.AddConstructor(modifiers, className, parameters, linesOfCode, new[] { paramForBase });
 
             var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"class TestClass
-{
-    public TestClass(string text, int number, string paramForBase): base(paramForBase)
-    {
-        var numberTwice = number * 2;
-        var fullText = $""{number}x {text}"";
-    }
-}";
 
             // TODO: weird spacing between ctor and base ctor
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         [Test]
         public void GivenSimpleClassWithMethod_CorrectlyGeneratesClass()
         {
-            var builder = new ClassBuilder("TestClass");
-
             var method = new MethodBuilder()
                 .SetName("TestMethod")
                 .SetAccessModifiers(SyntaxKind.PublicKeyword)
@@ -216,26 +159,19 @@ namespace HUGs.Generator.Common.Tests
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
                 .Build();
 
+            var builder = new ClassBuilder("TestClass10");
             builder.AddMethod(method);
 
             var classDeclaration = builder.Build();
-
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"class TestClass
-{
-    public void TestMethod()
-    {
-        System.Console.WriteLine(""Hello World!"");
-    }
-}";
 
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         [Test]
         public void GivenComplexClassWithMethod_CorrectlyGeneratesClass()
         {
-            var builder = new ClassBuilder("TestClass");
+            var builder = new ClassBuilder("TestClass11");
 
             builder
                 .AddClassAccessModifiers(SyntaxKind.ProtectedKeyword)
@@ -258,23 +194,10 @@ namespace HUGs.Generator.Common.Tests
             builder.AddMethod(method);
 
             var classDeclaration = builder.Build();
-
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
-            const string expectedClass = @"protected abstract class TestClass : BaseType, IRandomInterface
-{
-    private readonly int AmountField;
-    public string TextField;
-    private int AmountProperty { get; set; }
 
-    public string TextProperty { get; }
-
-    public void TestMethod()
-    {
-        System.Console.WriteLine(""Hello World!"");
-    }
-}";
             // TODO: weird spacing between AmountProperty - TextProperty
-            actualClass.Should().BeIgnoringLineEndings(expectedClass);
+            check.CheckString(actualClass, fileExtension: "cs");
         }
 
         // TODO: add tests - field with initialization

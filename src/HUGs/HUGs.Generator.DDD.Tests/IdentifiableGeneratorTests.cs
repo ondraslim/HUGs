@@ -1,12 +1,13 @@
-﻿using FluentAssertions;
+﻿using CheckTestOutput;
 using HUGs.Generator.DDD.Common;
-using HUGs.Generator.Tests.Tools.Extensions;
 using NUnit.Framework;
 
 namespace HUGs.Generator.DDD.Tests
 {
     public class IdentifiableGeneratorTests
     {
+        private readonly OutputChecker check = new("TestResults/Identifiable/Generator");
+
         [Test]
         [TestCase(DddObjectKind.Entity)]
         [TestCase(DddObjectKind.Aggregate)]
@@ -23,30 +24,7 @@ namespace HUGs.Generator.DDD.Tests
                 ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
                 : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
 
-            var expectedCode = $@"using System;
-using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
-
-namespace HUGs.DDD.Generated.{identifiableKind}
-{{
-    public class {objectSchema.Name}Id : EntityId<{objectSchema.Name}>
-    {{
-        public {objectSchema.Name}Id(string value)
-        {{
-        }}
-    }}
-
-    public partial class {objectSchema.Name} : {identifiableKind}<{objectSchema.Name}Id>
-    {{
-        public {objectSchema.Name}({objectSchema.Name}Id id): base(id)
-        {{
-        }}
-
-        private partial void OnInitialized();
-    }}
-}}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, checkName: identifiableKind.ToString(), fileExtension: "cs");
         }
 
         [Test]
@@ -69,36 +47,7 @@ namespace HUGs.DDD.Generated.{identifiableKind}
                 ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
                 : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
 
-            var expectedCode = $@"using System;
-using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
-
-namespace HUGs.DDD.Generated.{identifiableKind}
-{{
-    public class {objectSchema.Name}Id : EntityId<{objectSchema.Name}>
-    {{
-        public {objectSchema.Name}Id(string value)
-        {{
-        }}
-    }}
-
-    public partial class {objectSchema.Name} : {identifiableKind}<{objectSchema.Name}Id>
-    {{
-        public string Text {{ get; private set; }}
-
-        public double? Number {{ get; private set; }}
-
-        public {objectSchema.Name}({objectSchema.Name}Id id, string Text, double? Number): base(id)
-        {{
-            this.Text = Text;
-            this.Number = Number;
-        }}
-
-        private partial void OnInitialized();
-    }}
-}}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, checkName: identifiableKind.ToString(), fileExtension: "cs");
         }
 
         [Test]
@@ -109,7 +58,7 @@ namespace HUGs.DDD.Generated.{identifiableKind}
             var objectSchema = new DddObjectSchema
             {
                 Kind = identifiableKind,
-                Name = $"ArrayProperty{identifiableKind}",
+                Name = $"SimpleArrayProperty{identifiableKind}",
                 Properties = new DddObjectProperty[]
                 {
                     new() { Name = "Items", Type = "OrderItem[]" },
@@ -120,33 +69,7 @@ namespace HUGs.DDD.Generated.{identifiableKind}
                 ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
                 : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
 
-            var expectedCode = $@"using System;
-using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
-
-namespace HUGs.DDD.Generated.{identifiableKind}
-{{
-    public class {objectSchema.Name}Id : EntityId<{objectSchema.Name}>
-    {{
-        public {objectSchema.Name}Id(string value)
-        {{
-        }}
-    }}
-
-    public partial class {objectSchema.Name} : {identifiableKind}<{objectSchema.Name}Id>
-    {{
-        private List<OrderItem> _Items;
-        public IReadOnlyList<OrderItem> Items => _Items;
-        public {objectSchema.Name}({objectSchema.Name}Id id, IReadOnlyList<OrderItem> Items): base(id)
-        {{
-            this._Items = Items;
-        }}
-
-        private partial void OnInitialized();
-    }}
-}}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, checkName: identifiableKind.ToString(), fileExtension: "cs");
         }
 
         [Test]
@@ -170,39 +93,7 @@ namespace HUGs.DDD.Generated.{identifiableKind}
                 ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
                 : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
 
-            var expectedCode = $@"using System;
-using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
-
-namespace HUGs.DDD.Generated.{identifiableKind}
-{{
-    public class {objectSchema.Name}Id : EntityId<{objectSchema.Name}>
-    {{
-        public {objectSchema.Name}Id(string value)
-        {{
-        }}
-    }}
-
-    public partial class {objectSchema.Name} : {identifiableKind}<{objectSchema.Name}Id>
-    {{
-        private List<OrderItem> _Items;
-        public string Text {{ get; private set; }}
-
-        public IReadOnlyList<OrderItem> Items => _Items;
-        public double? Number {{ get; private set; }}
-
-        public {objectSchema.Name}({objectSchema.Name}Id id, string Text, IReadOnlyList<OrderItem> Items, double? Number): base(id)
-        {{
-            this.Text = Text;
-            this._Items = Items;
-            this.Number = Number;
-        }}
-
-        private partial void OnInitialized();
-    }}
-}}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, checkName: identifiableKind.ToString(), fileExtension: "cs");
         }
     }
 }

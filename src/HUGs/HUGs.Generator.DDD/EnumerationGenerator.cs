@@ -34,6 +34,7 @@ namespace HUGs.Generator.DDD
         {
             syntaxBuilder.AddUsing(
                 "System",
+                "System.Linq",
                 "System.Collections.Generic",
                 "HUGs.Generator.DDD.BaseModels");
         }
@@ -42,7 +43,7 @@ namespace HUGs.Generator.DDD
         {
             var classBuilder = new ClassBuilder(enumerationName)
                 .AddClassAccessModifiers(SyntaxKind.PublicKeyword)
-                .AddClassBaseTypes(nameof(Enumeration));
+                .AddClassBaseTypes(typeof(Enumeration).FullName);
 
             return classBuilder;
         }
@@ -120,7 +121,6 @@ namespace HUGs.Generator.DDD
             DddPropertyInitialization propertyInitialization,
             DddObjectSchema enumeration)
         {
-
             if (enumeration.Properties.Any(p => p.Name == propertyInitialization.PropertyName && p.Type == "string"))
             {
                 return SyntaxFactory.Argument(
@@ -129,7 +129,8 @@ namespace HUGs.Generator.DDD
                         SyntaxFactory.Literal(propertyInitialization.PropertyValue)));
             }
 
-            return SyntaxFactory.Argument(SyntaxFactory.IdentifierName(propertyInitialization.PropertyValue));
+            return SyntaxFactory.Argument(SyntaxFactory.ParseExpression(propertyInitialization.PropertyValue));
+
         }
     }
 }

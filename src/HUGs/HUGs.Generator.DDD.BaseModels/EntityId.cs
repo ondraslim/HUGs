@@ -13,7 +13,7 @@ namespace HUGs.Generator.DDD.BaseModels
 
         protected override IEnumerable<object> GetAtomicValues()
         {
-            return new List<object>() { this.Value };
+            return new List<object> { Value };
         }
     }
 }

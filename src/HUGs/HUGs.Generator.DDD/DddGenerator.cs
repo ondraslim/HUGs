@@ -20,6 +20,9 @@ namespace HUGs.Generator.DDD
         public void Execute(GeneratorExecutionContext context)
         {
             var dddSchemas = GetDddSchemaFiles(context);
+
+            // TODO: throw excpetion if not correct
+            // catch and diagnostics
             var dddModel = BuildDddModel(dddSchemas);
             GenerateDddModelSource(context, dddModel);
         }

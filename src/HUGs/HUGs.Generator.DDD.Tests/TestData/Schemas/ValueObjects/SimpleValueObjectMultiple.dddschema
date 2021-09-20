@@ -1,0 +1,5 @@
+﻿kind: ValueObject
+name: Simple3
+properties:
+  - name: Text
+    type: string

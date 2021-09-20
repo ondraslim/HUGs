@@ -1,39 +1,26 @@
-﻿using FluentAssertions;
+﻿using CheckTestOutput;
 using HUGs.Generator.DDD.Common;
-using HUGs.Generator.Tests.Tools.Extensions;
 using NUnit.Framework;
 
 namespace HUGs.Generator.DDD.Tests
 {
     public class EnumerationGeneratorTests
     {
+        private readonly OutputChecker check = new("TestResults/Enumeration/Generator");
+
         [Test]
         public void GivenEmptyEnumerationSchema_CorrectlyGeneratesEnumerationClass()
         {
             var inputEnumerationObject = new DddObjectSchema
             {
                 Kind = DddObjectKind.Enumeration,
-                Name = "SimpleClass",
+                Name = "SimpleClass1",
                 Properties = new DddObjectProperty[] { },
                 Values = new DddObjectValue[] { }
             };
 
             var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject);
-            var expectedCode = $@"using System;
-using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
-
-namespace HUGs.DDD.Generated.Enumeration
-{{
-    public class {inputEnumerationObject.Name} : Enumeration
-    {{
-        private {inputEnumerationObject.Name}(string internalName): base(internalName)
-        {{
-        }}
-    }}
-}}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, fileExtension: "cs");
         }
 
         [Test]
@@ -60,26 +47,7 @@ namespace HUGs.DDD.Generated.Enumeration
             };
 
             var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject);
-            var expectedCode = $@"using System;
-using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
-
-namespace HUGs.DDD.Generated.Enumeration
-{{
-    public class {inputEnumerationObject.Name} : Enumeration
-    {{
-        public static readonly {inputEnumerationObject.Name} Created = new {inputEnumerationObject.Name}(nameof(Created), ""Vytvořeno"");
-        public static readonly {inputEnumerationObject.Name} Canceled = new {inputEnumerationObject.Name}(nameof(Canceled), ""Zrušeno"");
-        public string Name {{ get; }}
-
-        private {inputEnumerationObject.Name}(string internalName, string Name): base(internalName)
-        {{
-            this.Name = Name;
-        }}
-    }}
-}}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, fileExtension: "cs");
         }
         
         [Test]
@@ -88,7 +56,7 @@ namespace HUGs.DDD.Generated.Enumeration
             var inputEnumerationObject = new DddObjectSchema
             {
                 Kind = DddObjectKind.Enumeration,
-                Name = "OrderState",
+                Name = "OrderState2",
                 Properties = new DddObjectProperty[]
                 {
                     new() { Name = "Name", Type = "string" },
@@ -118,29 +86,7 @@ namespace HUGs.DDD.Generated.Enumeration
             };
 
             var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject);
-            var expectedCode = $@"using System;
-using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
-
-namespace HUGs.DDD.Generated.Enumeration
-{{
-    public class {inputEnumerationObject.Name} : Enumeration
-    {{
-        public static readonly {inputEnumerationObject.Name} Created = new {inputEnumerationObject.Name}(nameof(Created), ""Vytvořeno"", 1);
-        public static readonly {inputEnumerationObject.Name} Canceled = new {inputEnumerationObject.Name}(nameof(Canceled), ""Zrušeno"", 42);
-        public string Name {{ get; }}
-
-        public int Count {{ get; }}
-
-        private {inputEnumerationObject.Name}(string internalName, string Name, int Count): base(internalName)
-        {{
-            this.Name = Name;
-            this.Count = Count;
-        }}
-    }}
-}}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, fileExtension: "cs");
         }
     }
 }

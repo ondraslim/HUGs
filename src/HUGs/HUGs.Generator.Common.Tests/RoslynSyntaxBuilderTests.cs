@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using HUGs.Generator.Tests.Tools.Extensions;
+﻿using CheckTestOutput;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
@@ -9,6 +8,7 @@ namespace HUGs.Generator.Common.Tests
     public class RoslynSyntaxBuilderTests
     {
         private RoslynSyntaxBuilder builder;
+        private readonly OutputChecker check = new("TestResults/RoslynSyntaxBuilder");
 
         [SetUp]
         public void Setup()
@@ -26,24 +26,7 @@ namespace HUGs.Generator.Common.Tests
             builder.AddClass(sampleClass);
 
             var actualCode = builder.Build();
-            const string expectedCode = @"using System;
-
-namespace HUGs.Generator.Common.Tests
-{
-    class TestClass
-    {
-        public TestClass()
-        {
-        }
-
-        public void TestMethod()
-        {
-            Console.WriteLine(""Hello World!"");
-        }
-    }
-}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, fileExtension: "cs");
         }
 
 

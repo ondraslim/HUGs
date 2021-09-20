@@ -1,42 +1,25 @@
-﻿using FluentAssertions;
+﻿using CheckTestOutput;
 using HUGs.Generator.DDD.Common;
-using HUGs.Generator.Tests.Tools.Extensions;
 using NUnit.Framework;
 
 namespace HUGs.Generator.DDD.Tests
 {
     public class ValueObjectGeneratorTests
     {
+        private readonly OutputChecker check = new("TestResults/ValueObjects/Generator");
+
         [Test]
         public void GivenEmptyValueObjectSchema_CorrectlyGeneratesValueObjectClass()
         {
             var inputValueObject = new DddObjectSchema
             {
                 Kind = DddObjectKind.ValueObject,
-                Name = "SimpleClass",
+                Name = "SimpleClass1",
                 Properties = new DddObjectProperty[] { }
             };
 
             var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
-            var expectedCode = $@"using System;
-using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
-
-namespace HUGs.DDD.Generated.ValueObject
-{{
-    public partial class {inputValueObject.Name} : ValueObject
-    {{
-        public {inputValueObject.Name}()
-        {{
-        }}
-
-        protected override IEnumerable<object> GetAtomicValues()
-        {{
-        }}
-    }}
-}}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, fileExtension: "cs");
         }
 
         [Test]
@@ -45,34 +28,12 @@ namespace HUGs.DDD.Generated.ValueObject
             var inputValueObject = new DddObjectSchema
             {
                 Kind = DddObjectKind.ValueObject,
-                Name = "SimpleClass",
+                Name = "SimpleOptionalPropertyClass",
                 Properties = new DddObjectProperty[] { new() { Name = "Number", Optional = false, Type = "int" } }
             };
 
             var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
-            var expectedCode = $@"using System;
-using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
-
-namespace HUGs.DDD.Generated.ValueObject
-{{
-    public partial class {inputValueObject.Name} : ValueObject
-    {{
-        public int Number {{ get; }}
-
-        public {inputValueObject.Name}(int Number)
-        {{
-            this.Number = Number;
-        }}
-
-        protected override IEnumerable<object> GetAtomicValues()
-        {{
-            yield return Number;
-        }}
-    }}
-}}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, fileExtension: "cs");
         }
 
         [Test]
@@ -81,7 +42,7 @@ namespace HUGs.DDD.Generated.ValueObject
             var inputValueObject = new DddObjectSchema
             {
                 Kind = DddObjectKind.ValueObject,
-                Name = "SimpleClass",
+                Name = "MultiplePropertyClass",
                 Properties = new DddObjectProperty[]
                 {
                     new() { Name = "Number", Optional = false, Type = "int" },
@@ -91,37 +52,7 @@ namespace HUGs.DDD.Generated.ValueObject
             };
 
             var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
-            var expectedCode = $@"using System;
-using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
-
-namespace HUGs.DDD.Generated.ValueObject
-{{
-    public partial class {inputValueObject.Name} : ValueObject
-    {{
-        public int Number {{ get; }}
-
-        public int? Number2 {{ get; }}
-
-        public string Text {{ get; }}
-
-        public {inputValueObject.Name}(int Number, int? Number2, string Text)
-        {{
-            this.Number = Number;
-            this.Number2 = Number2;
-            this.Text = Text;
-        }}
-
-        protected override IEnumerable<object> GetAtomicValues()
-        {{
-            yield return Number;
-            yield return Number2;
-            yield return Text;
-        }}
-    }}
-}}";
-
-            actualCode.Should().BeIgnoringLineEndings(expectedCode);
+            check.CheckString(actualCode, fileExtension: "cs");
         }
     }
 }

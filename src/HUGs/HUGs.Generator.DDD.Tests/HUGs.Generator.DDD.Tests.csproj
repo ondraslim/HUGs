@@ -7,18 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TestExpectedResults\AddressValueObject.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObjectMultiple.dddschema" />
+    <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObjectMultiple2.dddschema" />
     <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObjectWithOptional.dddschema" />
     <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObject2.dddschema" />
     <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObject.dddschema" />
     <AdditionalFiles Include="TestData\Schemas\ValueObjects\AddressValueObject.dddschema" />
-    <AdditionalFiles Include="TestExpectedResults\ValueObjects\AddressValueObject.txt" />
   </ItemGroup>
 
+
   <ItemGroup>
+    <PackageReference Include="CheckTestOutput" Version="0.4.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
@@ -32,4 +31,11 @@
     <ProjectReference Include="..\HUGs.Generator.Tests.Tools\HUGs.Generator.Tests.Tools.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Compile Remove="TestResults\**\*.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="TestResults\**\*.cs" />
+	</ItemGroup>
 </Project>
