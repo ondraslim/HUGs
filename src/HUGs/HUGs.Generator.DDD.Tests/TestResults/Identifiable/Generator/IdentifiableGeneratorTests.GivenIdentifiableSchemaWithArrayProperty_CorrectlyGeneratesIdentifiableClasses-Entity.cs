@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using HUGs.Generator.DDD.BaseModels;
 
@@ -13,12 +14,12 @@ namespace HUGs.DDD.Generated.Entity
 
     public partial class SimpleArrayPropertyEntity : HUGs.Generator.DDD.BaseModels.Entity<SimpleArrayPropertyEntityId>
     {
-        private IReadOnlyList<OrderItem> _Items;
+        private List<OrderItem> _Items;
         public IReadOnlyList<OrderItem> Items => _Items;
-        public SimpleArrayPropertyEntity(IId<SimpleArrayPropertyEntityId> id, IReadOnlyList<OrderItem> Items)
+        public SimpleArrayPropertyEntity(IId<SimpleArrayPropertyEntityId> id, IEnumerable<OrderItem> Items)
         {
             Id = id;
-            this._Items = Items;
+            this._Items = Items.ToList();
             OnInitialized();
         }
 

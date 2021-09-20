@@ -62,6 +62,7 @@ namespace HUGs.Generator.DDD
         {
             syntaxBuilder.AddUsing(
                 "System",
+                "System.Linq",
                 "System.Collections.Generic",
                 "HUGs.Generator.DDD.BaseModels");
         }
@@ -82,8 +83,7 @@ namespace HUGs.Generator.DDD
                 if (prop.IsArrayProperty)
                 {
                     classBuilder
-                        // TODO: originally List<>, not works, is it necessary?
-                        .AddField($"IReadOnlyList<{prop.TypeWithoutArray}>", prop.PrivateName, SyntaxKind.PrivateKeyword)
+                        .AddField($"List<{prop.TypeWithoutArray}>", prop.PrivateName, SyntaxKind.PrivateKeyword)
                         .AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{prop.TypeWithoutArray}>", prop.Name, prop.PrivateName, new[]
                         {
                             SyntaxKind.PublicKeyword
@@ -102,7 +102,7 @@ namespace HUGs.Generator.DDD
 
             var properties = objectSchema.Properties
                 .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(
-                    p.IsArrayProperty ? $"IReadOnlyList<{p.FullType}>" : p.FullType,
+                    p.IsArrayProperty ? $"IEnumerable<{p.FullType}>" : p.FullType,
                     p.Name))
                 .ToArray();
 
@@ -111,7 +111,7 @@ namespace HUGs.Generator.DDD
             var linesOfCode = new[] { "Id = id;" }
                 .Concat(objectSchema.Properties
                     .Select(p => p.IsArrayProperty
-                        ? $"this.{p.PrivateName} = {p.Name};"
+                        ? $"this.{p.PrivateName} = {p.Name}.ToList();"
                         : $"this.{p.Name} = {p.Name};"))
                 .Append("OnInitialized();")
                 .ToArray();

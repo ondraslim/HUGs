@@ -35,4 +35,7 @@
 		<Compile Remove="TestResults\**\*.cs" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Include="TestResults\**\*.cs" />
+	</ItemGroup>
 </Project>

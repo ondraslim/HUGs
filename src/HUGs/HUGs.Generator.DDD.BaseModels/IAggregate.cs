@@ -4,7 +4,6 @@ namespace HUGs.Generator.DDD.BaseModels
 {
     public interface IAggregate<TKey> : IEntity<TKey>
     {
-        void CheckState();
         public string Etag { get; }
         void RegenerateEtag();
         bool Equals(object other);

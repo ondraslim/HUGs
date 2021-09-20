@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using HUGs.Generator.DDD.BaseModels;
 
@@ -13,12 +14,12 @@ namespace HUGs.DDD.Generated.Aggregate
 
     public partial class SimpleArrayPropertyAggregate : HUGs.Generator.DDD.BaseModels.Aggregate<SimpleArrayPropertyAggregateId>
     {
-        private IReadOnlyList<OrderItem> _Items;
+        private List<OrderItem> _Items;
         public IReadOnlyList<OrderItem> Items => _Items;
-        public SimpleArrayPropertyAggregate(IId<SimpleArrayPropertyAggregateId> id, IReadOnlyList<OrderItem> Items)
+        public SimpleArrayPropertyAggregate(IId<SimpleArrayPropertyAggregateId> id, IEnumerable<OrderItem> Items)
         {
             Id = id;
-            this._Items = Items;
+            this._Items = Items.ToList();
             OnInitialized();
         }
 
