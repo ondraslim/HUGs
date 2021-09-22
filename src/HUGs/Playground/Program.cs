@@ -20,7 +20,7 @@ namespace Playground
 
             //TryRunGeneratorWithoutDependencies();
 
-            TryRunGenerator();
+            //TryRunGenerator();
         }
 
         private static void TryRunGenerator()
