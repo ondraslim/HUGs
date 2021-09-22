@@ -90,7 +90,7 @@ namespace HUGs.Generator.DDD.Ddd
         private static MethodDeclarationSyntax BuildOnInitializedMethod()
         {
             var methodBuilder = new MethodBuilder()
-                .SetAccessModifiers(SyntaxKind.PartialKeyword)
+                .SetAccessModifiers(SyntaxKind.PrivateKeyword, SyntaxKind.PartialKeyword)
                 .SetReturnType("void")
                 .SetName("OnInitialized");
 
