@@ -20,6 +20,7 @@ namespace HUGs.Generator.DDD.Ddd
         public static ParameterSyntax[] CreateParametersFromProperties(DddObjectProperty[] properties)
         {
             var parameters = properties
+                .Where(p => !p.Computed)
                 .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(
                     p.IsArrayProperty ? $"IEnumerable<{p.FullType}>" : p.FullType,
                     p.Name))
@@ -31,6 +32,7 @@ namespace HUGs.Generator.DDD.Ddd
         public static string[] CreateAssignmentStatementsFromProperties(DddObjectProperty[] properties)
         {
             var linesOfCode = properties
+                .Where(p => !p.Computed)
                 .Select(p => p.IsArrayProperty
                     ? $"this.{p.PrivateName} = {p.Name}.ToList();"
                     : $"this.{p.Name} = {p.Name};")

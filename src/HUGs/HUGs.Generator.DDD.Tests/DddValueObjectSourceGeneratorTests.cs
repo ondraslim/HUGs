@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace HUGs.Generator.DDD.Tests
 {
-    public class DddSourceGeneratorOfValueObjectTests
+    public class DddValueObjectSourceGeneratorTests
     {
         private Compilation emptyInputCompilation;
         private readonly OutputChecker check = new("TestResults/ValueObjects");

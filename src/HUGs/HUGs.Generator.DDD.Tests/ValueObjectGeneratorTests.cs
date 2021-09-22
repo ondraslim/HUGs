@@ -38,6 +38,24 @@ namespace HUGs.Generator.DDD.Tests
         }
 
         [Test]
+        public void GivenValueObjectSchemaWithComputedProperty_CorrectlyGeneratesValueObjectClass()
+        {
+            var inputValueObject = new DddObjectSchema
+            {
+                Kind = DddObjectKind.ValueObject,
+                Name = "SimpleOptionalPropertyClass",
+                Properties = new DddObjectProperty[]
+                {
+                    new() { Name = "Number", Optional = false, Type = "int" },
+                    new() { Name = "ComputedNumber", Computed = true, Type = "int" }
+                }
+            };
+
+            var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
+            check.CheckString(actualCode, fileExtension: "cs");
+        }
+
+        [Test]
         public void GivenValueObjectSchemaWithMultipleProperties_CorrectlyGeneratesValueObjectClass()
         {
             var inputValueObject = new DddObjectSchema
