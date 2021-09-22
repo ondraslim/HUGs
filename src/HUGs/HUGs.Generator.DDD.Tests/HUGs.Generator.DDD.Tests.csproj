@@ -27,4 +27,8 @@
 	<ItemGroup>
 		<Content Include="**\TestResults\**\*.cs" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="TestResults\Configuration\" />
+	</ItemGroup>
 </Project>

@@ -24,7 +24,7 @@ namespace HUGs.Generator.DDD.Tests
         }
 
         [Test]
-        public void GivenSimpleValueObjectSchema_WhenConfigurationTargetNamespaceIsSet_ThenClassIsGeneratedInDesiredNamespace()
+        public void SimpleValueObjectSchema_ConfigurationTargetNamespaceIsSet_ClassIsGeneratedInDesiredNamespace()
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
             var configuration = File.ReadAllText("../../../TestData/Configuration/SimpleValueObjectNamespaceConfig.dddconfig");
@@ -40,7 +40,7 @@ namespace HUGs.Generator.DDD.Tests
         }
 
         [Test]
-        public void GivenSimpleValueObjectSchema_WhenConfigurationTargetNamespaceIsSetForAll_ThenClassIsGeneratedInDesiredNamespace()
+        public void SimpleValueObjectSchema_ConfigurationTargetNamespaceIsSetForAll_ClassIsGeneratedInDesiredNamespace()
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
             var configuration = File.ReadAllText("../../../TestData/Configuration/CompleteNamespaceConfig.dddconfig");
@@ -56,7 +56,7 @@ namespace HUGs.Generator.DDD.Tests
         }
 
         [Test]
-        public void GivenSimpleValueObjectAndAggregateSchemas_WhenConfigurationTargetNamespaceIsSetForAll_ThenClassesAreGeneratedInDesiredNamespace()
+        public void VariousSchemas_ConfigurationTargetNamespaceIsSetForAll_ClassesAreGeneratedInDesiredNamespace()
         {
             var valueObjectSchema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
             var aggregateSchema = File.ReadAllText("../../../TestData/Schemas/Aggregates/SimpleAggregate.dddschema");
@@ -68,8 +68,9 @@ namespace HUGs.Generator.DDD.Tests
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
-            generatedFileTexts.Should().HaveCount(1);
-            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
+            generatedFileTexts.Should().HaveCount(2); 
+            check.CheckString(generatedFileTexts.First(), checkName: "First", fileExtension: "cs");
+            check.CheckString(generatedFileTexts.Last(), checkName: "Second", fileExtension: "cs");
         }
 
         private static GeneratorDriver SetupGeneratorDriver(string schema, string configuration)
