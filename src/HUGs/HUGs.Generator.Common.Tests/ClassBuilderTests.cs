@@ -1,4 +1,5 @@
-﻿using CheckTestOutput;
+﻿using System.Xml;
+using CheckTestOutput;
 using HUGs.Generator.Common.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -50,6 +51,44 @@ namespace HUGs.Generator.Common.Tests
         {
             var builder = new ClassBuilder("TestClass4");
             builder.AddField("string", "TestField", SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword);
+
+            var classDeclaration = builder.Build();
+            var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
+
+            check.CheckString(actualClass, fileExtension: "cs");
+        }
+
+        [Test]
+        public void GivenSimpleClassWithFieldWithInitialization_CorrectlyGeneratesClass()
+        {
+            var accessModifiers = new[] { SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword };
+            var objectCreationSyntax = SyntaxFactory
+                .ObjectCreationExpression(SyntaxFactory.IdentifierName("System.DateTime"))
+                .WithArgumentList(
+                    SyntaxFactory.ArgumentList(
+                        SyntaxFactory.SeparatedList<ArgumentSyntax>(
+                            new SyntaxNodeOrToken[]
+                            {
+                                SyntaxFactory.Argument(
+                                    SyntaxFactory.LiteralExpression(
+                                        SyntaxKind.NumericLiteralExpression,
+                                        SyntaxFactory.Literal(2021))),
+                                SyntaxFactory.Token(SyntaxKind.CommaToken),
+                                SyntaxFactory.Argument(
+                                    SyntaxFactory.LiteralExpression(
+                                        SyntaxKind.NumericLiteralExpression,
+                                        SyntaxFactory.Literal(12))),
+                                SyntaxFactory.Token(SyntaxKind.CommaToken),
+                                SyntaxFactory.Argument(
+                                    SyntaxFactory.LiteralExpression(
+                                        SyntaxKind.NumericLiteralExpression,
+                                        SyntaxFactory.Literal(12)))
+                            })
+                        )
+                    );
+
+            var builder = new ClassBuilder("TestClass41");
+            builder.AddFieldWithInitialization("System.DateTime", "TestField", accessModifiers, objectCreationSyntax);
 
             var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
