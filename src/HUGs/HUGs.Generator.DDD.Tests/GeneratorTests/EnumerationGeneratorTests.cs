@@ -1,13 +1,15 @@
 ﻿using CheckTestOutput;
 using HUGs.Generator.DDD.Common;
+using HUGs.Generator.DDD.Common.Configuration;
 using HUGs.Generator.DDD.Ddd;
 using NUnit.Framework;
 
-namespace HUGs.Generator.DDD.Tests
+namespace HUGs.Generator.DDD.Tests.GeneratorTests
 {
     public class EnumerationGeneratorTests
     {
-        private readonly OutputChecker check = new("TestResults/Enumeration/Generator");
+        private readonly OutputChecker check = new("TestResults/Enumeration");
+        private readonly DddGeneratorConfiguration generatorConfiguration = new();
 
         [Test]
         public void GivenEmptyEnumerationSchema_CorrectlyGeneratesEnumerationClass()
@@ -20,7 +22,7 @@ namespace HUGs.Generator.DDD.Tests
                 Values = new DddObjectValue[] { }
             };
 
-            var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject);
+            var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject, generatorConfiguration);
             check.CheckString(actualCode, fileExtension: "cs");
         }
 
@@ -47,7 +49,7 @@ namespace HUGs.Generator.DDD.Tests
                 }
             };
 
-            var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject);
+            var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject, generatorConfiguration);
             check.CheckString(actualCode, fileExtension: "cs");
         }
         
@@ -86,7 +88,7 @@ namespace HUGs.Generator.DDD.Tests
                 }
             };
 
-            var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject);
+            var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject, generatorConfiguration);
             check.CheckString(actualCode, fileExtension: "cs");
         }
     }

@@ -29,6 +29,6 @@ namespace HUGs.DDD.Generated.Entity
             OnInitialized();
         }
 
-        partial void OnInitialized();
+        private partial void OnInitialized();
     }
 }

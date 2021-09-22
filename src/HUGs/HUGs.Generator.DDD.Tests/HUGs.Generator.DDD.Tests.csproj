@@ -2,22 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-
-    <IsPackable>false</IsPackable>
+	  <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="TestData\Schemas\Aggregates\OrderAggregate.dddschema" />
-    <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObjectMultiple.dddschema" />
-    <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObjectMultiple2.dddschema" />
-    <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObjectWithOptional.dddschema" />
-    <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObject2.dddschema" />
-    <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObject.dddschema" />
-    <AdditionalFiles Include="TestData\Schemas\ValueObjects\AddressValueObject.dddschema" />
-  </ItemGroup>
-
-
-  <ItemGroup>
+	<ItemGroup>
     <PackageReference Include="CheckTestOutput" Version="0.4.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
@@ -33,18 +21,14 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Compile Remove="TestResults\**\*.cs" />
+		<Compile Remove="**\TestResults\**\*.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="TestResults\**\*.cs" />
+		<Content Include="**\TestResults\**\*.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="TestData\Schemas\Aggregates\OrderAggregate.dddschema" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="TestResults\ValueObjects\Generator\" />
+	  <Folder Include="TestResults\Configuration\" />
 	</ItemGroup>
 </Project>

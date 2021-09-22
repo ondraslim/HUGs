@@ -4,17 +4,20 @@ using HUGs.Generator.DDD.Common;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Runtime.CompilerServices;
+using HUGs.Generator.DDD.Common.Configuration;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
 {
     internal static class ValueObjectGenerator
     {
-        public static string GenerateValueObjectCode(DddObjectSchema valueObject)
+        public static string GenerateValueObjectCode(
+            DddObjectSchema valueObject, 
+            DddGeneratorConfiguration generatorConfiguration)
         {
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
-            syntaxBuilder.AddNamespace("HUGs.DDD.Generated.ValueObject");
+            syntaxBuilder.AddNamespace(generatorConfiguration.TargetNamespaces.ValueObject);
 
             DddGeneratorCommon.AddCommonUsings(syntaxBuilder);
 

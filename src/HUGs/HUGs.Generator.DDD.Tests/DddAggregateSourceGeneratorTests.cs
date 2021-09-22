@@ -24,7 +24,22 @@ namespace HUGs.Generator.DDD.Tests
         }
 
         [Test]
-        public void ValidComplexAggregateSchema_GeneratorRun_GeneratesCorrectValueObject()
+        public void ValidSimpleAggregateSchema_GeneratorRun_GeneratesCorrectAggregate()
+        {
+            var schema = File.ReadAllText("../../../TestData/Schemas/Aggregates/SimpleAggregate.dddschema");
+            var driver = SetupGeneratorDriver(schema);
+
+            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
+
+            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
+            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+
+            generatedFileTexts.Should().HaveCount(1);
+            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
+        }
+
+        [Test]
+        public void ValidComplexAggregateSchema_GeneratorRun_GeneratesCorrectAggregate()
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/Aggregates/OrderAggregate.dddschema");
             var driver = SetupGeneratorDriver(schema);

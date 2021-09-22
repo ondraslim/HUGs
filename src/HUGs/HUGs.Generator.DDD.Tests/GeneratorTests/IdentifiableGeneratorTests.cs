@@ -1,13 +1,15 @@
 ﻿using CheckTestOutput;
 using HUGs.Generator.DDD.Common;
+using HUGs.Generator.DDD.Common.Configuration;
 using HUGs.Generator.DDD.Ddd;
 using NUnit.Framework;
 
-namespace HUGs.Generator.DDD.Tests
+namespace HUGs.Generator.DDD.Tests.GeneratorTests
 {
     public class IdentifiableGeneratorTests
     {
-        private readonly OutputChecker check = new("TestResults/Identifiable/Generator");
+        private readonly OutputChecker check = new("TestResults/Identifiable");
+        private readonly DddGeneratorConfiguration generatorConfiguration = new();
 
         [Test]
         [TestCase(DddObjectKind.Entity)]
@@ -22,8 +24,8 @@ namespace HUGs.Generator.DDD.Tests
             };
 
             var actualCode = objectSchema.Kind == DddObjectKind.Entity 
-                ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
-                : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
+                ? IdentifiableGenerator.GenerateEntityCode(objectSchema, generatorConfiguration)
+                : IdentifiableGenerator.GenerateAggregateCode(objectSchema, generatorConfiguration);
 
             check.CheckString(actualCode, checkName: identifiableKind.ToString(), fileExtension: "cs");
         }
@@ -45,8 +47,8 @@ namespace HUGs.Generator.DDD.Tests
             };
 
             var actualCode = objectSchema.Kind == DddObjectKind.Entity
-                ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
-                : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
+                ? IdentifiableGenerator.GenerateEntityCode(objectSchema, generatorConfiguration)
+                : IdentifiableGenerator.GenerateAggregateCode(objectSchema, generatorConfiguration);
 
             check.CheckString(actualCode, checkName: identifiableKind.ToString(), fileExtension: "cs");
         }
@@ -67,8 +69,8 @@ namespace HUGs.Generator.DDD.Tests
             };
 
             var actualCode = objectSchema.Kind == DddObjectKind.Entity
-                ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
-                : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
+                ? IdentifiableGenerator.GenerateEntityCode(objectSchema, generatorConfiguration)
+                : IdentifiableGenerator.GenerateAggregateCode(objectSchema, generatorConfiguration);
 
             check.CheckString(actualCode, checkName: identifiableKind.ToString(), fileExtension: "cs");
         }
@@ -91,8 +93,8 @@ namespace HUGs.Generator.DDD.Tests
             };
 
             var actualCode = objectSchema.Kind == DddObjectKind.Entity
-                ? IdentifiableGenerator.GenerateEntityCode(objectSchema)
-                : IdentifiableGenerator.GenerateAggregateCode(objectSchema);
+                ? IdentifiableGenerator.GenerateEntityCode(objectSchema, generatorConfiguration)
+                : IdentifiableGenerator.GenerateAggregateCode(objectSchema, generatorConfiguration);
 
             check.CheckString(actualCode, checkName: identifiableKind.ToString(), fileExtension: "cs");
         }
