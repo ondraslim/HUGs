@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using System.Runtime.CompilerServices;
-using HUGs.Generator.Common;
+﻿using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.BaseModels;
 using HUGs.Generator.DDD.Common;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
@@ -21,7 +21,7 @@ namespace HUGs.Generator.DDD.Ddd
             DddGeneratorCommon.AddCommonUsings(syntaxBuilder);
 
             var classBuilder = PrepareEnumerationClassBuilder(enumeration.Name);
-            AddProperties(classBuilder, enumeration.Properties);
+            DddGeneratorCommon.AddClassProperties(classBuilder, enumeration.Properties);
             AddConstructor(classBuilder, enumeration);
             AddEnumerationFields(classBuilder, enumeration);
 
@@ -37,14 +37,6 @@ namespace HUGs.Generator.DDD.Ddd
                 .AddClassBaseTypes(typeof(Enumeration).FullName);
 
             return classBuilder;
-        }
-
-        private static void AddProperties(ClassBuilder classBuilder, DddObjectProperty[] properties)
-        {
-            foreach (var property in properties)
-            {
-                classBuilder.AddGetOnlyProperty(property.FullType, property.Name, SyntaxKind.PublicKeyword);
-            }
         }
 
         private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema enumeration)

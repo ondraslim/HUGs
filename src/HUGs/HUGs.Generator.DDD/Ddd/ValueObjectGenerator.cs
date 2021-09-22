@@ -1,9 +1,9 @@
-﻿using System.Runtime.CompilerServices;
-using HUGs.Generator.Common;
+﻿using HUGs.Generator.Common;
 using HUGs.Generator.DDD.BaseModels;
 using HUGs.Generator.DDD.Common;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
@@ -19,7 +19,7 @@ namespace HUGs.Generator.DDD.Ddd
             DddGeneratorCommon.AddCommonUsings(syntaxBuilder);
 
             var classBuilder = PrepareValueObjectClassBuilder(valueObject.Name);
-            AddProperties(classBuilder, valueObject);
+            DddGeneratorCommon.AddClassProperties(classBuilder, valueObject.Properties);
             AddConstructor(classBuilder, valueObject);
 
             classBuilder.AddMethod(GetGetAtomicValuesMethod(valueObject));
@@ -35,14 +35,6 @@ namespace HUGs.Generator.DDD.Ddd
                 .AddClassBaseTypes(typeof(ValueObject).FullName);
 
             return classBuilder;
-        }
-
-        private static void AddProperties(ClassBuilder classBuilder, DddObjectSchema valueObject)
-        {
-            foreach (var prop in valueObject.Properties)
-            {
-                classBuilder.AddGetOnlyProperty(prop.FullType, prop.Name, SyntaxKind.PublicKeyword);
-            }
         }
 
         private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema valueObject)

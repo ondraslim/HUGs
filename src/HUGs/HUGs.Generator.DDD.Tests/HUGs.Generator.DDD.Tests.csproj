@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AdditionalFiles Include="TestData\Schemas\Aggregates\OrderAggregate.dddschema" />
     <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObjectMultiple.dddschema" />
     <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObjectMultiple2.dddschema" />
     <AdditionalFiles Include="TestData\Schemas\ValueObjects\SimpleValueObjectWithOptional.dddschema" />
@@ -37,6 +38,10 @@
 
 	<ItemGroup>
 		<Content Include="TestResults\**\*.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="TestData\Schemas\Aggregates\OrderAggregate.dddschema" />
 	</ItemGroup>
 
 	<ItemGroup>

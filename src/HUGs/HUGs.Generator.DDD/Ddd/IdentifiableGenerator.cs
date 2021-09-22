@@ -32,7 +32,7 @@ namespace HUGs.Generator.DDD.Ddd
             syntaxBuilder.AddClass(entityIdClass);
 
             var classBuilder = PrepareIdentifiableClassBuilder(identifiable, entityIdClass.Identifier.ValueText);
-            AddClassProperties(classBuilder, identifiable);
+            DddGeneratorCommon.AddClassProperties(classBuilder, identifiable.Properties, withPrivateSetter: true);
             AddClassConstructor(classBuilder, identifiable, entityIdClass.Identifier.ValueText);
 
             classBuilder.AddMethod(BuildOnInitializedMethod());
@@ -63,26 +63,6 @@ namespace HUGs.Generator.DDD.Ddd
                     .AddClassBaseTypes($"HUGs.Generator.DDD.BaseModels.{objectSchema.Kind}<{entityIdClassIdentifier}>");
 
             return classBuilder;
-        }
-
-        private static void AddClassProperties(ClassBuilder classBuilder, DddObjectSchema objectSchema)
-        {
-            foreach (var prop in objectSchema.Properties)
-            {
-                if (prop.IsArrayProperty)
-                {
-                    classBuilder
-                        .AddField($"List<{prop.TypeWithoutArray}>", prop.PrivateName, SyntaxKind.PrivateKeyword)
-                        .AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{prop.TypeWithoutArray}>", prop.Name, prop.PrivateName, new[]
-                        {
-                            SyntaxKind.PublicKeyword
-                        });
-                }
-                else
-                {
-                    classBuilder.AddPropertyWithPrivateSetter(prop.FullType, prop.Name, new[] { SyntaxKind.PublicKeyword });
-                }
-            }
         }
 
         private static void AddClassConstructor(ClassBuilder classBuilder, DddObjectSchema objectSchema, string entityIdClassIdentifier)

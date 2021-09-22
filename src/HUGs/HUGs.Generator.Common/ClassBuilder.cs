@@ -91,7 +91,7 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        public ClassBuilder AddPropertyWithPrivateSetter(string type, string name, SyntaxKind[] accessModifiers)
+        public ClassBuilder AddPropertyWithPrivateSetter(string type, string name, params SyntaxKind[] accessModifiers)
         {
             var accessors = new[]
             {

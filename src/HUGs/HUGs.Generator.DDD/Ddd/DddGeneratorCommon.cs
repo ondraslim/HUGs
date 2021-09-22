@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Common;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HUGs.Generator.DDD.Ddd
@@ -39,6 +41,33 @@ namespace HUGs.Generator.DDD.Ddd
                 .ToArray();
 
             return linesOfCode;
+        }
+
+        public static void AddClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties, bool withPrivateSetter = false)
+        {
+            foreach (var property in properties)
+            {
+                if (property.IsArrayProperty)
+                {
+                    classBuilder
+                        .AddField($"List<{property.TypeWithoutArray}>", property.PrivateName, SyntaxKind.PrivateKeyword)
+                        .AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{property.TypeWithoutArray}>", property.Name, property.PrivateName, new[]
+                        {
+                            SyntaxKind.PublicKeyword
+                        });
+                }
+                else
+                {
+                    if (withPrivateSetter)
+                    {
+                        classBuilder.AddPropertyWithPrivateSetter(property.FullType, property.Name, SyntaxKind.PublicKeyword);
+                    }
+                    else
+                    {
+                        classBuilder.AddGetOnlyProperty(property.FullType, property.Name, SyntaxKind.PublicKeyword);
+                    }
+                }
+            }
         }
 
     }
