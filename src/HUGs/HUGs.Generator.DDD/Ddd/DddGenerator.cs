@@ -18,11 +18,11 @@ namespace HUGs.Generator.DDD.Ddd
             .Build();
 
         public static DddModel DddModel { get; private set; }
-        public static DddGeneratorConfiguration GeneratorConfiguration { get; private set; } = new();
+        public static DddGeneratorConfiguration GeneratorConfiguration { get; private set; }
 
         public static void Initialize(GeneratorInitializationContext context)
         {
-            // not needed
+            GeneratorConfiguration = new DddGeneratorConfiguration();
         }
 
         public static void Load(GeneratorExecutionContext context)
