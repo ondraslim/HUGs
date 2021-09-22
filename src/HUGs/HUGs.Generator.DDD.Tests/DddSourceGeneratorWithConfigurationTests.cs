@@ -47,7 +47,7 @@ namespace HUGs.Generator.DDD.Tests
             var generator = new Generator();
             var additionalFiles = schemas
                 .Select(s => new TestAdditionalText(text: s, path: "dummy.dddschema"))
-                .Append(new TestAdditionalText(text: configuration, path: "dummy.ddd.config"));
+                .Append(new TestAdditionalText(text: configuration, path: "dummy.dddconfig"));
             
             return CSharpGeneratorDriver.Create(new List<ISourceGenerator> { generator }, additionalFiles);
         }

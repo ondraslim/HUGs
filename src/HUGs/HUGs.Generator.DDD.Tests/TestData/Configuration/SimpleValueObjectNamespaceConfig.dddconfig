@@ -1,4 +1,2 @@
-﻿TargetNamespaces:	
-  ValueObject: My.Desired.Namespace.ValueObjects
-	
-	
+﻿targetNamespaces:
+  valueObject: My.Desired.Namespace.ValueObjects

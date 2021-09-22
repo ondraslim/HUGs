@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using HUGs.Generator.DDD.BaseModels;
 
-namespace HUGs.DDD.Generated.ValueObject
+namespace My.Desired.Namespace.ValueObjects
 {
     public partial class Simple1 : HUGs.Generator.DDD.BaseModels.ValueObject
     {
