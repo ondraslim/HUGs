@@ -40,8 +40,4 @@
 	<ItemGroup>
 		<Content Include="**\TestResults\**\*.cs" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="TestResults\" />
-	</ItemGroup>
 </Project>
