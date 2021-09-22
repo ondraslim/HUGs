@@ -1,4 +1,6 @@
-﻿using HUGs.Generator.DDD.Common;
+﻿using HUGs.Generator.Common.Diagnostics;
+using HUGs.Generator.Common.Exceptions;
+using HUGs.Generator.DDD.Common;
 using HUGs.Generator.DDD.Common.Configuration;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using Microsoft.CodeAnalysis;
@@ -13,6 +15,8 @@ namespace HUGs.Generator.DDD.Ddd
 {
     public static class DddGenerator
     {
+        private static DiagnosticReporter _diagnosticReporter;
+
         private static readonly IDeserializer Deserializer = new DeserializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .Build();
@@ -20,49 +24,79 @@ namespace HUGs.Generator.DDD.Ddd
         public static DddModel DddModel { get; private set; }
         public static DddGeneratorConfiguration GeneratorConfiguration { get; private set; }
 
+        public static bool LoadFinishedSuccessfully { get; private set; }
+
         public static void Initialize(GeneratorInitializationContext context)
         {
             GeneratorConfiguration = new DddGeneratorConfiguration();
+            LoadFinishedSuccessfully = true;
         }
 
-        public static void Load(GeneratorExecutionContext context)
+        public static void Execute(GeneratorExecutionContext context)
         {
+            Load(context);
+            if (LoadFinishedSuccessfully)
+            {
+                GenerateDddModelSource(context);
+            }
+        }
+
+        private static void Load(GeneratorExecutionContext context)
+        {
+            _diagnosticReporter = new DiagnosticReporter(context);
+
             var configurationFile = GetDddConfiguration(context);
             var dddSchemas = GetDddSchemaFiles(context);
 
             if (!dddSchemas.Any())
             {
+                LoadFinishedSuccessfully = false;
                 return;
             }
 
-            var configuration = BuildConfiguration(configurationFile);
-            // TODO: validate configuration
-            if (configuration is not null)
+            LoadConfiguration(configurationFile);
+            LoadDddModel(dddSchemas);
+        }
+
+        private static void LoadConfiguration(AdditionalText configurationFile)
+        {
+            try
             {
-                GeneratorConfiguration = configuration;
+                var configuration = BuildConfiguration(configurationFile);
+                // TODO: validate configuration
+                if (configuration is not null)
+                {
+                    GeneratorConfiguration = configuration;
+                }
             }
-
-            // TODO: throw exception if not correct; catch -> diagnostics
-            var model = BuildDddModel(dddSchemas);
-            // TODO: validate model
-            DddModel = model;
+            catch (AdditionalFileParseException e)
+            {
+                _diagnosticReporter.ReportDiagnostic(Diagnostic.Create(
+                    DddDiagnostics.AdditionalFileParseError, 
+                    Location.None, 
+                    DiagnosticSeverity.Error, 
+                    e.FilePath,
+                     e.InnerException?.Message ?? e.Message));
+            }
         }
 
-        private static DddGeneratorConfiguration BuildConfiguration(AdditionalText configurationFile)
+        private static void LoadDddModel(IEnumerable<AdditionalText> dddSchemas)
         {
-            var configurationText = configurationFile?.GetText()?.ToString();
-
-            if (string.IsNullOrWhiteSpace(configurationText)) return null;
-
-            var configuration = Deserializer.Deserialize<DddGeneratorConfiguration>(configurationText);
-            if (configuration is null) return null; // TODO: raise diagnostics exception
-
-            return configuration;
-        }
-
-        public static void Execute(GeneratorExecutionContext context)
-        {
-            GenerateDddModelSource(context);
+            try
+            {
+                var model = BuildDddModel(dddSchemas);
+                // TODO: validate model
+                DddModel = model;
+            }
+            catch (AdditionalFileParseException e)
+            {
+                _diagnosticReporter.ReportDiagnostic(Diagnostic.Create(
+                    DddDiagnostics.AdditionalFileParseError, 
+                    Location.None, 
+                    DiagnosticSeverity.Error,
+                    e.FilePath,
+                    e.InnerException?.Message ?? e.Message));
+            }
         }
 
         private static AdditionalText GetDddConfiguration(GeneratorExecutionContext context)
@@ -75,7 +109,7 @@ namespace HUGs.Generator.DDD.Ddd
             if (configurations.Count > 1)
             {
                 var foundFileNames = string.Join(", ", configurations.Select(c => $"'{c.Path}'"));
-                context.ReportDiagnostic(Diagnostic.Create(DddDiagnostics.ConfigurationDiagnostics, Location.None, foundFileNames));
+                _diagnosticReporter.ReportDiagnostic(Diagnostic.Create(DddDiagnostics.ConfigurationConflictError, Location.None, foundFileNames));
                 return null;
             }
 
@@ -90,6 +124,24 @@ namespace HUGs.Generator.DDD.Ddd
                 .ToList();
         }
 
+        private static DddGeneratorConfiguration BuildConfiguration(AdditionalText configurationFile)
+        {
+            var configurationText = configurationFile?.GetText()?.ToString();
+
+            if (string.IsNullOrWhiteSpace(configurationText)) return null;
+
+            try
+            {
+                var configuration = Deserializer.Deserialize<DddGeneratorConfiguration>(configurationText);
+                return configuration;
+            }
+            catch (Exception e)
+            {
+                LoadFinishedSuccessfully = false;
+                throw new AdditionalFileParseException($"Error occurred while parsing file: {configurationFile.Path}", configurationFile.Path, e);
+            }
+        }
+
         private static DddModel BuildDddModel(IEnumerable<AdditionalText> schemaFiles)
         {
             var dddModel = new DddModel();
@@ -97,12 +149,26 @@ namespace HUGs.Generator.DDD.Ddd
             {
                 var schemaText = schemaFile.GetText()?.ToString();
 
-                if (string.IsNullOrWhiteSpace(schemaText)) continue;
+                if (string.IsNullOrWhiteSpace(schemaText))
+                {
+                    _diagnosticReporter.ReportDiagnostic(Diagnostic.Create(
+                        DddDiagnostics.EmptyAdditionalFileWarning,
+                        Location.None, 
+                        DiagnosticSeverity.Warning, 
+                        schemaFile.Path));
+                    continue;
+                };
 
-                var dddSchema = Deserializer.Deserialize<DddObjectSchema>(schemaText);
-                if (dddSchema is null) continue; // TODO: raise diagnostics exception
-
-                dddModel.AddObjectSchema(dddSchema);
+                try
+                {
+                    var dddSchema = Deserializer.Deserialize<DddObjectSchema>(schemaText);
+                    dddModel.AddObjectSchema(dddSchema);
+                }
+                catch (Exception e)
+                {
+                    LoadFinishedSuccessfully = false;
+                    throw new AdditionalFileParseException($"Error occurred while parsing file: {schemaFile.Path}", schemaFile.Path, e);
+                }
             }
 
             return dddModel;
