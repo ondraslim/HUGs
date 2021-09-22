@@ -5,27 +5,32 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using HUGs.Generator.DDD.Common.Configuration;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
 {
     internal class IdentifiableGenerator
     {
-        public static string GenerateAggregateCode(DddObjectSchema aggregate)
+        public static string GenerateAggregateCode(
+            DddObjectSchema aggregate,
+            DddGeneratorConfiguration generatorConfiguration)
         {
-            return GenerateIdentifiableObjectCode(aggregate);
+            return GenerateIdentifiableObjectCode(aggregate, generatorConfiguration.TargetNamespaces.Aggregate);
         }
 
-        public static string GenerateEntityCode(DddObjectSchema entity)
+        public static string GenerateEntityCode(
+            DddObjectSchema entity,
+            DddGeneratorConfiguration generatorConfiguration)
         {
-            return GenerateIdentifiableObjectCode(entity);
+            return GenerateIdentifiableObjectCode(entity, generatorConfiguration.TargetNamespaces.Entity);
         }
 
-        private static string GenerateIdentifiableObjectCode(DddObjectSchema identifiable)
+        private static string GenerateIdentifiableObjectCode(DddObjectSchema identifiable, string targetNamespace)
         {
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
-            syntaxBuilder.AddNamespace($"HUGs.DDD.Generated.{identifiable.Kind}");
+            syntaxBuilder.AddNamespace(targetNamespace);
             DddGeneratorCommon.AddCommonUsings(syntaxBuilder);
 
             var entityIdClass = PrepareEntityIdClass(identifiable.Name);

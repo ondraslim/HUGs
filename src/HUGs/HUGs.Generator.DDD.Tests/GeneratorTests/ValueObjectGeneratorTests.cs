@@ -1,13 +1,15 @@
 ﻿using CheckTestOutput;
 using HUGs.Generator.DDD.Common;
+using HUGs.Generator.DDD.Common.Configuration;
 using HUGs.Generator.DDD.Ddd;
 using NUnit.Framework;
 
-namespace HUGs.Generator.DDD.Tests
+namespace HUGs.Generator.DDD.Tests.GeneratorTests
 {
     public class ValueObjectGeneratorTests
     {
-        private readonly OutputChecker check = new("TestResults/ValueObjects/Generator");
+        private readonly OutputChecker check = new("TestResults/ValueObjects");
+        private readonly DddGeneratorConfiguration generatorConfiguration = new();
 
         [Test]
         public void GivenEmptyValueObjectSchema_CorrectlyGeneratesValueObjectClass()
@@ -19,7 +21,7 @@ namespace HUGs.Generator.DDD.Tests
                 Properties = new DddObjectProperty[] { }
             };
 
-            var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
+            var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject, generatorConfiguration);
             check.CheckString(actualCode, fileExtension: "cs");
         }
 
@@ -33,7 +35,7 @@ namespace HUGs.Generator.DDD.Tests
                 Properties = new DddObjectProperty[] { new() { Name = "Number", Optional = false, Type = "int" } }
             };
 
-            var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
+            var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject, generatorConfiguration);
             check.CheckString(actualCode, fileExtension: "cs");
         }
 
@@ -51,7 +53,7 @@ namespace HUGs.Generator.DDD.Tests
                 }
             };
 
-            var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
+            var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject, generatorConfiguration);
             check.CheckString(actualCode, fileExtension: "cs");
         }
 
@@ -70,7 +72,7 @@ namespace HUGs.Generator.DDD.Tests
                 }
             };
 
-            var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject);
+            var actualCode = ValueObjectGenerator.GenerateValueObjectCode(inputValueObject, generatorConfiguration);
             check.CheckString(actualCode, fileExtension: "cs");
         }
     }

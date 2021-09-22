@@ -2,6 +2,7 @@
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.BaseModels;
 using HUGs.Generator.DDD.Common;
+using HUGs.Generator.DDD.Common.Configuration;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
@@ -12,11 +13,13 @@ namespace HUGs.Generator.DDD.Ddd
 {
     internal static class EnumerationGenerator
     {
-        public static string GenerateEnumerationCode(DddObjectSchema enumeration)
+        public static string GenerateEnumerationCode(
+            DddObjectSchema enumeration,
+            DddGeneratorConfiguration generatorConfiguration)
         {
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
-            syntaxBuilder.AddNamespace("HUGs.DDD.Generated.Enumeration");
+            syntaxBuilder.AddNamespace(generatorConfiguration.TargetNamespaces.Enumeration);
 
             DddGeneratorCommon.AddCommonUsings(syntaxBuilder);
 

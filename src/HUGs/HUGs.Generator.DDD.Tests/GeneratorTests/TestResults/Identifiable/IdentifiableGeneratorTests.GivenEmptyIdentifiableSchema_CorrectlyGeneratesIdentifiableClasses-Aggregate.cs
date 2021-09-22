@@ -20,6 +20,6 @@ namespace HUGs.DDD.Generated.Aggregate
             OnInitialized();
         }
 
-        partial void OnInitialized();
+        private partial void OnInitialized();
     }
 }
