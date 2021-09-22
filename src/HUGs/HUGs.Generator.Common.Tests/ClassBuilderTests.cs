@@ -238,7 +238,5 @@ namespace HUGs.Generator.Common.Tests
             // TODO: weird spacing between AmountProperty - TextProperty
             check.CheckString(actualClass, fileExtension: "cs");
         }
-
-        // TODO: add tests - field with initialization
     }
 }
