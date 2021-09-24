@@ -1,6 +1,4 @@
 using CheckTestOutput;
-using FluentAssertions;
-using HUGs.Generator.Tests.Tools.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;

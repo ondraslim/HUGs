@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using System.Linq;
+using HUGs.Generator.Common.Exceptions;
+using Microsoft.CodeAnalysis;
 
 namespace HUGs.Generator.DDD.Ddd.Diagnostics
 {
@@ -27,5 +30,24 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             category: "DddGenerator",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
+
+
+        public static Diagnostic ExceptionToDiagnosticConverter(Exception e) => e switch
+        {
+            AdditionalFileParseException afp => AdditionalFileParseExceptionToDiagnostic(afp),
+            DddMultipleConfigurationsFoundException dmcf => MultipleConfigurationsExceptionToDiagnostic(dmcf),
+            _ => throw new ArgumentOutOfRangeException(nameof(e), e, "Cannot convert exception to diagnostic.")
+        };
+
+        private static Diagnostic AdditionalFileParseExceptionToDiagnostic(AdditionalFileParseException e)
+        {
+            return Diagnostic.Create(AdditionalFileParseError, Location.None, DiagnosticSeverity.Error, e.FilePath, e.InnerException?.Message ?? e.Message);
+        }
+
+        private static Diagnostic MultipleConfigurationsExceptionToDiagnostic(DddMultipleConfigurationsFoundException e)
+        {
+            var foundFileNames = string.Join(", ", e.Files.Select(c => $"'{c}'"));
+            return Diagnostic.Create(ConfigurationConflictError, Location.None, foundFileNames);
+        }
     }
 }

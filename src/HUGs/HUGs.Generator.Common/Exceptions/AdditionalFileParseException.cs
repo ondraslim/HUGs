@@ -3,30 +3,28 @@ using System.Runtime.Serialization;
 
 namespace HUGs.Generator.Common.Exceptions
 {
-    public class AdditionalFileParseException : Exception
+    public class AdditionalFileParseException : DddLoadException
     {
-        public string FilePath { get; private set; }
+        public string FilePath { get; }
 
-        public AdditionalFileParseException()
+        public AdditionalFileParseException(string filePath)
         {
+            FilePath = filePath;
         }
 
-        protected AdditionalFileParseException(SerializationInfo info, StreamingContext context) 
+        protected AdditionalFileParseException(string filePath, SerializationInfo info, StreamingContext context) 
             : base(info, context)
         {
+            FilePath = filePath;
         }
 
-        public AdditionalFileParseException(string message) 
+        public AdditionalFileParseException(string filePath, string message) 
             : base(message)
         {
+            FilePath = filePath;
         }
 
-        public AdditionalFileParseException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
-
-        public AdditionalFileParseException(string message, string filePath, Exception innerException)
+        public AdditionalFileParseException(string filePath, string message, Exception innerException)
             : base(message, innerException)
         {
             FilePath = filePath;
