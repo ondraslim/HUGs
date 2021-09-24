@@ -13,7 +13,6 @@ namespace HUGs.Generator.DDD
 
         public void Execute(GeneratorExecutionContext context)
         {
-            DddGenerator.Load(context);
             DddGenerator.Execute(context);
         }
     }

@@ -1,6 +1,6 @@
 using CheckTestOutput;
 using FluentAssertions;
-using HUGs.Generator.DDD.Tests.Mocks;
+using HUGs.Generator.Tests.Tools.Mocks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
@@ -9,13 +9,14 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
 
-namespace HUGs.Generator.DDD.Tests
+namespace HUGs.Generator.DDD.IntegrationTests
 {
-    public class DddValueObjectSourceGeneratorTests
+    public class ValueObjectSourceGeneratorTests
     {
         private Compilation emptyInputCompilation;
-        private readonly OutputChecker check = new("TestResults/ValueObjects");
+        private readonly OutputChecker check = new("TestResults");
 
         [SetUp]
         public void Setup()
@@ -24,9 +25,9 @@ namespace HUGs.Generator.DDD.Tests
         }
 
         [Test]
-        public void ValidSimpleValueObjectSchema_GeneratorRun_GeneratesCorrectValueObject()
+        public void EmptySchema_GeneratorRun_GeneratesCorrectValueObject()
         {
-            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
+            var schema = File.ReadAllText("../../../TestData/Schemas/Empty.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
@@ -34,14 +35,18 @@ namespace HUGs.Generator.DDD.Tests
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
-            generatedFileTexts.Should().HaveCount(1);
-            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
+            diagnostics.Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostics.EmptyAdditionalFileWarningId).Should().NotBeEmpty();
+            generatedFileTexts.Should().BeEmpty();
         }
 
         [Test]
-        public void ValidSimpleValueObjectSchema2_GeneratorRun_GeneratesCorrectValueObject()
+        [TestCase("SimpleValueObject")]
+        [TestCase("SimpleValueObject2")]
+        [TestCase("SimpleValueObjectWithOptional")]
+        public void ValidSimpleValueObjectSchema_GeneratorRun_GeneratesCorrectValueObject(string valueObjectSchemaFile)
         {
-            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject2.dddschema");
+            var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{valueObjectSchemaFile}.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
@@ -49,8 +54,9 @@ namespace HUGs.Generator.DDD.Tests
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
+            diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
-            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
+            check.CheckString(generatedFileTexts.First(), checkName: valueObjectSchemaFile, fileExtension: "cs");
         }
 
         [Test]
@@ -64,25 +70,11 @@ namespace HUGs.Generator.DDD.Tests
 
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
-
+            
+            diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(2);
             check.CheckString(generatedFileTexts.First(), checkName: "SimpleValueObject1", fileExtension: "cs");
             check.CheckString(generatedFileTexts.Last(), checkName: "SimpleValueObject2", fileExtension: "cs");
-        }
-
-        [Test]
-        public void ValidSimpleValueObjectWithOptionalsSchema_GeneratorRun_GeneratesCorrectValueObject()
-        {
-            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObjectWithOptional.dddschema");
-            var driver = SetupGeneratorDriver(schema);
-
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
-
-            generatedFileTexts.Should().HaveCount(1);
-            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }
 
         [Test]
@@ -100,19 +92,18 @@ namespace Test
     }
 }
 
-namespace Test.Country 
+public class CountryId 
 {
-    public class CountryId 
-    {
-        public System.Guid Id { get; set; }
-    }
-}");
+    public System.Guid Id { get; set; }
+}
+");
 
             driver.RunGeneratorsAndUpdateCompilation(compilationWithCountryId, out var outputCompilation, out var diagnostics);
 
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !compilationWithCountryId.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
+            diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
             check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }

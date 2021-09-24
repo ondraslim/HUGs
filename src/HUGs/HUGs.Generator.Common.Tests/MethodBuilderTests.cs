@@ -1,6 +1,4 @@
 using CheckTestOutput;
-using FluentAssertions;
-using HUGs.Generator.Tests.Tools.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
@@ -10,7 +8,7 @@ namespace HUGs.Generator.Common.Tests
     public class MethodBuilderTests
     {
         private MethodBuilder builder;
-        private readonly OutputChecker check = new("TestResults/MethodBuilder");
+        private readonly OutputChecker check = new("TestResults");
 
         [SetUp]
         public void Setup()

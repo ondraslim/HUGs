@@ -4,7 +4,7 @@ using HUGs.Generator.DDD.Common.Configuration;
 using HUGs.Generator.DDD.Ddd;
 using NUnit.Framework;
 
-namespace HUGs.Generator.DDD.Tests.GeneratorTests
+namespace HUGs.Generator.DDD.Tests
 {
     public class ValueObjectGeneratorTests
     {

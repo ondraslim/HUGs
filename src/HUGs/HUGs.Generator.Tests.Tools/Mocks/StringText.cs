@@ -1,11 +1,11 @@
-﻿using Microsoft.CodeAnalysis.Text;
-using System;
+﻿using System;
 using System.Collections.Immutable;
 using System.IO;
 using System.Text;
 using System.Threading;
+using Microsoft.CodeAnalysis.Text;
 
-namespace HUGs.Generator.DDD.Tests.Mocks
+namespace HUGs.Generator.Tests.Tools.Mocks
 {
     internal sealed class StringText : SourceText
     {

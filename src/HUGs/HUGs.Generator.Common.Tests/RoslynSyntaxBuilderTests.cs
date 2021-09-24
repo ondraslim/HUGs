@@ -8,7 +8,7 @@ namespace HUGs.Generator.Common.Tests
     public class RoslynSyntaxBuilderTests
     {
         private RoslynSyntaxBuilder builder;
-        private readonly OutputChecker check = new("TestResults/RoslynSyntaxBuilder");
+        private readonly OutputChecker check = new("TestResults");
 
         [SetUp]
         public void Setup()
