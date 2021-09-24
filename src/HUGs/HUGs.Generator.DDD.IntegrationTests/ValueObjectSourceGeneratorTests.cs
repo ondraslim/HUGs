@@ -13,10 +13,10 @@ using HUGs.Generator.DDD.Ddd.Diagnostics;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
-    public class DddValueObjectSourceGeneratorTests
+    public class ValueObjectSourceGeneratorTests
     {
         private Compilation emptyInputCompilation;
-        private readonly OutputChecker check = new("TestResults/ValueObjects");
+        private readonly OutputChecker check = new("TestResults");
 
         [SetUp]
         public void Setup()

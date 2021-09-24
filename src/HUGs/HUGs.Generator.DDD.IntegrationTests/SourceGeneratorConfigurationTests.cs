@@ -1,5 +1,6 @@
 ﻿using CheckTestOutput;
 using FluentAssertions;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.Tests.Tools.Mocks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -9,14 +10,13 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using HUGs.Generator.DDD.Ddd.Diagnostics;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
-    public class DddSourceGeneratorWithConfigurationTests
+    public class SourceGeneratorConfigurationTests
     {
         private Compilation emptyInputCompilation;
-        private readonly OutputChecker check = new("TestResults/Configuration");
+        private readonly OutputChecker check = new("TestResults");
 
         [SetUp]
         public void Setup()
@@ -25,9 +25,9 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        [TestCase("SimpleValueObject.dddschema", "SimpleValueObjectNamespaceConfig.dddconfig")]
+        [TestCase("SimpleValueObject.dddschema", "ValueObjectNamespaceConfig.dddconfig")]
         [TestCase("SimpleValueObject.dddschema", "CompleteNamespaceConfig.dddconfig")]
-        public void SimpleValueObjectSchema_ConfigurationTargetNamespaceIsSet_ClassIsGeneratedInDesiredNamespace(string schemaFile, string configFile)
+        public void TargetNamespaceConfiguration_GeneratedInTheNamespace(string schemaFile, string configFile)
         {
             var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{schemaFile}");
             var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}");
@@ -66,9 +66,9 @@ namespace HUGs.Generator.DDD.IntegrationTests
         public void MultipleConfigurationFiles_DiagnosticErrorReportedAndNothingGenerated()
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
-            var configuration = File.ReadAllText("../../../TestData/Configuration/SimpleValueObjectNamespaceConfig.dddconfig");
-            var configuration2 = File.ReadAllText("../../../TestData/Configuration/SimpleValueObjectNamespaceConfig.dddconfig");
-            var driver = SetupGeneratorDriver(new[] { schema }, configuration, configuration2);
+            var configuration1 = File.ReadAllText("../../../TestData/Configuration/ValueObjectNamespaceConfig.dddconfig");
+            var configuration2 = File.ReadAllText("../../../TestData/Configuration/ValueObjectNamespaceConfig.dddconfig");
+            var driver = SetupGeneratorDriver(new[] { schema }, configuration1, configuration2);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
 

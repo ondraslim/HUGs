@@ -8,7 +8,7 @@ namespace HUGs.Generator.Common.Tests
     public class MethodBuilderTests
     {
         private MethodBuilder builder;
-        private readonly OutputChecker check = new("TestResults/MethodBuilder");
+        private readonly OutputChecker check = new("TestResults");
 
         [SetUp]
         public void Setup()

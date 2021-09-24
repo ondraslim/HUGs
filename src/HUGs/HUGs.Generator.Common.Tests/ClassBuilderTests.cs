@@ -10,7 +10,7 @@ namespace HUGs.Generator.Common.Tests
 {
     public class ClassBuilderTests
     {
-        private readonly OutputChecker check = new("TestResults/ClassBuilder");
+        private readonly OutputChecker check = new("TestResults");
 
         [Test]
         public void GivenEmptyClass_CorrectlyGeneratesEmptyClass()

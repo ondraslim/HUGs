@@ -12,10 +12,10 @@ using System.Reflection;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
-    public class DddAggregateSourceGeneratorTests
+    public class AggregateSourceGeneratorTests
     {
         private Compilation emptyInputCompilation;
-        private readonly OutputChecker check = new("TestResults/Identifiable");
+        private readonly OutputChecker check = new("TestResults");
 
         [SetUp]
         public void Setup()

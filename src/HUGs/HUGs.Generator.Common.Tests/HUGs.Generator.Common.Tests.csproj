@@ -18,11 +18,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Remove="TestResults\**\*.cs" />
+		<Compile Remove="**\TestResults\**\*.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="TestResults\**\*.cs" />
+		<Content Include="**\TestResults\**\*.cs" />
 	</ItemGroup>
 
 </Project>
