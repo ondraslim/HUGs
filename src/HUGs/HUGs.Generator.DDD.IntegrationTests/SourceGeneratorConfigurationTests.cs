@@ -25,12 +25,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        [TestCase("SimpleValueObject.dddschema", "ValueObjectNamespaceConfig.dddconfig")]
-        [TestCase("SimpleValueObject.dddschema", "CompleteNamespaceConfig.dddconfig")]
+        [TestCase("SimpleValueObject", "ValueObjectNamespaceConfig")]
+        [TestCase("SimpleValueObject", "CompleteNamespaceConfig")]
         public void TargetNamespaceConfiguration_GeneratedInTheNamespace(string schemaFile, string configFile)
         {
-            var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{schemaFile}");
-            var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}");
+            var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{schemaFile}.dddschema");
+            var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}.dddconfig");
             var driver = SetupGeneratorDriver(schema, configuration);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
@@ -81,12 +81,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        [TestCase("SyntaxInvalidConfig1.dddconfig")]
-        [TestCase("SyntaxInvalidConfig2.dddconfig")]
+        [TestCase("SyntaxInvalidConfig1")]
+        [TestCase("SyntaxInvalidConfig2")]
         public void InvalidConfigurationFile_DiagnosticErrorReportedAndNothingGenerated(string configFile)
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
-            var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}");
+            var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}.dddconfig");
             var driver = SetupGeneratorDriver(new[] { schema }, configuration);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);

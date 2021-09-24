@@ -24,11 +24,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        [TestCase("SimpleAggregate.dddschema")]
-        [TestCase("OrderAggregate.dddschema")]
+        [TestCase("SimpleAggregate")]
+        [TestCase("OrderAggregate")]
         public void ValidSimpleAggregateSchema_GeneratorRun_GeneratesCorrectAggregate(string fileName)
         {
-            var schema = File.ReadAllText($"../../../TestData/Schemas/Aggregates/{fileName}");
+            var schema = File.ReadAllText($"../../../TestData/Schemas/Aggregates/{fileName}.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);

@@ -41,12 +41,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        [TestCase("SimpleValueObject.dddschema")]
-        [TestCase("SimpleValueObject2.dddschema")]
-        [TestCase("SimpleValueObjectWithOptional.dddschema")]
+        [TestCase("SimpleValueObject")]
+        [TestCase("SimpleValueObject2")]
+        [TestCase("SimpleValueObjectWithOptional")]
         public void ValidSimpleValueObjectSchema_GeneratorRun_GeneratesCorrectValueObject(string valueObjectSchemaFile)
         {
-            var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{valueObjectSchemaFile}");
+            var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{valueObjectSchemaFile}.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
