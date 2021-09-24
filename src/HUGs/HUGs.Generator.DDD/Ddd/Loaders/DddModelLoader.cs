@@ -52,7 +52,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
                         DiagnosticSeverity.Warning,
                         schemaFile.Path));
                     continue;
-                };
+                }
 
                 try
                 {

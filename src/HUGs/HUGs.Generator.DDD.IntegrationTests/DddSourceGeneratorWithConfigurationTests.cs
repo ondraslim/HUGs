@@ -9,6 +9,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -24,10 +25,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        public void SimpleValueObjectSchema_ConfigurationTargetNamespaceIsSet_ClassIsGeneratedInDesiredNamespace()
+        [TestCase("SimpleValueObject.dddschema", "SimpleValueObjectNamespaceConfig.dddconfig")]
+        [TestCase("SimpleValueObject.dddschema", "CompleteNamespaceConfig.dddconfig")]
+        public void SimpleValueObjectSchema_ConfigurationTargetNamespaceIsSet_ClassIsGeneratedInDesiredNamespace(string schemaFile, string configFile)
         {
-            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
-            var configuration = File.ReadAllText("../../../TestData/Configuration/SimpleValueObjectNamespaceConfig.dddconfig");
+            var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{schemaFile}");
+            var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}");
             var driver = SetupGeneratorDriver(schema, configuration);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
@@ -37,24 +40,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
-            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
-        }
-
-        [Test]
-        public void SimpleValueObjectSchema_ConfigurationTargetNamespaceIsSetForAll_ClassIsGeneratedInDesiredNamespace()
-        {
-            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
-            var configuration = File.ReadAllText("../../../TestData/Configuration/CompleteNamespaceConfig.dddconfig");
-            var driver = SetupGeneratorDriver(schema, configuration);
-
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
-
-            diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(1);
-            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
+            check.CheckString(generatedFileTexts.First(), checkName: $"{schemaFile}_{configFile}", fileExtension: "cs");
         }
 
         [Test]
@@ -90,7 +76,27 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
             diagnostics.Should().HaveCount(1);
-            generatedFileTexts.Should().HaveCount(0);
+            diagnostics.Where(d => d.Id == DddDiagnostics.MultipleConfigurationsErrorId).Should().HaveCount(1);
+            generatedFileTexts.Should().BeEmpty();
+        }
+
+        [Test]
+        [TestCase("SyntaxInvalidConfig1.dddconfig")]
+        [TestCase("SyntaxInvalidConfig2.dddconfig")]
+        public void InvalidConfigurationFile_DiagnosticErrorReportedAndNothingGenerated(string configFile)
+        {
+            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
+            var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}");
+            var driver = SetupGeneratorDriver(new[] { schema }, configuration);
+
+            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
+
+            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
+            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+
+            diagnostics.Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostics.AdditionalFileParseErrorId).Should().HaveCount(1);
+            generatedFileTexts.Should().BeEmpty();
         }
 
         private static GeneratorDriver SetupGeneratorDriver(string schema, string configuration)

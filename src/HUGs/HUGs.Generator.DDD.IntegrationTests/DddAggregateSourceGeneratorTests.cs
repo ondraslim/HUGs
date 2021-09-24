@@ -24,9 +24,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        public void ValidSimpleAggregateSchema_GeneratorRun_GeneratesCorrectAggregate()
+        [TestCase("SimpleAggregate.dddschema")]
+        [TestCase("OrderAggregate.dddschema")]
+        public void ValidSimpleAggregateSchema_GeneratorRun_GeneratesCorrectAggregate(string fileName)
         {
-            var schema = File.ReadAllText("../../../TestData/Schemas/Aggregates/SimpleAggregate.dddschema");
+            var schema = File.ReadAllText($"../../../TestData/Schemas/Aggregates/{fileName}");
             var driver = SetupGeneratorDriver(schema);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
@@ -36,23 +38,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
-            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
-        }
-
-        [Test]
-        public void ValidComplexAggregateSchema_GeneratorRun_GeneratesCorrectAggregate()
-        {
-            var schema = File.ReadAllText("../../../TestData/Schemas/Aggregates/OrderAggregate.dddschema");
-            var driver = SetupGeneratorDriver(schema);
-
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
-
-            diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(1);
-            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
+            check.CheckString(generatedFileTexts.First(), checkName: fileName, fileExtension: "cs");
         }
 
         private static GeneratorDriver SetupGeneratorDriver(string schema)
