@@ -1,6 +1,6 @@
 ﻿using CheckTestOutput;
 using FluentAssertions;
-using HUGs.Generator.DDD.Tests.Mocks;
+using HUGs.Generator.Tests.Tools.Mocks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace HUGs.Generator.DDD.Tests
+namespace HUGs.Generator.DDD.IntegrationTests
 {
     public class DddSourceGeneratorWithConfigurationTests
     {
@@ -35,6 +35,7 @@ namespace HUGs.Generator.DDD.Tests
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
+            diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
             check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }
@@ -51,6 +52,7 @@ namespace HUGs.Generator.DDD.Tests
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
+            diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
             check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }
@@ -61,28 +63,47 @@ namespace HUGs.Generator.DDD.Tests
             var valueObjectSchema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
             var aggregateSchema = File.ReadAllText("../../../TestData/Schemas/Aggregates/SimpleAggregate.dddschema");
             var configuration = File.ReadAllText("../../../TestData/Configuration/CompleteNamespaceConfig.dddconfig");
-            var driver = SetupGeneratorDriver(new[] { valueObjectSchema, aggregateSchema}, configuration);
+            var driver = SetupGeneratorDriver(new[] { valueObjectSchema, aggregateSchema }, configuration);
 
             driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
 
             var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
             var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
 
-            generatedFileTexts.Should().HaveCount(2); 
+            diagnostics.Should().BeEmpty();
+            generatedFileTexts.Should().HaveCount(2);
             check.CheckString(generatedFileTexts.First(), checkName: "First", fileExtension: "cs");
             check.CheckString(generatedFileTexts.Last(), checkName: "Second", fileExtension: "cs");
+        }
+
+        [Test]
+        public void MultipleConfigurationFiles_DiagnosticErrorReportedAndNothingGenerated()
+        {
+            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
+            var configuration = File.ReadAllText("../../../TestData/Configuration/SimpleValueObjectNamespaceConfig.dddconfig");
+            var configuration2 = File.ReadAllText("../../../TestData/Configuration/SimpleValueObjectNamespaceConfig.dddconfig");
+            var driver = SetupGeneratorDriver(new[] { schema }, configuration, configuration2);
+
+            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
+
+            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
+            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+
+            diagnostics.Should().HaveCount(1);
+            generatedFileTexts.Should().HaveCount(0);
         }
 
         private static GeneratorDriver SetupGeneratorDriver(string schema, string configuration)
             => SetupGeneratorDriver(new List<string> { schema }, configuration);
 
-        private static GeneratorDriver SetupGeneratorDriver(IEnumerable<string> schemas, string configuration)
+        private static GeneratorDriver SetupGeneratorDriver(IEnumerable<string> schemas, params string[] configurations)
         {
             var generator = new Generator();
             var additionalFiles = schemas
                 .Select(s => new TestAdditionalText(text: s, path: "dummy.dddschema"))
-                .Append(new TestAdditionalText(text: configuration, path: "dummy.dddconfig"));
-            
+                .Concat(configurations
+                    .Select(config => new TestAdditionalText(text: config, path: "dummy.dddconfig")));
+
             return CSharpGeneratorDriver.Create(new List<ISourceGenerator> { generator }, additionalFiles);
         }
 

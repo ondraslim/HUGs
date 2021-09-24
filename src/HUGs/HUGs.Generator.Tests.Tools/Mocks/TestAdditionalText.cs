@@ -1,9 +1,9 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
-using System.Text;
+﻿using System.Text;
 using System.Threading;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
-namespace HUGs.Generator.DDD.Tests.Mocks
+namespace HUGs.Generator.Tests.Tools.Mocks
 {
     public sealed class TestAdditionalText : AdditionalText
     {
