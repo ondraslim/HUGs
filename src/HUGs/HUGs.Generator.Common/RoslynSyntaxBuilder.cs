@@ -12,7 +12,7 @@ namespace HUGs.Generator.Common
         private NamespaceDeclarationSyntax @namespace;
         private readonly List<ClassDeclarationSyntax> classes = new();
 
-        public RoslynSyntaxBuilder AddUsing(params string[] names)
+        public RoslynSyntaxBuilder AddUsings(params string[] names)
         {
             compilationUnitSyntax = compilationUnitSyntax.AddUsings(
                 names.Select(u => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(u)))
@@ -21,7 +21,7 @@ namespace HUGs.Generator.Common
             return this;
         }
 
-        public RoslynSyntaxBuilder AddNamespace(string ns)
+        public RoslynSyntaxBuilder SetNamespace(string ns)
         {
             @namespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(ns)).NormalizeWhitespace();
             return this;

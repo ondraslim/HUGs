@@ -1,15 +1,15 @@
 using CheckTestOutput;
 using FluentAssertions;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
+using HUGs.Generator.Tests.Tools;
 using HUGs.Generator.Tests.Tools.Mocks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using HUGs.Generator.DDD.Ddd.Diagnostics;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -30,10 +30,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var schema = File.ReadAllText("../../../TestData/Schemas/Empty.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
             diagnostics.Where(d => d.Id == DddDiagnostics.EmptyAdditionalFileWarningId).Should().NotBeEmpty();
@@ -49,13 +46,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{valueObjectSchemaFile}.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
+
             check.CheckString(generatedFileTexts.First(), checkName: valueObjectSchemaFile, fileExtension: "cs");
         }
 
@@ -66,13 +61,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var schema2 = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObjectMultiple2.dddschema");
             var driver = SetupGeneratorDriver(new List<string> { schema1, schema2 });
 
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
+            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
-            
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(2);
+
             check.CheckString(generatedFileTexts.First(), checkName: "SimpleValueObject1", fileExtension: "cs");
             check.CheckString(generatedFileTexts.Last(), checkName: "SimpleValueObject2", fileExtension: "cs");
         }
@@ -98,13 +91,11 @@ public class CountryId
 }
 ");
 
-            driver.RunGeneratorsAndUpdateCompilation(compilationWithCountryId, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !compilationWithCountryId.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+            GeneratorTestUtils.RunGenerator(driver, compilationWithCountryId, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
+
             check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }
 

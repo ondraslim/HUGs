@@ -16,29 +16,31 @@ namespace HUGs.Generator.DDD.Ddd
             DddObjectSchema aggregate,
             DddGeneratorConfiguration generatorConfiguration)
         {
-            return GenerateIdentifiableObjectCode(aggregate, generatorConfiguration.TargetNamespaces.Aggregate);
+            return GenerateIdentifiableObjectCode(aggregate, generatorConfiguration);
         }
 
         public static string GenerateEntityCode(
             DddObjectSchema entity,
             DddGeneratorConfiguration generatorConfiguration)
         {
-            return GenerateIdentifiableObjectCode(entity, generatorConfiguration.TargetNamespaces.Entity);
+            return GenerateIdentifiableObjectCode(entity, generatorConfiguration);
         }
 
-        private static string GenerateIdentifiableObjectCode(DddObjectSchema identifiable, string targetNamespace)
+        private static string GenerateIdentifiableObjectCode(
+            DddObjectSchema objectSchema,
+            DddGeneratorConfiguration generatorConfiguration)
         {
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
-            syntaxBuilder.AddNamespace(targetNamespace);
-            DddGeneratorCommon.AddCommonUsings(syntaxBuilder);
+            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(objectSchema.Kind));
+            DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
 
-            var entityIdClass = PrepareEntityIdClass(identifiable.Name);
+            var entityIdClass = PrepareEntityIdClass(objectSchema.Name);
             syntaxBuilder.AddClass(entityIdClass);
 
-            var classBuilder = PrepareIdentifiableClassBuilder(identifiable, entityIdClass.Identifier.ValueText);
-            DddGeneratorCommon.AddClassProperties(classBuilder, identifiable.Properties, withPrivateSetter: true);
-            AddClassConstructor(classBuilder, identifiable, entityIdClass.Identifier.ValueText);
+            var classBuilder = PrepareIdentifiableClassBuilder(objectSchema, entityIdClass.Identifier.ValueText);
+            DddGeneratorCommon.AddClassProperties(classBuilder, objectSchema.Properties, withPrivateSetter: true);
+            AddClassConstructor(classBuilder, objectSchema, entityIdClass.Identifier.ValueText);
 
             classBuilder.AddMethod(BuildOnInitializedMethod());
             syntaxBuilder.AddClass(classBuilder.Build());

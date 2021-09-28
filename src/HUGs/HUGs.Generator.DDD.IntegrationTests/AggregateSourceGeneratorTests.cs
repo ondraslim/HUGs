@@ -9,6 +9,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using HUGs.Generator.Tests.Tools;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -31,13 +32,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var schema = File.ReadAllText($"../../../TestData/Schemas/Aggregates/{fileName}.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
+
             check.CheckString(generatedFileTexts.First(), checkName: fileName, fileExtension: "cs");
         }
 

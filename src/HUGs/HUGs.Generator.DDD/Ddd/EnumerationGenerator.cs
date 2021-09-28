@@ -14,19 +14,19 @@ namespace HUGs.Generator.DDD.Ddd
     internal static class EnumerationGenerator
     {
         public static string GenerateEnumerationCode(
-            DddObjectSchema enumeration,
+            DddObjectSchema objectSchema,
             DddGeneratorConfiguration generatorConfiguration)
         {
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
-            syntaxBuilder.AddNamespace(generatorConfiguration.TargetNamespaces.Enumeration);
+            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(objectSchema.Kind));
 
-            DddGeneratorCommon.AddCommonUsings(syntaxBuilder);
+            DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
 
-            var classBuilder = PrepareEnumerationClassBuilder(enumeration.Name);
-            DddGeneratorCommon.AddClassProperties(classBuilder, enumeration.Properties);
-            AddConstructor(classBuilder, enumeration);
-            AddEnumerationFields(classBuilder, enumeration);
+            var classBuilder = PrepareEnumerationClassBuilder(objectSchema.Name);
+            DddGeneratorCommon.AddClassProperties(classBuilder, objectSchema.Properties);
+            AddConstructor(classBuilder, objectSchema);
+            AddEnumerationFields(classBuilder, objectSchema);
 
             syntaxBuilder.AddClass(classBuilder.Build());
 
