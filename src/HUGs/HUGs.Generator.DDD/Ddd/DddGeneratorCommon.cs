@@ -1,22 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using HUGs.Generator.Common;
+﻿using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Common;
+using HUGs.Generator.DDD.Common.Configuration;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace HUGs.Generator.DDD.Ddd
 {
     public static class DddGeneratorCommon
     {
-        public static void AddCommonUsings(RoslynSyntaxBuilder syntaxBuilder)
+        public static void AddUsings(
+            RoslynSyntaxBuilder syntaxBuilder,
+            DddGeneratorConfiguration generatorConfiguration)
         {
-            syntaxBuilder.AddUsing(
+            syntaxBuilder.AddUsings(
                 "System",
                 "System.Linq",
                 "System.Collections.Generic",
                 "HUGs.Generator.DDD.BaseModels");
+
+            syntaxBuilder.AddUsings(generatorConfiguration.AdditionalUsings.ToArray());
         }
 
         public static ParameterSyntax[] CreateParametersFromProperties(DddObjectProperty[] properties)

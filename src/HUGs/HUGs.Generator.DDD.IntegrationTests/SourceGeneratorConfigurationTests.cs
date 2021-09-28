@@ -10,6 +10,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using HUGs.Generator.Tests.Tools;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -33,10 +34,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}.dddconfig");
             var driver = SetupGeneratorDriver(schema, configuration);
 
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
@@ -51,16 +49,14 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var configuration = File.ReadAllText("../../../TestData/Configuration/CompleteNamespaceConfig.dddconfig");
             var driver = SetupGeneratorDriver(new[] { valueObjectSchema, aggregateSchema }, configuration);
 
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(2);
             check.CheckString(generatedFileTexts.First(), checkName: "First", fileExtension: "cs");
             check.CheckString(generatedFileTexts.Last(), checkName: "Second", fileExtension: "cs");
         }
+
 
         [Test]
         public void MultipleConfigurationFiles_DiagnosticErrorReportedAndNothingGenerated()
@@ -70,10 +66,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var configuration2 = File.ReadAllText("../../../TestData/Configuration/ValueObjectNamespaceConfig.dddconfig");
             var driver = SetupGeneratorDriver(new[] { schema }, configuration1, configuration2);
 
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
             diagnostics.Where(d => d.Id == DddDiagnostics.MultipleConfigurationsErrorId).Should().HaveCount(1);
@@ -89,10 +82,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}.dddconfig");
             var driver = SetupGeneratorDriver(new[] { schema }, configuration);
 
-            driver.RunGeneratorsAndUpdateCompilation(emptyInputCompilation, out var outputCompilation, out var diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !emptyInputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            var generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
             diagnostics.Where(d => d.Id == DddDiagnostics.AdditionalFileParseErrorId).Should().HaveCount(1);

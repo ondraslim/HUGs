@@ -1,10 +1,10 @@
 ﻿using HUGs.Generator.Common;
 using HUGs.Generator.DDD.BaseModels;
 using HUGs.Generator.DDD.Common;
+using HUGs.Generator.DDD.Common.Configuration;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Runtime.CompilerServices;
-using HUGs.Generator.DDD.Common.Configuration;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
@@ -12,20 +12,20 @@ namespace HUGs.Generator.DDD.Ddd
     internal static class ValueObjectGenerator
     {
         public static string GenerateValueObjectCode(
-            DddObjectSchema valueObject, 
+            DddObjectSchema objectSchema, 
             DddGeneratorConfiguration generatorConfiguration)
         {
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
-            syntaxBuilder.AddNamespace(generatorConfiguration.TargetNamespaces.ValueObject);
+            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(objectSchema.Kind));
 
-            DddGeneratorCommon.AddCommonUsings(syntaxBuilder);
+            DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
 
-            var classBuilder = PrepareValueObjectClassBuilder(valueObject.Name);
-            DddGeneratorCommon.AddClassProperties(classBuilder, valueObject.Properties);
-            AddConstructor(classBuilder, valueObject);
+            var classBuilder = PrepareValueObjectClassBuilder(objectSchema.Name);
+            DddGeneratorCommon.AddClassProperties(classBuilder, objectSchema.Properties);
+            AddConstructor(classBuilder, objectSchema);
 
-            classBuilder.AddMethod(GetGetAtomicValuesMethod(valueObject));
+            classBuilder.AddMethod(GetGetAtomicValuesMethod(objectSchema));
             syntaxBuilder.AddClass(classBuilder.Build());
 
             return syntaxBuilder.Build();

@@ -19,8 +19,8 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void GivenRoslynSyntaxBuilder_WhenAllInfoIsFilled_CorrectlyGeneratesCode()
         {
-            builder.AddUsing("System");
-            builder.AddNamespace("HUGs.Generator.Common.Tests");
+            builder.AddUsings("System");
+            builder.SetNamespace("HUGs.Generator.Common.Tests");
 
             var sampleClass = PrepareSampleClassDeclarationSyntax();
             builder.AddClass(sampleClass);
