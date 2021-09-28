@@ -7,32 +7,21 @@ using My.Additional.Using2;
 
 namespace HUGs.DDD.Generated.Aggregate
 {
-    public class OrderId : EntityId<Order>
+    public class SimpleAggregateId : EntityId<SimpleAggregate>
     {
-        public OrderId(string value): base(value)
+        public SimpleAggregateId(string value): base(value)
         {
         }
     }
 
-    public partial class Order : HUGs.Generator.DDD.BaseModels.Aggregate<OrderId>
+    public partial class SimpleAggregate : HUGs.Generator.DDD.BaseModels.Aggregate<SimpleAggregateId>
     {
-        private List<OrderItem> _Items;
         public string Number { get; private set; }
 
-        public DateTime CreatedDate { get; private set; }
-
-        public IReadOnlyList<OrderItem> Items => _Items;
-        public Address ShippingAddress { get; private set; }
-
-        public decimal TotalPrice { get; private set; }
-
-        public Order(IId<OrderId> id, string Number, DateTime CreatedDate, IEnumerable<OrderItem> Items, Address ShippingAddress)
+        public SimpleAggregate(IId<SimpleAggregateId> id, string Number)
         {
             Id = id;
             this.Number = Number;
-            this.CreatedDate = CreatedDate;
-            this._Items = Items.ToList();
-            this.ShippingAddress = ShippingAddress;
             OnInitialized();
         }
 

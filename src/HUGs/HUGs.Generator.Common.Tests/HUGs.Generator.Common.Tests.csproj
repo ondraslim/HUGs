@@ -14,7 +14,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\HUGs.Generator.Common\HUGs.Generator.Common.csproj" />
-		<ProjectReference Include="..\HUGs.Generator.Tests.Tools\HUGs.Generator.Tests.Tools.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

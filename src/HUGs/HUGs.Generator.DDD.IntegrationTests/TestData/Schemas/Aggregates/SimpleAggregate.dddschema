@@ -1,14 +1,5 @@
 ﻿kind: Aggregate
-name: Order
+name: SimpleAggregate
 properties:
   - name: Number
     type: string
-  - name: CreatedDate
-    type: DateTime
-  - name: Items
-    type: OrderItem[]
-  - name: ShippingAddress
-    type: Address
-  - name: TotalPrice
-    type: decimal
-    computed: true
