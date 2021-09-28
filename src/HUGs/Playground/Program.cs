@@ -6,7 +6,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Reflection;
 using HUGs.Generator.DDD;
-using HUGs.Generator.DDD.Common;
+using HUGs.Generator.DDD.Ddd.Models;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -21,6 +21,32 @@ namespace Playground
             //TryRunGeneratorWithoutDependencies();
 
             //TryRunGenerator();
+
+            var enumeration = new DddObjectSchema
+            {
+                Kind = DddObjectKind.Enumeration,
+                Name = "SimpleEnumeration",
+                Properties = new[]
+                {
+                    new DddObjectProperty { Name = "Name", Type = "string" }
+                },
+                Values = new[]
+                {
+                    new DddObjectValue
+                    {
+                        Name = "SimpleEnumerationExample",
+                        PropertyInitialization = new[]
+                        {
+                            new DddPropertyInitialization { PropertyValue = "NameValue", PropertyName = "Name" }
+                        }
+                    }
+                }
+            };
+
+            var serializer = new SerializerBuilder()
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .Build();
+            var text = serializer.Serialize(enumeration);
         }
 
         private static void TryRunGenerator()
@@ -47,7 +73,7 @@ namespace MyCode
             var additionalFiles = ImmutableArray.Create<AdditionalText>(additionalFile);
 
             driver = driver.AddAdditionalTexts(additionalFiles);
-            
+
             // Run the generation pass
             driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
@@ -61,7 +87,7 @@ namespace MyCode
         private static void TryRunGeneratorWithoutDependencies()
         {
             var generator = new Generator();
-            
+
             generator.Initialize(new GeneratorInitializationContext());
             generator.Execute(new GeneratorExecutionContext());
         }

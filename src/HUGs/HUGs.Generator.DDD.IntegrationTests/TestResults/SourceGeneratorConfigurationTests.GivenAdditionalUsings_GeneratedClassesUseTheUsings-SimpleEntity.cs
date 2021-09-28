@@ -5,20 +5,20 @@ using HUGs.Generator.DDD.BaseModels;
 using My.Additional.Using1;
 using My.Additional.Using2;
 
-namespace My.Desired.Namespace.Aggregates
+namespace HUGs.DDD.Generated.Entity
 {
-    public class SimpleAggregateId : EntityId<SimpleAggregate>
+    public class SimpleEntityId : EntityId<SimpleEntity>
     {
-        public SimpleAggregateId(string value): base(value)
+        public SimpleEntityId(string value): base(value)
         {
         }
     }
 
-    public partial class SimpleAggregate : HUGs.Generator.DDD.BaseModels.Aggregate<SimpleAggregateId>
+    public partial class SimpleEntity : HUGs.Generator.DDD.BaseModels.Entity<SimpleEntityId>
     {
         public string Number { get; private set; }
 
-        public SimpleAggregate(IId<SimpleAggregateId> id, string Number)
+        public SimpleEntity(IId<SimpleEntityId> id, string Number)
         {
             Id = id;
             this.Number = Number;

@@ -7,10 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="AddressValueObject.dddschema" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<AdditionalFiles Include="AddressValueObject.dddschema" />
 	</ItemGroup>
 

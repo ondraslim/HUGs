@@ -1,9 +1,0 @@
-﻿kind: Enumeration
-name: SimpleEnumeration
-properties:
-  - name: Name
-    type: string
-values:
-  - name: EnumValueOne
-    properties: 
-      Name: NameValue

@@ -1,14 +1,9 @@
-﻿kind: Aggregate
-name: Order
+﻿kind: Enumeration
+name: SimpleEnumeration
 properties:
-  - name: Number
+  - name: Name
     type: string
-  - name: CreatedDate
-    type: DateTime
-  - name: Items
-    type: OrderItem[]
-  - name: ShippingAddress
-    type: Address
-  - name: TotalPrice
-    type: decimal
-    computed: true
+values:
+  - name: SampleEnumeration
+    properties: 
+      Name: NameValue

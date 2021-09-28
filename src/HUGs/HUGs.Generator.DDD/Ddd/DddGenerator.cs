@@ -1,9 +1,9 @@
 ﻿using HUGs.Generator.Common.Diagnostics;
 using HUGs.Generator.Common.Exceptions;
-using HUGs.Generator.DDD.Common;
-using HUGs.Generator.DDD.Common.Configuration;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Loaders;
+using HUGs.Generator.DDD.Ddd.Models;
+using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis;
 using System;
 

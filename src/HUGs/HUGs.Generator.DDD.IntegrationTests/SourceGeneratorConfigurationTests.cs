@@ -53,8 +53,8 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [Test]
         [TestCase("ValueObjects/SimpleValueObject.dddschema", "AdditionalUsingsConfig")]
         [TestCase("Aggregates/SimpleAggregate.dddschema", "AdditionalUsingsConfig")]
-        // TODO: Entity TestCase
-        // TODO: Enumeration TestCase
+        [TestCase("Entities/SimpleEntity.dddschema", "AdditionalUsingsConfig")]
+        [TestCase("Enumerations/SimpleEnumeration.dddschema", "AdditionalUsingsConfig")]
         public void GivenAdditionalUsings_GeneratedClassesUseTheUsings(string schemaFilePath, string configurationFile)
         {
             var schema = File.ReadAllText($"../../../TestData/Schemas/{schemaFilePath}");
@@ -75,18 +75,22 @@ namespace HUGs.Generator.DDD.IntegrationTests
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
             var schema2 = File.ReadAllText("../../../TestData/Schemas/Aggregates/SimpleAggregate.dddschema");
-            // TODO: add Entity and Enumeration
+            var schema3 = File.ReadAllText("../../../TestData/Schemas/Entities/SimpleEntity.dddschema");
+            var schema4 = File.ReadAllText("../../../TestData/Schemas/Enumerations/SimpleEnumeration.dddschema");
             var configuration = File.ReadAllText("../../../TestData/Configuration/CompleteConfig.dddconfig");
 
-            var driver = SetupGeneratorDriver(new[] { schema, schema2 }, configuration);
+            var driver = SetupGeneratorDriver(new[] { schema, schema2, schema3, schema4 }, configuration);
 
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(2);
+            generatedFileTexts.Should().HaveCount(3);
 
-            Check.CheckString(generatedFileTexts.First(), checkName: "First", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts.Last(), checkName: "Second", fileExtension: "cs");
+            for (var index = 0; index < generatedFileTexts.Length; index++)
+            {
+                var generatedText = generatedFileTexts[index];
+                Check.CheckString(generatedText, checkName: index.ToString(), fileExtension: "cs");
+            }
         }
 
         [Test]

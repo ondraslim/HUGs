@@ -1,4 +1,4 @@
-﻿namespace HUGs.Generator.DDD.Common
+﻿namespace HUGs.Generator.DDD.Ddd.Models
 {
     public class DddObjectValue
     {

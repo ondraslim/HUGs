@@ -1,0 +1,5 @@
+﻿kind: Entity
+name: SimpleEntity
+properties:
+  - name: Number
+    type: string

@@ -1,4 +1,4 @@
-﻿namespace HUGs.Generator.DDD.Common.Configuration
+﻿namespace HUGs.Generator.DDD.Ddd.Models.Configuration
 {
     public class DddObjectTargetNamespaces
     {
