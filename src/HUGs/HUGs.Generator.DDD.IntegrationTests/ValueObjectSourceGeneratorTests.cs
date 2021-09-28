@@ -7,7 +7,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -51,6 +50,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
+
             check.CheckString(generatedFileTexts.First(), checkName: valueObjectSchemaFile, fileExtension: "cs");
         }
 
@@ -65,6 +65,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(2);
+
             check.CheckString(generatedFileTexts.First(), checkName: "SimpleValueObject1", fileExtension: "cs");
             check.CheckString(generatedFileTexts.Last(), checkName: "SimpleValueObject2", fileExtension: "cs");
         }
@@ -94,6 +95,7 @@ public class CountryId
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
+
             check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }
 

@@ -36,6 +36,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
+
             check.CheckString(generatedFileTexts.First(), checkName: fileName, fileExtension: "cs");
         }
 

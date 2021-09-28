@@ -1,16 +1,15 @@
 ﻿using CheckTestOutput;
 using FluentAssertions;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
+using HUGs.Generator.Tests.Tools;
 using HUGs.Generator.Tests.Tools.Mocks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using HUGs.Generator.Tests.Tools;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -38,6 +37,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
+
             check.CheckString(generatedFileTexts.First(), checkName: $"{schemaFile}_{configFile}", fileExtension: "cs");
         }
 
@@ -53,10 +53,49 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(2);
+
             check.CheckString(generatedFileTexts.First(), checkName: "First", fileExtension: "cs");
             check.CheckString(generatedFileTexts.Last(), checkName: "Second", fileExtension: "cs");
         }
 
+        [Test]
+        [TestCase("ValueObjects/SimpleValueObject.dddschema", "AdditionalUsingsConfig")]
+        [TestCase("Aggregates/SimpleAggregate.dddschema", "AdditionalUsingsConfig")]
+        // TODO: Entity TestCase
+        // TODO: Enumeration TestCase
+        public void GivenAdditionalUsings_GeneratedClassesUseTheUsings(string schemaFilePath, string configurationFile)
+        {
+            var schema = File.ReadAllText($"../../../TestData/Schemas/{schemaFilePath}");
+            var configuration1 = File.ReadAllText($"../../../TestData/Configuration/{configurationFile}.dddconfig");
+            var driver = SetupGeneratorDriver(new[] { schema }, configuration1);
+
+            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+
+            diagnostics.Should().BeEmpty();
+            generatedFileTexts.Should().HaveCount(1);
+
+            var checkName = schemaFilePath.SkipWhile(c => c != '/').Skip(1).TakeWhile(c => c != '.').ToArray();
+            check.CheckString(generatedFileTexts.First(), checkName: new string(checkName), fileExtension: "cs");
+        }
+
+        [Test]
+        public void CompleteConfiguration_GeneratedClassesWorkProperly()
+        {
+            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
+            var schema2 = File.ReadAllText("../../../TestData/Schemas/Aggregates/SimpleAggregate.dddschema");
+            // TODO: add Entity and Enumeration
+            var configuration = File.ReadAllText("../../../TestData/Configuration/CompleteConfig.dddconfig");
+
+            var driver = SetupGeneratorDriver(new[] { schema, schema2 }, configuration);
+
+            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+
+            diagnostics.Should().BeEmpty();
+            generatedFileTexts.Should().HaveCount(2);
+
+            check.CheckString(generatedFileTexts.First(), checkName: "First", fileExtension: "cs");
+            check.CheckString(generatedFileTexts.Last(), checkName: "Second", fileExtension: "cs");
+        }
 
         [Test]
         public void MultipleConfigurationFiles_DiagnosticErrorReportedAndNothingGenerated()
