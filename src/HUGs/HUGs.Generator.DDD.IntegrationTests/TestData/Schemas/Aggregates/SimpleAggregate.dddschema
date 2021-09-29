@@ -1,5 +1,5 @@
-﻿kind: Aggregate
-name: SimpleAggregate
-properties:
-  - name: Number
-    type: string
+﻿Kind: Aggregate
+Name: SimpleAggregate
+Properties:
+  - Name: Number
+    Type: string

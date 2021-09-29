@@ -1,4 +1,5 @@
-﻿using CheckTestOutput;
+﻿using System.Collections.Generic;
+using CheckTestOutput;
 using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
@@ -39,12 +40,12 @@ namespace HUGs.Generator.DDD.Tests
                     new()
                     {
                         Name = "Created",
-                        PropertyInitialization = new DddPropertyInitialization[] { new() { PropertyName = "Name", PropertyValue = "Vytvořeno" } }
+                        Properties = new Dictionary<string, string>{ { "Name", "Created" } }
                     },
                     new()
                     {
                         Name = "Canceled",
-                        PropertyInitialization = new DddPropertyInitialization[] { new() { PropertyName = "Name", PropertyValue = "Zrušeno" } }
+                        Properties = new Dictionary<string, string> { { "Name", "Canceled" } }
                     }
                 }
             };
@@ -70,19 +71,19 @@ namespace HUGs.Generator.DDD.Tests
                     new()
                     {
                         Name = "Created",
-                        PropertyInitialization = new DddPropertyInitialization[]
+                        Properties = new Dictionary<string, string>
                         {
-                            new() { PropertyName = "Name", PropertyValue = "Vytvořeno" },
-                            new() { PropertyName = "Count", PropertyValue = "1" }
+                            { "Name", "Created" },
+                            { "Count", "1" },
                         }
                     },
                     new()
                     {
                         Name = "Canceled",
-                        PropertyInitialization = new DddPropertyInitialization[]
+                        Properties = new Dictionary<string, string>
                         {
-                            new() { PropertyName = "Name", PropertyValue = "Zrušeno" },
-                            new() { PropertyName = "Count", PropertyValue = "42" }
+                            { "Name", "Canceled" },
+                            { "Count", "42" },
                         }
                     }
                 }

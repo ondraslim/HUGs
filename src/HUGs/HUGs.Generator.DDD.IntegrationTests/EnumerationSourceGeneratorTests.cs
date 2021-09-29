@@ -18,6 +18,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [Test]
         [TestCase("EmptyEnumeration")]
         [TestCase("SimpleEnumeration")]
+        [TestCase("OrderStateEnumeration")]
         public void ValidEnumerationSchema_GeneratorRun_GeneratesCorrectEnumeration(string fileName)
         {
             var schema = File.ReadAllText($"../../../TestData/Schemas/Enumerations/{fileName}.dddschema");

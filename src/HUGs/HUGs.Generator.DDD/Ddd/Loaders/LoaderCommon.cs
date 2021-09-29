@@ -6,7 +6,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
     public static class LoaderCommon
     {
         private static readonly IDeserializer Deserializer = new DeserializerBuilder()
-            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .WithNamingConvention(NullNamingConvention.Instance)
             .Build();
 
         public static T Deserialize<T>(string text)
