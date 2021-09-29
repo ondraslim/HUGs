@@ -1,4 +1,5 @@
-﻿using CheckTestOutput;
+﻿using System.Collections.Generic;
+using CheckTestOutput;
 using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
@@ -39,12 +40,12 @@ namespace HUGs.Generator.DDD.Tests
                     new()
                     {
                         Name = "Created",
-                        Properties = new DddPropertyInitialization[] { new() { Property = "Name", Value = "Vytvořeno" } }
+                        Properties = new Dictionary<string, string>{ { "Name", "Created" } }
                     },
                     new()
                     {
                         Name = "Canceled",
-                        Properties = new DddPropertyInitialization[] { new() { Property = "Name", Value = "Zrušeno" } }
+                        Properties = new Dictionary<string, string> { { "Name", "Canceled" } }
                     }
                 }
             };
@@ -70,19 +71,19 @@ namespace HUGs.Generator.DDD.Tests
                     new()
                     {
                         Name = "Created",
-                        Properties = new DddPropertyInitialization[]
+                        Properties = new Dictionary<string, string>
                         {
-                            new() { Property = "Name", Value = "Vytvořeno" },
-                            new() { Property = "Count", Value = "1" }
+                            { "Name", "Created" },
+                            { "Count", "1" },
                         }
                     },
                     new()
                     {
                         Name = "Canceled",
-                        Properties = new DddPropertyInitialization[]
+                        Properties = new Dictionary<string, string>
                         {
-                            new() { Property = "Name", Value = "Zrušeno" },
-                            new() { Property = "Count", Value = "42" }
+                            { "Name", "Canceled" },
+                            { "Count", "42" },
                         }
                     }
                 }

@@ -5,5 +5,3 @@ Properties:
     Type: string
 Values:
   - Name: SampleEnumeration
-    Properties:
-      Name: PropertyNameValue
