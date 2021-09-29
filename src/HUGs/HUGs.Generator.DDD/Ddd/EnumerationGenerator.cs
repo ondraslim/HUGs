@@ -18,10 +18,6 @@ namespace HUGs.Generator.DDD.Ddd
             DddObjectSchema objectSchema,
             DddGeneratorConfiguration generatorConfiguration)
         {
-            // TODO: tmp init
-            objectSchema.Properties ??= new DddObjectProperty[] { };
-            objectSchema.Values ??= new DddObjectValue[] { };
-
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
             syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(objectSchema.Kind));

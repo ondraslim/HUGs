@@ -17,11 +17,12 @@ namespace Playground
     {
         private static void Main()
         {
+            var isValidIdentifier = SyntaxFacts.IsValidIdentifier("{asd");
             //TryRunGenerator();
 
             //TrySerialize();
 
-            TryDeserialize();
+            //TryDeserialize();
         }
 
         private static void TryDeserialize()

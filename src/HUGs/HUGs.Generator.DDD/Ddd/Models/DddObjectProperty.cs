@@ -6,16 +6,14 @@ namespace HUGs.Generator.DDD.Ddd.Models
     {
         public string Name { get; set; }
         public string Type { get; set; }
-        // TODO: rename to IsOptional
         public bool Optional { get; set; }
-        // TODO: rename to IsComputed
         public bool Computed { get; set; }
 
         [YamlIgnore]
-        public bool IsArrayProperty => Type.EndsWith("[]");
+        public bool IsArrayProperty => Type?.EndsWith("[]") ?? false;
         
         [YamlIgnore]
-        public string TypeWithoutArray => Type.Replace("[]", "");
+        public string TypeWithoutArray => Type?.Replace("[]", "");
         
         [YamlIgnore]
         public string FullType => $"{TypeWithoutArray}{(Optional ? "?" : "")}";
