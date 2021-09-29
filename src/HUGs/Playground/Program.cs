@@ -57,17 +57,8 @@ namespace Playground
 
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(NullNamingConvention.Instance)
-                .WithTypeResolver(new PropertyInitializationTypeResolver())
                 .Build();
             var text = serializer.Serialize(enumeration);
-        }
-
-        internal class PropertyInitializationTypeResolver : ITypeResolver
-        {
-            public Type Resolve(Type staticType, object? actualValue)
-            {
-                return default;
-            }
         }
 
         private static void TryRunGenerator()
