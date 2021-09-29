@@ -1,0 +1,15 @@
+﻿Kind: Enumeration
+Name: SimpleEnumerationMultiValues
+Properties:
+  - Name: Name
+    Type: string
+Values:
+  - Name: SampleEnumeration1
+    Properties:
+      Name: PropertyNameValue1
+  - Name: SampleEnumeration2
+    Properties:
+      Name: PropertyNameValue2
+  - Name: SampleEnumeration3
+    Properties:
+      Name: PropertyNameValue3
