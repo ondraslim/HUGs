@@ -6,7 +6,7 @@ namespace HUGs.Generator.DDD.Ddd.Models
     {
         public string Name { get; set; }
 
-        public Dictionary<string, string> Properties { get; set; }
+        public Dictionary<string, string> Properties { get; set; } = new();
     }
     
 }
