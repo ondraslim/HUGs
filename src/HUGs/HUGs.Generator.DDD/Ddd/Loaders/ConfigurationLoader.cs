@@ -1,9 +1,9 @@
 ﻿using HUGs.Generator.Common.Exceptions;
-using HUGs.Generator.DDD.Common.Configuration;
 using Microsoft.CodeAnalysis;
 using System;
 using System.IO;
 using System.Linq;
+using HUGs.Generator.DDD.Ddd.Models.Configuration;
 
 namespace HUGs.Generator.DDD.Ddd.Loaders
 {

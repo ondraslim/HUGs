@@ -1,13 +1,13 @@
-﻿kind: ValueObject
-name: SimpleOptional
-properties:
-  - name: Text
-    type: string
-  - name: Number
-    type: int
-  - name: TextOptional
-    type: string
-    optional: true
-  - name: NumberOptional
-    type: int
-    optional: true
+﻿Kind: ValueObject
+Name: SimpleOptional
+Properties:
+  - Name: Text
+    Type: string
+  - Name: Number
+    Type: int
+  - Name: TextOptional
+    Type: string
+    Optional: true
+  - Name: NumberOptional
+    Type: int
+    Optional: true

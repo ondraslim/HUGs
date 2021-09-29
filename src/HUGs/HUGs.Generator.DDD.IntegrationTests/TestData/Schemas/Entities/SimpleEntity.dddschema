@@ -1,5 +1,5 @@
-﻿Kind: Aggregate
-Name: SimpleAggregate
+﻿Kind: Entity
+Name: SimpleEntity
 Properties:
   - Name: Number
     Type: string

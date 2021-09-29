@@ -1,8 +1,9 @@
-﻿using HUGs.Generator.Common;
+﻿using System.Collections.Generic;
+using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.BaseModels;
-using HUGs.Generator.DDD.Common;
-using HUGs.Generator.DDD.Common.Configuration;
+using HUGs.Generator.DDD.Ddd.Models;
+using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
@@ -17,6 +18,10 @@ namespace HUGs.Generator.DDD.Ddd
             DddObjectSchema objectSchema,
             DddGeneratorConfiguration generatorConfiguration)
         {
+            // TODO: tmp init
+            objectSchema.Properties ??= new DddObjectProperty[] { };
+            objectSchema.Values ??= new DddObjectValue[] { };
+
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
             syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(objectSchema.Kind));
@@ -96,24 +101,22 @@ namespace HUGs.Generator.DDD.Ddd
             var prepareEnumFieldObjectCreationSyntax = SyntaxFactory
                 .ObjectCreationExpression(SyntaxFactory.IdentifierName(enumeration.Name))
                 .AddArgumentListArguments(nameofArgument)
-                .AddArgumentListArguments(value.PropertyInitialization.Select(i => ArgumentSyntax(i, enumeration)).ToArray());
+                .AddArgumentListArguments(value.Properties.Select(i => ArgumentSyntax(i.Key, i.Value, enumeration)).ToArray());
 
             return prepareEnumFieldObjectCreationSyntax;
         }
 
-        private static ArgumentSyntax ArgumentSyntax(
-            DddPropertyInitialization propertyInitialization,
-            DddObjectSchema enumeration)
+        private static ArgumentSyntax ArgumentSyntax(string propertyName, string propertyValue, DddObjectSchema enumeration)
         {
-            if (enumeration.Properties.Any(p => p.Name == propertyInitialization.PropertyName && p.Type == "string"))
+            if (enumeration.Properties.Any(p => p.Name == propertyName && p.Type == "string"))
             {
                 return SyntaxFactory.Argument(
                     SyntaxFactory.LiteralExpression(
                         SyntaxKind.StringLiteralExpression,
-                        SyntaxFactory.Literal(propertyInitialization.PropertyValue)));
+                        SyntaxFactory.Literal(propertyValue)));
             }
 
-            return SyntaxFactory.Argument(SyntaxFactory.ParseExpression(propertyInitialization.PropertyValue));
+            return SyntaxFactory.Argument(SyntaxFactory.ParseExpression(propertyValue));
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace HUGs.Generator.DDD.Common
+namespace HUGs.Generator.DDD.Ddd.Models
 {
     public class DddModel
     {

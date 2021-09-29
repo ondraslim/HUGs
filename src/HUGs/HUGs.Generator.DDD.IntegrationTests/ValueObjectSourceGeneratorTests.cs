@@ -1,27 +1,20 @@
 using CheckTestOutput;
 using FluentAssertions;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
-using HUGs.Generator.Tests.Tools;
-using HUGs.Generator.Tests.Tools.Mocks;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
-    public class ValueObjectSourceGeneratorTests
+    public class ValueObjectSourceGeneratorTests : GeneratorTestBase
     {
-        private Compilation emptyInputCompilation;
-        private readonly OutputChecker check = new("TestResults");
-
         [SetUp]
-        public void Setup()
+        public override void Setup()
         {
-            emptyInputCompilation = CreateCompilation(@"class Program { static void Main() {} }");
+            base.Setup();
         }
 
         [Test]
@@ -30,7 +23,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var schema = File.ReadAllText("../../../TestData/Schemas/Empty.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
-            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+            RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
             diagnostics.Where(d => d.Id == DddDiagnostics.EmptyAdditionalFileWarningId).Should().NotBeEmpty();
@@ -46,12 +39,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{valueObjectSchemaFile}.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
-            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+            RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
 
-            check.CheckString(generatedFileTexts.First(), checkName: valueObjectSchemaFile, fileExtension: "cs");
+            Check.CheckString(generatedFileTexts.First(), checkName: valueObjectSchemaFile, fileExtension: "cs");
         }
 
         [Test]
@@ -61,13 +54,13 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var schema2 = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObjectMultiple2.dddschema");
             var driver = SetupGeneratorDriver(new List<string> { schema1, schema2 });
 
-            GeneratorTestUtils.RunGenerator(driver, emptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+            RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(2);
 
-            check.CheckString(generatedFileTexts.First(), checkName: "SimpleValueObject1", fileExtension: "cs");
-            check.CheckString(generatedFileTexts.Last(), checkName: "SimpleValueObject2", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts.First(), checkName: "SimpleValueObject1", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts.Last(), checkName: "SimpleValueObject2", fileExtension: "cs");
         }
 
         [Test]
@@ -91,33 +84,12 @@ public class CountryId
 }
 ");
 
-            GeneratorTestUtils.RunGenerator(driver, compilationWithCountryId, out var diagnostics, out var generatedFileTexts);
+            RunGenerator(driver, compilationWithCountryId, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
 
-            check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
-        }
-
-        private static GeneratorDriver SetupGeneratorDriver(string schema)
-            => SetupGeneratorDriver(new List<string> { schema });
-
-        private static GeneratorDriver SetupGeneratorDriver(IEnumerable<string> schemas)
-        {
-            var generator = new Generator();
-
-            return CSharpGeneratorDriver.Create(
-                new List<ISourceGenerator> { generator },
-                schemas.Select(s => new TestAdditionalText(text: s, path: "dummyPath.dddschema")));
-        }
-
-        private static Compilation CreateCompilation(string source)
-        {
-            return CSharpCompilation.Create(
-                "compilation",
-                new[] { CSharpSyntaxTree.ParseText(source) },
-                new[] { MetadataReference.CreateFromFile(typeof(Binder).GetTypeInfo().Assembly.Location) },
-                new CSharpCompilationOptions(OutputKind.ConsoleApplication));
+            Check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
         }
     }
 }

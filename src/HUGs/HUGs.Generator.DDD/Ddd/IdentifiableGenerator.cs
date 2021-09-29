@@ -1,11 +1,11 @@
 ﻿using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
-using HUGs.Generator.DDD.Common;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using HUGs.Generator.DDD.Common.Configuration;
+using HUGs.Generator.DDD.Ddd.Models;
+using HUGs.Generator.DDD.Ddd.Models.Configuration;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd

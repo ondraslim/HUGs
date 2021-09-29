@@ -1,12 +1,13 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using HUGs.Generator.DDD;
+using HUGs.Generator.DDD.Ddd.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Playground.Mocks;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Reflection;
-using HUGs.Generator.DDD;
-using HUGs.Generator.DDD.Common;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -16,11 +17,48 @@ namespace Playground
     {
         private static void Main()
         {
-            //TryYamlDeserialize();
-
-            //TryRunGeneratorWithoutDependencies();
-
             //TryRunGenerator();
+
+            //TrySerialize();
+
+            TryDeserialize();
+        }
+
+        private static void TryDeserialize()
+        {
+            var enumeration = File.ReadAllText("../../../SimpleEnumeration.dddschema");
+            
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(NullNamingConvention.Instance)
+                .Build();
+
+            var schema = deserializer.Deserialize<DddObjectSchema>(enumeration);
+        }
+
+        private static void TrySerialize()
+        {
+            var enumeration = new DddObjectSchema
+            {
+                Kind = DddObjectKind.Enumeration,
+                Name = "SimpleEnumeration",
+                Properties = new[]
+                {
+                    new DddObjectProperty {Name = "Name", Type = "string"}
+                },
+                Values = new[]
+                {
+                    new DddObjectValue
+                    {
+                        Name = "SimpleEnumerationExample",
+                        Properties = new Dictionary<string, string>{ { "Name", "NameValue" } }
+                    }
+                }
+            };
+
+            var serializer = new SerializerBuilder()
+                .WithNamingConvention(NullNamingConvention.Instance)
+                .Build();
+            var text = serializer.Serialize(enumeration);
         }
 
         private static void TryRunGenerator()
@@ -47,7 +85,7 @@ namespace MyCode
             var additionalFiles = ImmutableArray.Create<AdditionalText>(additionalFile);
 
             driver = driver.AddAdditionalTexts(additionalFiles);
-            
+
             // Run the generation pass
             driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
@@ -56,21 +94,6 @@ namespace MyCode
                     new[] { CSharpSyntaxTree.ParseText(source) },
                     new[] { MetadataReference.CreateFromFile(typeof(Binder).GetTypeInfo().Assembly.Location) },
                     new CSharpCompilationOptions(OutputKind.ConsoleApplication));
-        }
-
-        private static void TryRunGeneratorWithoutDependencies()
-        {
-            var generator = new Generator();
-            
-            generator.Initialize(new GeneratorInitializationContext());
-            generator.Execute(new GeneratorExecutionContext());
-        }
-
-        private static void TryYamlDeserialize()
-        {
-            var yaml = File.ReadAllText("../../../AddressValueObject.dddschema");
-            var deserializer = new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
-            var schema = deserializer.Deserialize<DddObjectSchema>(yaml);
         }
     }
 }

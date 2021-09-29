@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
-    public class AggregateSourceGeneratorTests : GeneratorTestBase
+    public class EnumerationSourceGeneratorTests : GeneratorTestBase
     {
         [SetUp]
         public override void Setup()
@@ -16,11 +16,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        [TestCase("SimpleAggregate")]
-        [TestCase("OrderAggregate")]
-        public void ValidSimpleAggregateSchema_GeneratorRun_GeneratesCorrectAggregate(string fileName)
+        [TestCase("EmptyEnumeration")]
+        [TestCase("SimpleEnumeration")]
+        [TestCase("OrderStateEnumeration")]
+        public void ValidEnumerationSchema_GeneratorRun_GeneratesCorrectEnumeration(string fileName)
         {
-            var schema = File.ReadAllText($"../../../TestData/Schemas/Aggregates/{fileName}.dddschema");
+            var schema = File.ReadAllText($"../../../TestData/Schemas/Enumerations/{fileName}.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);

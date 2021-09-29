@@ -1,5 +1,5 @@
-﻿kind: ValueObject
-name: Simple3
-properties:
-  - name: Text
-    type: string
+﻿Kind: ValueObject
+Name: Simple3
+Properties:
+  - Name: Text
+    Type: string

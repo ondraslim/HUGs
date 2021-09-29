@@ -1,5 +1,5 @@
-﻿targetNamespaces:
-  valueObject: My.Desired.Namespace.ValueObjects
-  entity: My.Desired.Namespace.Entities
-  aggregate: My.Desired.Namespace.Aggregates
-  enumeration: My.Desired.Namespace.Enumerations
+﻿TargetNamespaces:
+  ValueObject: My.Desired.Namespace.ValueObjects
+  Entity: My.Desired.Namespace.Entities
+  Aggregate: My.Desired.Namespace.Aggregates
+  Enumeration: My.Desired.Namespace.Enumerations

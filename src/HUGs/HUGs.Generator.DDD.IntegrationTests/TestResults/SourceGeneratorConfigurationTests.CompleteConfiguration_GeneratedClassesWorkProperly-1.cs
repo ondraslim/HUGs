@@ -5,7 +5,7 @@ using HUGs.Generator.DDD.BaseModels;
 using My.Additional.Using1;
 using My.Additional.Using2;
 
-namespace HUGs.DDD.Generated.Aggregate
+namespace My.Desired.Namespace.Aggregates
 {
     public class SimpleAggregateId : EntityId<SimpleAggregate>
     {
