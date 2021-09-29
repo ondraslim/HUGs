@@ -4,6 +4,7 @@
 ### New Rules
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-HUGSDDDCONF01 | DddGenerator | Error | DddDiagnostics
-HUGSDDDCONF02 | DddGenerator | Error | DddDiagnostics
-HUGSDDDCONF03 | DddGenerator | Warning | DddDiagnostics
+HUGSDDDAF01 | DddGenerator | Error | DddDiagnostics
+HUGSDDDAF02 | DddGenerator | Error | DddDiagnostics
+HUGSDDDAF03 | DddGenerator | Warning | DddDiagnostics
+HUGSDDDAF04 | DddGenerator | Error | DddDiagnostics

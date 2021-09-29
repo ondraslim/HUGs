@@ -7,16 +7,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using HUGs.Generator.DDD.Ddd.Validation;
 
 namespace HUGs.Generator.DDD.Ddd.Loaders
 {
     public class DddModelLoader
     {
         private static DiagnosticReporter _diagnosticReporter;
+        private static SchemaValidator _schemaValidator;
 
         public static DddModel LoadDddModel(GeneratorExecutionContext context)
         {
             _diagnosticReporter = new DiagnosticReporter(context);
+            _schemaValidator = new SchemaValidator(_diagnosticReporter);
 
             var schemas = GetDddSchemaFiles(context);
             return LoadDddModel(schemas);
@@ -57,7 +60,10 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
                 try
                 {
                     var dddSchema = LoaderCommon.Deserialize<DddObjectSchema>(schemaText);
-                    dddModel.AddObjectSchema(dddSchema);
+                    if (_schemaValidator.ValidateSchema(dddSchema))
+                    {
+                        dddModel.AddObjectSchema(dddSchema);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -67,6 +73,5 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
 
             return dddModel;
         }
-
     }
 }

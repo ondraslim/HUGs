@@ -5,6 +5,7 @@ using HUGs.Generator.DDD.Ddd.Loaders;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using System;
 
 namespace HUGs.Generator.DDD.Ddd
@@ -63,7 +64,10 @@ namespace HUGs.Generator.DDD.Ddd
         private static void AddDddObjectSchemaSource(GeneratorExecutionContext context, DddObjectSchema objectSchema)
         {
             var sourceCode = GenerateDddObjectCode(objectSchema);
-            context.AddSource($"{objectSchema.Name}{objectSchema.Kind}", sourceCode);
+            if (ValidateSourceCodeSyntax(sourceCode))
+            {
+                context.AddSource($"{objectSchema.Name}{objectSchema.Kind}", sourceCode);
+            }
         }
 
         private static string GenerateDddObjectCode(DddObjectSchema objectSchema)
@@ -75,5 +79,19 @@ namespace HUGs.Generator.DDD.Ddd
                 DddObjectKind.Enumeration => EnumerationGenerator.GenerateEnumerationCode(objectSchema, GeneratorConfiguration),
                 _ => throw new ArgumentOutOfRangeException($"Kind '{objectSchema.Kind}' is not supported.")
             };
+
+        private static bool ValidateSourceCodeSyntax(string sourceCode)
+        {
+            try
+            {
+                var syntaxTree = CSharpSyntaxTree.ParseText(sourceCode);
+                return syntaxTree.HasCompilationUnitRoot && !string.IsNullOrWhiteSpace(syntaxTree.GetText().ToString());
+            }
+            catch (Exception)
+            {
+                // TODO: diagnostics
+                return false;
+            }
+        }
     }
 }
