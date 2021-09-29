@@ -96,7 +96,7 @@ namespace HUGs.Generator.DDD.Ddd
             var prepareEnumFieldObjectCreationSyntax = SyntaxFactory
                 .ObjectCreationExpression(SyntaxFactory.IdentifierName(enumeration.Name))
                 .AddArgumentListArguments(nameofArgument)
-                .AddArgumentListArguments(value.PropertyInitialization.Select(i => ArgumentSyntax(i, enumeration)).ToArray());
+                .AddArgumentListArguments(value.Properties.Select(i => ArgumentSyntax(i, enumeration)).ToArray());
 
             return prepareEnumFieldObjectCreationSyntax;
         }
@@ -105,15 +105,15 @@ namespace HUGs.Generator.DDD.Ddd
             DddPropertyInitialization propertyInitialization,
             DddObjectSchema enumeration)
         {
-            if (enumeration.Properties.Any(p => p.Name == propertyInitialization.PropertyName && p.Type == "string"))
+            if (enumeration.Properties.Any(p => p.Name == propertyInitialization.Property && p.Type == "string"))
             {
                 return SyntaxFactory.Argument(
                     SyntaxFactory.LiteralExpression(
                         SyntaxKind.StringLiteralExpression,
-                        SyntaxFactory.Literal(propertyInitialization.PropertyValue)));
+                        SyntaxFactory.Literal(propertyInitialization.Value)));
             }
 
-            return SyntaxFactory.Argument(SyntaxFactory.ParseExpression(propertyInitialization.PropertyValue));
+            return SyntaxFactory.Argument(SyntaxFactory.ParseExpression(propertyInitialization.Value));
         }
     }
 }

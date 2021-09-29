@@ -35,16 +35,16 @@ namespace Playground
                     new DddObjectValue
                     {
                         Name = "SimpleEnumerationExample",
-                        PropertyInitialization = new[]
+                        Properties = new[]
                         {
-                            new DddPropertyInitialization { PropertyValue = "NameValue", PropertyName = "Name" }
+                            new DddPropertyInitialization { Value = "NameValue", Property = "Name" }
                         }
                     }
                 }
             };
 
             var serializer = new SerializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .WithNamingConvention(NullNamingConvention.Instance)
                 .Build();
             var text = serializer.Serialize(enumeration);
         }

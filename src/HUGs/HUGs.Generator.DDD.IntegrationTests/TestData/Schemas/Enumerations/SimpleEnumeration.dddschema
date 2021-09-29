@@ -1,9 +1,10 @@
-﻿kind: Enumeration
-name: SimpleEnumeration
-properties:
-  - name: Name
-    type: string
-values:
-  - name: SampleEnumeration
-    properties: 
-      Name: NameValue
+﻿Kind: Enumeration
+Name: SimpleEnumeration
+Properties:
+  - Name: Name
+    Type: string
+Values:
+  - Name: SampleEnumeration
+    Properties: 
+      - Property: Name
+        Value: RandomName

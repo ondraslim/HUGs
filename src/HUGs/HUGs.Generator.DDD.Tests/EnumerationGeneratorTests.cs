@@ -39,12 +39,12 @@ namespace HUGs.Generator.DDD.Tests
                     new()
                     {
                         Name = "Created",
-                        PropertyInitialization = new DddPropertyInitialization[] { new() { PropertyName = "Name", PropertyValue = "Vytvořeno" } }
+                        Properties = new DddPropertyInitialization[] { new() { Property = "Name", Value = "Vytvořeno" } }
                     },
                     new()
                     {
                         Name = "Canceled",
-                        PropertyInitialization = new DddPropertyInitialization[] { new() { PropertyName = "Name", PropertyValue = "Zrušeno" } }
+                        Properties = new DddPropertyInitialization[] { new() { Property = "Name", Value = "Zrušeno" } }
                     }
                 }
             };
@@ -70,19 +70,19 @@ namespace HUGs.Generator.DDD.Tests
                     new()
                     {
                         Name = "Created",
-                        PropertyInitialization = new DddPropertyInitialization[]
+                        Properties = new DddPropertyInitialization[]
                         {
-                            new() { PropertyName = "Name", PropertyValue = "Vytvořeno" },
-                            new() { PropertyName = "Count", PropertyValue = "1" }
+                            new() { Property = "Name", Value = "Vytvořeno" },
+                            new() { Property = "Count", Value = "1" }
                         }
                     },
                     new()
                     {
                         Name = "Canceled",
-                        PropertyInitialization = new DddPropertyInitialization[]
+                        Properties = new DddPropertyInitialization[]
                         {
-                            new() { PropertyName = "Name", PropertyValue = "Zrušeno" },
-                            new() { PropertyName = "Count", PropertyValue = "42" }
+                            new() { Property = "Name", Value = "Zrušeno" },
+                            new() { Property = "Count", Value = "42" }
                         }
                     }
                 }

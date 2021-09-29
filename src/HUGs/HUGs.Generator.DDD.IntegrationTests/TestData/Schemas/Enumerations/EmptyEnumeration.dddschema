@@ -1,4 +1,4 @@
-﻿kind: Enumeration
-name: EmptyEnumeration
-values:
-  - name: SampleËmptyEnumeration
+﻿Kind: Enumeration
+Name: EmptyEnumeration
+Values:
+  - Name: SampleEmptyEnumeration

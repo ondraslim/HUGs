@@ -1,5 +1,5 @@
-﻿kind: Entity
-name: SimpleEntity
-properties:
-  - name: Number
-    type: string
+﻿Kind: Entity
+Name: SimpleEntity
+Properties:
+  - Name: Number
+    Type: string
