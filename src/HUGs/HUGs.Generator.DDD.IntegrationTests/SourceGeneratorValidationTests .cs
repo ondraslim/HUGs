@@ -131,6 +131,36 @@ namespace HUGs.Generator.DDD.IntegrationTests
             return sb.ToString();
         }
 
+        [Test]
+        [TestCase(1, "Entity|TestDuplicateName|2")]
+        [TestCase(1, "Aggregate|TestDuplicateName|2")]
+        [TestCase(1, "Enumeration|TestDuplicateName|2")]
+        [TestCase(1, "ValueObject|TestDuplicateName|2")]
+        [TestCase(2, "ValueObject|TestDuplicateName|2", "Entity|TestDuplicateName|2")]
+        [TestCase(4, "ValueObject|TestDuplicateName|2", "Entity|TestDuplicateName|2", "Aggregate|TestDuplicateName|2", "Enumeration|TestDuplicateName|2")]
+        [TestCase(1, "ValueObject|TestDuplicateName|2", "Entity|TestDuplicateName|1", "Aggregate|TestDuplicateName|1", "Enumeration|TestDuplicateName|1")]
+        [TestCase(2, "ValueObject|TestDuplicateName|2", "Entity|TestDuplicateName|1", "Aggregate|TestDuplicateName|1", "Enumeration|TestDuplicateName|2")]
+        [TestCase(2, "ValueObject|TestDuplicateValueObject|2", "Entity|TestDuplicateEntity|1", "Aggregate|TestDuplicateAggregate|1", "Enumeration|TestDuplicateEnum|2")]
+        [TestCase(2, "ValueObject|TestDuplicateName|2", "Entity|TestUniqueName|1", "Aggregate|DifferentDuplicateName|2", "Enumeration|TestUniqueName|1")]
+        public void GivenModelWithDuplicatedNamesOfTheSameType_DiagnosticIsReported(int expectedDuplicateCount, params string[] duplicates)
+        {
+            var schemas = duplicates
+                .Select(ds => ds.Split('|'))
+                .Select(d => new { Kind = d[0], Name = d[1], Count = int.Parse(d[2])})
+                .Select(d => Enumerable.Repeat(GetSchema(d.Kind, d.Name), d.Count))
+                .SelectMany(a => a)
+                .ToArray();
+
+            var driver = SetupGeneratorDriver(schemas);
+
+            RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+
+            generatedFileTexts.Should().BeEmpty();
+            diagnostics.Where(d => d.Id == DddDiagnostic.DuplicatedDddObjectNamesErrorId).Should().HaveCount(expectedDuplicateCount);
+            diagnostics.Where(d => d.Id == DddDiagnostic.InvalidDddModelErrorId).Should().HaveCount(1);
+            diagnostics.Should().HaveCount(expectedDuplicateCount + 1);
+        }
+
         private static string GetConfiguration(
             bool useNamespace = false,
             string valueObjectNamespace = null, string entityNamespace = null, string aggregateNamespace = null, string enumNamespace = null,

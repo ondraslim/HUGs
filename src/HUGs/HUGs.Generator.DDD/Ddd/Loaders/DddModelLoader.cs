@@ -14,12 +14,12 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
     public class DddModelLoader
     {
         private static DiagnosticReporter _diagnosticReporter;
-        private static SchemaValidator _schemaValidator;
+        private static ModelValidator _modelValidator;
 
         private static void InitializeDependencies(GeneratorExecutionContext context)
         {
             _diagnosticReporter = new DiagnosticReporter(context);
-            _schemaValidator = new SchemaValidator(_diagnosticReporter);
+            _modelValidator = new ModelValidator(_diagnosticReporter, new SchemaValidator(_diagnosticReporter));
         }
 
         public static DddModel LoadDddModel(GeneratorExecutionContext context)
@@ -41,14 +41,9 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
         private static DddModel LoadDddModel(IEnumerable<AdditionalText> dddSchemas)
         {
             var model = BuildDddModel(dddSchemas);
-
-            // TODO: move to ModelValidator
-            foreach (var schema in model.Schemas)
+            if (!_modelValidator.ValidateModel(model))
             {
-                if (!_schemaValidator.ValidateSchema(schema))
-                {
-                    throw new DddSchemaValidationException(schema.Name);
-                }
+                throw new DddModelValidationException();
             }
             return model;
         }

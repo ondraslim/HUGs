@@ -14,6 +14,8 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
         public const string SchemaInvalidErrorId = "HUGSDDDAF06";
         public const string ConfigurationInvalidErrorId = "HUGSDDDAF07";
         public const string LoadErrorId = "HUGSDDDAF08";
+        public const string DuplicatedDddObjectNamesErrorId = "HUGSDDDAF09";
+        public const string InvalidDddModelErrorId = "HUGSDDDAF10";
 
         internal static readonly DiagnosticDescriptor MultipleConfigurationsError = new(
             id: MultipleConfigurationsErrorId,
@@ -80,12 +82,29 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
+        internal static readonly DiagnosticDescriptor DuplicatedDddObjectNamesError = new(
+            id: DuplicatedDddObjectNamesErrorId,
+            title: "DDD model contains duplicates",
+            messageFormat: "DDD model contains duplicated objects with name '{0}'",
+            category: "DddGenerator",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static readonly DiagnosticDescriptor InvalidDddModelError = new(
+            id: InvalidDddModelErrorId,
+            title: "Invalid DDD model",
+            messageFormat: "DDD model is invalid",
+            category: "DddGenerator",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
         public static Diagnostic ExceptionToDiagnosticConverter(DddLoadException e) => e switch
         {
             AdditionalFileParseException ex => GetAdditionalFileParseDiagnostic(ex),
             DddMultipleConfigurationsFoundException ex => GetMultipleConfigurationsDiagnostic(ex),
             DddConfigurationValidationException ex => GetInvalidConfigurationDiagnostic(ex),
             DddSchemaValidationException ex => GetInvalidSchemaDiagnostic(ex),
+            DddModelValidationException ex => GetInvalidDddModelError(ex),
             DddLoadException ex => GetLoadErrorDiagnostic(ex),
         };
 
@@ -112,6 +131,11 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             return Diagnostic.Create(InvalidSchemaError, Location.None, e.SchemaFile);
         }
 
+        private static Diagnostic GetInvalidDddModelError(DddModelValidationException _)
+        {
+            return Diagnostic.Create(InvalidDddModelError, Location.None);
+        }
+
         private static Diagnostic GetLoadErrorDiagnostic(DddLoadException _)
         {
             return Diagnostic.Create(LoadError, Location.None);
@@ -129,6 +153,11 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
         internal static Diagnostic GetConfigurationInvalidValueDiagnostic(string value, string property)
         {
             return Diagnostic.Create(ConfigurationInvalidValueError, Location.None, value, property);
+        }
+
+        internal static Diagnostic GetDuplicatedDddObjectNamesDiagnostic(string duplicatedName)
+        {
+            return Diagnostic.Create(DuplicatedDddObjectNamesError, Location.None, duplicatedName);
         }
 
         #endregion
