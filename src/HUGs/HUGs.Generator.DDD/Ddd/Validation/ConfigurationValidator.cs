@@ -1,17 +1,16 @@
-﻿using System.Linq;
-using HUGs.Generator.Common.Diagnostics;
-using HUGs.Generator.DDD.Ddd.Diagnostics;
+﻿using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis.CSharp;
+using System.Linq;
 
 
 namespace HUGs.Generator.DDD.Ddd.Validation
 {
     internal class ConfigurationValidator
     {
-        private readonly DiagnosticReporter diagnosticReporter;
+        private readonly DddDiagnosticsReporter diagnosticReporter;
 
-        public ConfigurationValidator(DiagnosticReporter diagnosticReporter)
+        public ConfigurationValidator(DddDiagnosticsReporter diagnosticReporter)
         {
             this.diagnosticReporter = diagnosticReporter;
         }
@@ -41,9 +40,8 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 
             if (!@namespace.Split('.').All(SyntaxFacts.IsValidIdentifier))
             {
-                diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetConfigurationInvalidValueDiagnostic(
-                    namespaceTarget,
-                    $"{nameof(DddGeneratorConfiguration.TargetNamespaces)}_{namespaceTarget}"));
+                diagnosticReporter.ReportConfigurationInvalidValue(
+                    namespaceTarget, $"{nameof(DddGeneratorConfiguration.TargetNamespaces)}_{namespaceTarget}");
 
                 return false;
             }
@@ -60,7 +58,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             {
                 if (!additionalUsing.Split('.').All(SyntaxFacts.IsValidIdentifier))
                 {
-                    diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetConfigurationInvalidValueDiagnostic(additionalUsing, nameof(DddGeneratorConfiguration.AdditionalUsings)));
+                    diagnosticReporter.ReportConfigurationInvalidValue(additionalUsing, nameof(DddGeneratorConfiguration.AdditionalUsings));
                     isValid = false;
                 }
             }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace HUGs.Generator.Common.Exceptions
+namespace HUGs.Generator.DDD.Ddd.Exceptions
 {
     public class DddValidationException : DddLoadException
     {

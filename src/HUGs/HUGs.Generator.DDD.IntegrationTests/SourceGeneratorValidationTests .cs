@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using HUGs.Generator.Common.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == DddDiagnostic.EmptyAdditionalFileWarningId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == Diagnostics.AdditionalFileEmptyWarningId).Should().HaveCount(1);
             generatedFileTexts.Should().BeEmpty();
         }
 
@@ -69,8 +70,8 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
             
             generatedFileTexts.Should().BeEmpty();
-            diagnostics.Where(d => d.Id == DddDiagnostic.SchemaInvalidValueErrorId).Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == DddDiagnostic.SchemaInvalidErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostics.SchemaInvalidValueErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostics.SchemaInvalidErrorId).Should().HaveCount(1);
             diagnostics.Should().HaveCount(2);
         }
 
@@ -99,36 +100,9 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             generatedFileTexts.Should().BeEmpty();
-            diagnostics.Where(d => d.Id == DddDiagnostic.ConfigurationInvalidValueErrorId).Should().HaveCount(expectedValueErrorCount);
-            diagnostics.Where(d => d.Id == DddDiagnostic.ConfigurationInvalidErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostics.ConfigurationInvalidValueErrorId).Should().HaveCount(expectedValueErrorCount);
+            diagnostics.Where(d => d.Id == DddDiagnostics.ConfigurationInvalidErrorId).Should().HaveCount(1);
             diagnostics.Should().HaveCount(expectedValueErrorCount + 1);
-        }
-
-        private static string GetSchema(
-            string kind, string name,
-            bool useProperties = false, string propertyName = null, string propertyType = null,
-            bool useValues = false, string valueName = null, string valuePropertyName = null, string valuePropertyValue = null)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine($"Kind: {kind}");
-            sb.AppendLine($"Name: {name}");
-
-            if (useProperties)
-            {
-                sb.AppendLine("Properties:");
-                sb.AppendLine($"  - Name: {propertyName}");
-                sb.AppendLine($"    Type: {propertyType}");
-            }
-
-            if (useValues)
-            {
-                sb.AppendLine("Values:");
-                sb.AppendLine($"  - Name: {valueName}");
-                sb.AppendLine("    Properties:");
-                sb.AppendLine($"       {valuePropertyName}: {valuePropertyValue}");
-            }
-
-            return sb.ToString();
         }
 
         [Test]
@@ -156,9 +130,36 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             generatedFileTexts.Should().BeEmpty();
-            diagnostics.Where(d => d.Id == DddDiagnostic.DuplicatedDddObjectNamesErrorId).Should().HaveCount(expectedDuplicateCount);
-            diagnostics.Where(d => d.Id == DddDiagnostic.InvalidDddModelErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostics.DddModelDuplicatedNamesErrorId).Should().HaveCount(expectedDuplicateCount);
+            diagnostics.Where(d => d.Id == DddDiagnostics.DddModelInvalidErrorId).Should().HaveCount(1);
             diagnostics.Should().HaveCount(expectedDuplicateCount + 1);
+        }
+
+        private static string GetSchema(
+            string kind, string name,
+            bool useProperties = false, string propertyName = null, string propertyType = null,
+            bool useValues = false, string valueName = null, string valuePropertyName = null, string valuePropertyValue = null)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Kind: {kind}");
+            sb.AppendLine($"Name: {name}");
+
+            if (useProperties)
+            {
+                sb.AppendLine("Properties:");
+                sb.AppendLine($"  - Name: {propertyName}");
+                sb.AppendLine($"    Type: {propertyType}");
+            }
+
+            if (useValues)
+            {
+                sb.AppendLine("Values:");
+                sb.AppendLine($"  - Name: {valueName}");
+                sb.AppendLine("    Properties:");
+                sb.AppendLine($"       {valuePropertyName}: {valuePropertyValue}");
+            }
+
+            return sb.ToString();
         }
 
         private static string GetConfiguration(

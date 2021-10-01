@@ -7,12 +7,14 @@ using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System;
+using HUGs.Generator.DDD.Ddd.Exceptions;
+using AdditionalFileParseException = HUGs.Generator.Common.Exceptions.AdditionalFileParseException;
 
 namespace HUGs.Generator.DDD.Ddd
 {
     public static class DddGenerator
     {
-        private static DiagnosticReporter _diagnosticReporter;
+        private static DddDiagnosticsReporter _diagnosticsReporter;
 
         public static void Initialize(GeneratorInitializationContext context)
         {
@@ -21,7 +23,7 @@ namespace HUGs.Generator.DDD.Ddd
 
         public static void Execute(GeneratorExecutionContext context)
         {
-            _diagnosticReporter = new DiagnosticReporter(context);
+            _diagnosticsReporter = new DddDiagnosticsReporter(context);
 
             try
             {
@@ -30,9 +32,9 @@ namespace HUGs.Generator.DDD.Ddd
 
                 GenerateDddModelSource(context, configuration, dddModel);
             }
-            catch (DddLoadException e)
+            catch (LoadException e)
             {
-                _diagnosticReporter.ReportDiagnostic(DddDiagnostic.ExceptionToDiagnosticConverter(e));
+                _diagnosticsReporter.ReportDiagnostic(e);
             }
         }
 

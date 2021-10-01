@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace HUGs.Generator.Common.Exceptions
+namespace HUGs.Generator.DDD.Ddd.Exceptions
 {
     public class DddMultipleConfigurationsFoundException : DddLoadException
     {

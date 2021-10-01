@@ -1,9 +1,10 @@
-﻿using System;
+﻿using HUGs.Generator.Common.Exceptions;
+using System;
 using System.Runtime.Serialization;
 
-namespace HUGs.Generator.Common.Exceptions
+namespace HUGs.Generator.DDD.Ddd.Exceptions
 {
-    public class DddLoadException : Exception
+    public class DddLoadException : LoadException
     {
         public DddLoadException()
         {

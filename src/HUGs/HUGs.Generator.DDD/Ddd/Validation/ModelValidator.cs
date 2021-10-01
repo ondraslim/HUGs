@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using HUGs.Generator.Common.Diagnostics;
-using HUGs.Generator.Common.Exceptions;
+﻿using HUGs.Generator.Common.Exceptions;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Models;
+using System.Collections.Generic;
+using System.Linq;
+using HUGs.Generator.DDD.Ddd.Exceptions;
 
 namespace HUGs.Generator.DDD.Ddd.Validation
 {
     internal class ModelValidator
     {
-        private readonly DiagnosticReporter diagnosticReporter;
+        private readonly DddDiagnosticsReporter diagnosticReporter;
         private readonly SchemaValidator schemaValidator;
 
-        public ModelValidator(DiagnosticReporter diagnosticReporter, SchemaValidator schemaValidator)
+        public ModelValidator(DddDiagnosticsReporter diagnosticReporter, SchemaValidator schemaValidator)
         {
             this.diagnosticReporter = diagnosticReporter;
             this.schemaValidator = schemaValidator;
@@ -49,7 +49,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             var duplicates = names.GroupBy(n => n).Where(g => g.Count() > 1).Select(d => d.Key).ToArray();
             foreach (var duplicate in duplicates)
             {
-                diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetDuplicatedDddObjectNamesDiagnostic(duplicate));
+                diagnosticReporter.ReportDuplicatedDddObjectNames(duplicate);
             }
 
             return !duplicates.Any();

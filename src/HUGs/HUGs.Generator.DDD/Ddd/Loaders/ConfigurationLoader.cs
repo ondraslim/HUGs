@@ -1,11 +1,12 @@
-﻿using HUGs.Generator.Common.Diagnostics;
-using HUGs.Generator.Common.Exceptions;
+﻿using HUGs.Generator.Common.Exceptions;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using HUGs.Generator.DDD.Ddd.Validation;
 using Microsoft.CodeAnalysis;
 using System;
 using System.IO;
 using System.Linq;
+using HUGs.Generator.DDD.Ddd.Exceptions;
 
 namespace HUGs.Generator.DDD.Ddd.Loaders
 {
@@ -15,7 +16,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
 
         private static void InitializeDependencies(GeneratorExecutionContext context)
         {
-            _configurationValidator = new ConfigurationValidator(new DiagnosticReporter(context));
+            _configurationValidator = new ConfigurationValidator(new DddDiagnosticsReporter(context));
         }
 
         public static DddGeneratorConfiguration LoadConfiguration(GeneratorExecutionContext context)
