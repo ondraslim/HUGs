@@ -1,12 +1,10 @@
 ﻿using FluentAssertions;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using FluentAssertions.Execution;
-using HUGs.Generator.DDD.Ddd.Diagnostics;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -16,6 +14,20 @@ namespace HUGs.Generator.DDD.IntegrationTests
         public override void Setup()
         {
             base.Setup();
+        }
+
+
+        [Test]
+        public void EmptySchema_GeneratorRun_GeneratesCorrectValueObject()
+        {
+            var schema = File.ReadAllText("../../../TestData/Schemas/Empty.dddschema");
+            var driver = SetupGeneratorDriver(schema);
+
+            RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+
+            diagnostics.Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostic.EmptyAdditionalFileWarningId).Should().HaveCount(1);
+            generatedFileTexts.Should().BeEmpty();
         }
 
         [Test]
