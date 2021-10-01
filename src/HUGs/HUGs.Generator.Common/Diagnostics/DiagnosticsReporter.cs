@@ -28,5 +28,11 @@ namespace HUGs.Generator.Common.Diagnostics
             ReportDiagnostic(diagnostic);
         }
 
+        public void ReportGeneratedCodeValidationError(string sourceCodeFileName)
+        {
+            var diagnostic = Diagnostic.Create(Diagnostics.AdditionalFileEmptyWarning, Location.None, DiagnosticSeverity.Error, sourceCodeFileName);
+            ReportDiagnostic(diagnostic);
+        }
+
     }
 }

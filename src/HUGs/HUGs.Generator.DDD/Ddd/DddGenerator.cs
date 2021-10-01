@@ -1,5 +1,4 @@
-﻿using HUGs.Generator.Common.Diagnostics;
-using HUGs.Generator.Common.Exceptions;
+﻿using HUGs.Generator.Common.Exceptions;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Loaders;
 using HUGs.Generator.DDD.Ddd.Models;
@@ -7,8 +6,6 @@ using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System;
-using HUGs.Generator.DDD.Ddd.Exceptions;
-using AdditionalFileParseException = HUGs.Generator.Common.Exceptions.AdditionalFileParseException;
 
 namespace HUGs.Generator.DDD.Ddd
 {
@@ -55,9 +52,10 @@ namespace HUGs.Generator.DDD.Ddd
             DddGeneratorConfiguration configuration)
         {
             var sourceCode = GenerateDddObjectCode(objectSchema, configuration);
-            if (ValidateSourceCodeSyntax(sourceCode))
+            var sourceCodeFileName = $"{objectSchema.Name}{objectSchema.Kind}";
+            if (ValidateSourceCodeSyntax(sourceCode, sourceCodeFileName))
             {
-                context.AddSource($"{objectSchema.Name}{objectSchema.Kind}", sourceCode);
+                context.AddSource(sourceCodeFileName, sourceCode);
             }
         }
 
@@ -71,7 +69,7 @@ namespace HUGs.Generator.DDD.Ddd
                 _ => throw new ArgumentOutOfRangeException($"Kind '{objectSchema.Kind}' is not supported.")
             };
 
-        private static bool ValidateSourceCodeSyntax(string sourceCode)
+        private static bool ValidateSourceCodeSyntax(string sourceCode, string sourceCodeFileName)
         {
             try
             {
@@ -80,7 +78,7 @@ namespace HUGs.Generator.DDD.Ddd
             }
             catch (Exception)
             {
-                // TODO: diagnostics and throw exception
+                _diagnosticsReporter.ReportGeneratedCodeValidationError(sourceCodeFileName);
                 return false;
             }
         }
