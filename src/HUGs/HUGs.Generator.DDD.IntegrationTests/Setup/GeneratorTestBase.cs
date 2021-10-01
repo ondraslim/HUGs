@@ -19,6 +19,15 @@ namespace HUGs.Generator.DDD.IntegrationTests.Setup
             EmptyInputCompilation = CreateCompilation(@"class Program { static void Main() {} }");
         }
 
+        protected Compilation CreateCompilation(string source)
+        {
+            return CSharpCompilation.Create(
+                "compilation",
+                new[] { CSharpSyntaxTree.ParseText(source) },
+                new[] { MetadataReference.CreateFromFile(typeof(Binder).GetTypeInfo().Assembly.Location) },
+                new CSharpCompilationOptions(OutputKind.ConsoleApplication));
+        }
+
         protected static void RunGenerator(
             GeneratorDriver driver,
             Compilation inputCompilation,
@@ -36,23 +45,13 @@ namespace HUGs.Generator.DDD.IntegrationTests.Setup
         
         protected GeneratorDriver SetupGeneratorDriver(IEnumerable<string> schemas, params string[] configurations)
         {
-            var generator = new DDD.Generator();
+            var generator = new Generator();
             var additionalFiles = schemas
-                .Select(s => new TestAdditionalText(text: s, path: "dummy.dddschema"))
+                .Select((s, i) => new TestAdditionalText(text: s, path: $"dummy{i}.dddschema"))
                 .Concat(configurations
-                    .Select(config => new TestAdditionalText(text: config, path: "dummy.dddconfig")));
+                    .Select((config, i) => new TestAdditionalText(text: config, path: $"dummy{i}.dddconfig")));
 
             return CSharpGeneratorDriver.Create(new List<ISourceGenerator> { generator }, additionalFiles);
         }
-
-        protected Compilation CreateCompilation(string source)
-        {
-            return CSharpCompilation.Create(
-                "compilation",
-                new[] { CSharpSyntaxTree.ParseText(source) },
-                new[] { MetadataReference.CreateFromFile(typeof(Binder).GetTypeInfo().Assembly.Location) },
-                new CSharpCompilationOptions(OutputKind.ConsoleApplication));
-        }
-
     }
 }

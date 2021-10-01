@@ -26,7 +26,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == DddDiagnostics.EmptyAdditionalFileWarningId).Should().NotBeEmpty();
+            diagnostics.Where(d => d.Id == DddDiagnostic.EmptyAdditionalFileWarningId).Should().HaveCount(1);
             generatedFileTexts.Should().BeEmpty();
         }
 

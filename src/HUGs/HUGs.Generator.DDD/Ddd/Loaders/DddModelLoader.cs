@@ -2,12 +2,12 @@
 using HUGs.Generator.Common.Exceptions;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Models;
+using HUGs.Generator.DDD.Ddd.Validation;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using HUGs.Generator.DDD.Ddd.Validation;
 
 namespace HUGs.Generator.DDD.Ddd.Loaders
 {
@@ -16,10 +16,15 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
         private static DiagnosticReporter _diagnosticReporter;
         private static SchemaValidator _schemaValidator;
 
+        private static void InitializeDependencies(GeneratorExecutionContext context)
+        {
+            _diagnosticReporter ??= new DiagnosticReporter(context);
+            _schemaValidator ??= new SchemaValidator(_diagnosticReporter);
+        }
+
         public static DddModel LoadDddModel(GeneratorExecutionContext context)
         {
-            _diagnosticReporter = new DiagnosticReporter(context);
-            _schemaValidator = new SchemaValidator(_diagnosticReporter);
+            InitializeDependencies(context);
 
             var schemas = GetDddSchemaFiles(context);
             return LoadDddModel(schemas);
@@ -36,7 +41,15 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
         private static DddModel LoadDddModel(IEnumerable<AdditionalText> dddSchemas)
         {
             var model = BuildDddModel(dddSchemas);
-            // TODO: validate model
+
+            // TODO: move to ModelValidator
+            foreach (var schema in model.Schemas)
+            {
+                if (!_schemaValidator.ValidateSchema(schema))
+                {
+                    throw new DddSchemaValidationException(schema.Name);
+                }
+            }
             return model;
         }
 
@@ -50,7 +63,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
                 if (string.IsNullOrWhiteSpace(schemaText))
                 {
                     _diagnosticReporter.ReportDiagnostic(Diagnostic.Create(
-                        DddDiagnostics.EmptyAdditionalFileWarning,
+                        DddDiagnostic.EmptyAdditionalFileWarning,
                         Location.None,
                         DiagnosticSeverity.Warning,
                         schemaFile.Path));
@@ -60,10 +73,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
                 try
                 {
                     var dddSchema = LoaderCommon.Deserialize<DddObjectSchema>(schemaText);
-                    if (_schemaValidator.ValidateSchema(dddSchema))
-                    {
-                        dddModel.AddObjectSchema(dddSchema);
-                    }
+                    dddModel.AddObjectSchema(dddSchema);
                 }
                 catch (Exception e)
                 {

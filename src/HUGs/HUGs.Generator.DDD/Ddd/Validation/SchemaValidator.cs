@@ -53,7 +53,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
         {
             if (!SyntaxFacts.IsValidIdentifier(schema.Name))
             {
-                diagnosticReporter.ReportDiagnostic(DddDiagnostics.GetInvalidSchemaDiagnostic(schema.Name, nameof(DddObjectSchema.Name), schema.Name));
+                diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetSchemaInvalidValueDiagnostic(schema.Name, nameof(DddObjectSchema.Name), schema.Name));
                 return false;
             }
 
@@ -69,13 +69,14 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             {
                 if (!SyntaxFacts.IsValidIdentifier(property.Name))
                 {
-                    diagnosticReporter.ReportDiagnostic(DddDiagnostics.GetInvalidSchemaDiagnostic(
+                    diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetSchemaInvalidValueDiagnostic(
                         schema.Name, $"{nameof(DddObjectProperty)}_{nameof(DddObjectProperty.Name)}", property.Name));
                     isValid = false;
                 }
+
                 if (!IsValidType(property.TypeWithoutArray))
                 {
-                    diagnosticReporter.ReportDiagnostic(DddDiagnostics.GetInvalidSchemaDiagnostic(
+                    diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetSchemaInvalidValueDiagnostic(
                         schema.Name, $"{nameof(DddObjectProperty)}_{nameof(DddObjectProperty.Type)}", property.Type));
                     isValid = false;
                 }
@@ -93,7 +94,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             {
                 if (!SyntaxFacts.IsValidIdentifier(value.Name))
                 {
-                    diagnosticReporter.ReportDiagnostic(DddDiagnostics.GetInvalidSchemaDiagnostic(
+                    diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetSchemaInvalidValueDiagnostic(
                         schema.Name, $"{nameof(DddObjectValue)}_{nameof(DddObjectValue.Name)}", value.Name));
                     isValid = false;
                 }
@@ -132,7 +133,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
                 var schemaProperty = schema.Properties.FirstOrDefault(p => p.Name == propertyName);
                 if (schemaProperty == default || !SyntaxFacts.IsValidIdentifier(propertyName))
                 {
-                    diagnosticReporter.ReportDiagnostic(DddDiagnostics.GetInvalidSchemaDiagnostic(
+                    diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetSchemaInvalidValueDiagnostic(
                         schema.Name, $"{nameof(DddObjectValue)}_{nameof(DddObjectValue.Properties)}_Key", propertyName));
                     isValid = false;
                 }

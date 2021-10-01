@@ -6,8 +6,7 @@ namespace HUGs.Generator.DDD.Ddd.Models.Configuration
     public class DddGeneratorConfiguration
     {
         public DddObjectTargetNamespaces TargetNamespaces { get; set; } = new();
-        public ICollection<string> AdditionalUsings { get; set; } = new List<string>();
-
+        public string[] AdditionalUsings { get; set; } = { };
 
         public string GetTargetNamespaceForKind(DddObjectKind kind)
             => kind switch

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using FluentAssertions.Execution;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 
@@ -54,11 +55,15 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var driver = SetupGeneratorDriver(schema);
 
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
-
+            
             generatedFileTexts.Should().BeEmpty();
-            diagnostics.Should().HaveCount(1);
+            diagnostics.Should().HaveCount(2);
             diagnostics
-                .Where(d => d.Id == DddDiagnostics.InvalidValueSchemaErrorId)
+                .Where(d => d.Id == DddDiagnostic.SchemaInvalidValueErrorId)
+                .Should().HaveCount(1);
+
+            diagnostics
+                .Where(d => d.Id == DddDiagnostic.SchemaInvalidErrorId)
                 .Should().HaveCount(1);
         }
 
