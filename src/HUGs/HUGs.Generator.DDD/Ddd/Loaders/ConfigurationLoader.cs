@@ -15,7 +15,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
 
         private static void InitializeDependencies(GeneratorExecutionContext context)
         {
-            _configurationValidator ??= new ConfigurationValidator(new DiagnosticReporter(context));
+            _configurationValidator = new ConfigurationValidator(new DiagnosticReporter(context));
         }
 
         public static DddGeneratorConfiguration LoadConfiguration(GeneratorExecutionContext context)

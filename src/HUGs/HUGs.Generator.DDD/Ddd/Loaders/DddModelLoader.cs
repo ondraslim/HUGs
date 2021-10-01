@@ -18,8 +18,8 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
 
         private static void InitializeDependencies(GeneratorExecutionContext context)
         {
-            _diagnosticReporter ??= new DiagnosticReporter(context);
-            _schemaValidator ??= new SchemaValidator(_diagnosticReporter);
+            _diagnosticReporter = new DiagnosticReporter(context);
+            _schemaValidator = new SchemaValidator(_diagnosticReporter);
         }
 
         public static DddModel LoadDddModel(GeneratorExecutionContext context)
