@@ -3,11 +3,11 @@
 
 
 ### New Rules
-HUGSDDDAF01 | DddGenerator | Error | DddDiagnostic
-HUGSDDDAF02 | DddGenerator | Error | DddDiagnostic
-HUGSDDDAF03 | DddGenerator | Warning | DddDiagnostic
-HUGSDDDAF04 | DddGenerator | Error | DddDiagnostic
-HUGSDDDAF05 | DddGenerator | Error | DddDiagnostic
-HUGSDDDAF06 | DddGenerator | Error | DddDiagnostic
-HUGSDDDAF07 | DddGenerator | Error | DddDiagnostic
-HUGSDDDAF08 | DddGenerator | Error | DddDiagnostic
+HUGSDDD01 | DddGenerator | Error | DddDiagnostic
+HUGSDDD02 | DddGenerator | Error | DddDiagnostic
+HUGSDDD03 | DddGenerator | Error | DddDiagnostic
+HUGSDDD04 | DddGenerator | Error | DddDiagnostic
+HUGSDDD05 | DddGenerator | Error | DddDiagnostic
+HUGSDDD06 | DddGenerator | Error | DddDiagnostic
+HUGSDDD07 | DddGenerator | Error | DddDiagnostic
+HUGSDDD08 | DddGenerator | Error | DddDiagnostic

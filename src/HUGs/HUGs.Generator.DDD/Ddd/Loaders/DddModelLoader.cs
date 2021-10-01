@@ -1,6 +1,6 @@
-﻿using HUGs.Generator.Common.Diagnostics;
-using HUGs.Generator.Common.Exceptions;
+﻿using HUGs.Generator.Common.Exceptions;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
+using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Validation;
 using Microsoft.CodeAnalysis;
@@ -13,13 +13,13 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
 {
     public class DddModelLoader
     {
-        private static DiagnosticReporter _diagnosticReporter;
-        private static SchemaValidator _schemaValidator;
+        private static DddDiagnosticsReporter _diagnosticsReporter;
+        private static ModelValidator _modelValidator;
 
         private static void InitializeDependencies(GeneratorExecutionContext context)
         {
-            _diagnosticReporter = new DiagnosticReporter(context);
-            _schemaValidator = new SchemaValidator(_diagnosticReporter);
+            _diagnosticsReporter = new DddDiagnosticsReporter(context);
+            _modelValidator = new ModelValidator(_diagnosticsReporter, new SchemaValidator(_diagnosticsReporter));
         }
 
         public static DddModel LoadDddModel(GeneratorExecutionContext context)
@@ -41,14 +41,9 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
         private static DddModel LoadDddModel(IEnumerable<AdditionalText> dddSchemas)
         {
             var model = BuildDddModel(dddSchemas);
-
-            // TODO: move to ModelValidator
-            foreach (var schema in model.Schemas)
+            if (!_modelValidator.ValidateModel(model))
             {
-                if (!_schemaValidator.ValidateSchema(schema))
-                {
-                    throw new DddSchemaValidationException(schema.Name);
-                }
+                throw new DddModelValidationException();
             }
             return model;
         }
@@ -62,11 +57,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
 
                 if (string.IsNullOrWhiteSpace(schemaText))
                 {
-                    _diagnosticReporter.ReportDiagnostic(Diagnostic.Create(
-                        DddDiagnostic.EmptyAdditionalFileWarning,
-                        Location.None,
-                        DiagnosticSeverity.Warning,
-                        schemaFile.Path));
+                    _diagnosticsReporter.ReportEmptyAdditionalFile(schemaFile.Path);;
                     continue;
                 }
 
