@@ -27,6 +27,7 @@ namespace HUGs.Generator.DDD.Ddd
             {
                 var configuration = ConfigurationLoader.LoadConfiguration(context);
                 var dddModel = DddModelLoader.LoadDddModel(context);
+
                 GenerateDddModelSource(context, configuration, dddModel);
             }
             catch (DddLoadException e)
