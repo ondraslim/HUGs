@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
 using System.Text;
-using FluentAssertions.Execution;
-using HUGs.Generator.DDD.Ddd.Diagnostics;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -15,6 +14,20 @@ namespace HUGs.Generator.DDD.IntegrationTests
         public override void Setup()
         {
             base.Setup();
+        }
+
+
+        [Test]
+        public void EmptySchema_GeneratorRun_GeneratesCorrectValueObject()
+        {
+            var schema = File.ReadAllText("../../../TestData/Schemas/Empty.dddschema");
+            var driver = SetupGeneratorDriver(schema);
+
+            RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+
+            diagnostics.Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostic.EmptyAdditionalFileWarningId).Should().HaveCount(1);
+            generatedFileTexts.Should().BeEmpty();
         }
 
         [Test]
@@ -50,19 +63,48 @@ namespace HUGs.Generator.DDD.IntegrationTests
             bool useProperties = false, string propertyName = null, string propertyType = null,
             bool useValues = false, string valueName = null, string valuePropertyName = null, string valuePropertyValue = null)
         {
-            var schema = GetInvalidSchema(kind, name, useProperties, propertyName, propertyType, useValues, valueName, valuePropertyName, valuePropertyValue);
+            var schema = GetSchema(kind, name, useProperties, propertyName, propertyType, useValues, valueName, valuePropertyName, valuePropertyValue);
             var driver = SetupGeneratorDriver(schema);
 
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
-
+            
             generatedFileTexts.Should().BeEmpty();
-            diagnostics.Should().HaveCount(1);
-            diagnostics
-                .Where(d => d.Id == DddDiagnostics.InvalidValueSchemaErrorId)
-                .Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostic.SchemaInvalidValueErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostic.SchemaInvalidErrorId).Should().HaveCount(1);
+            diagnostics.Should().HaveCount(2);
         }
 
-        private static string GetInvalidSchema(
+        [Test]
+        [TestCase(1, true, ".")]
+        [TestCase(3, true, ".", ".&.", ".Nop.")]
+        [TestCase(1, true, "ValidValueObjectNs", "\\{")]
+        [TestCase(1, true, "ValidValueObjectNs", "ValidEntityNs", "/")]
+        [TestCase(1, true, "ValidValueObjectNs", "ValidEntityNs", "ValidAggregateNs", "+InvalidEnumNs")]
+        [TestCase(1, true, "ValidValueObjectNs", "ValidEntityNs", "ValidAggregateNs", "ValidEnumNs", true, new[] { "$" })]
+        [TestCase(1, true, "ValidValueObjectNs", "ValidEntityNs", "ValidAggregateNs", "ValidEnumNs", true, new[] { "OneValid", "Another..Invalid" })]
+        [TestCase(1, true, "ValidValueObjectNs", "ValidEntityNs", "ValidAggregateNs", "ValidEnumNs", true, new[] { "OneValid", "/" })]
+        [TestCase(1, false, "", "", "", "", true, new[] { "?Invalid" })]
+        [TestCase(1, false, "", "", "", "", true, new[] { "With@Invalid@Separators" })]
+        [TestCase(1, false, "", "", "", "", true, new[] { "With&Invalid&Separators" })]
+        public void GivenInvalidConfiguration_DiagnosticIsReported(int expectedValueErrorCount,
+            bool useNamespaces, string valueObjectNamespace = null, string entityNamespace = null, string aggregateNamespace = null, string enumNamespace = null,
+            bool useUsings = false, string[] additionalUsings = null)
+        {
+            var schema = GetSchema("ValueObject", "EmptyTestValueObject");
+            var configuration = GetConfiguration(useNamespaces, valueObjectNamespace, entityNamespace,
+                aggregateNamespace, enumNamespace, useUsings, additionalUsings);
+            
+            var driver = SetupGeneratorDriver(schema, configuration);
+            
+            RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+
+            generatedFileTexts.Should().BeEmpty();
+            diagnostics.Where(d => d.Id == DddDiagnostic.ConfigurationInvalidValueErrorId).Should().HaveCount(expectedValueErrorCount);
+            diagnostics.Where(d => d.Id == DddDiagnostic.ConfigurationInvalidErrorId).Should().HaveCount(1);
+            diagnostics.Should().HaveCount(expectedValueErrorCount + 1);
+        }
+
+        private static string GetSchema(
             string kind, string name,
             bool useProperties = false, string propertyName = null, string propertyType = null,
             bool useValues = false, string valueName = null, string valuePropertyName = null, string valuePropertyValue = null)
@@ -82,10 +124,39 @@ namespace HUGs.Generator.DDD.IntegrationTests
             {
                 sb.AppendLine("Values:");
                 sb.AppendLine($"  - Name: {valueName}");
-                sb.AppendLine($"    Properties:");
+                sb.AppendLine("    Properties:");
                 sb.AppendLine($"       {valuePropertyName}: {valuePropertyValue}");
             }
 
+            return sb.ToString();
+        }
+
+        private static string GetConfiguration(
+            bool useNamespace = false,
+            string valueObjectNamespace = null, string entityNamespace = null, string aggregateNamespace = null, string enumNamespace = null,
+            bool useUsings = false, string[] additionalUsings = null)
+        {
+            var sb = new StringBuilder();
+            if (useNamespace)
+            {
+                sb.AppendLine("TargetNamespaces:");
+                if (valueObjectNamespace is not null) sb.AppendLine($"  ValueObject: {valueObjectNamespace}");
+                if (entityNamespace is not null) sb.AppendLine($"  Entity: {entityNamespace}");
+                if (aggregateNamespace is not null) sb.AppendLine($"  Aggregate: {aggregateNamespace}");
+                if (enumNamespace is not null) sb.AppendLine($"  Enumeration: {enumNamespace}");
+            }
+
+            if (useUsings)
+            {
+                sb.AppendLine("AdditionalUsings:");
+                if (additionalUsings != null)
+                {
+                    foreach (var additionalUsing in additionalUsings)
+                    {
+                        sb.AppendLine($"  - {additionalUsing}");
+                    }
+                }
+            }
             return sb.ToString();
         }
     }

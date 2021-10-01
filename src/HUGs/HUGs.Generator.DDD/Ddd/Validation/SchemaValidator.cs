@@ -1,11 +1,10 @@
 ﻿using HUGs.Generator.Common.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Models;
+using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace HUGs.Generator.DDD.Ddd.Validation
 {
@@ -32,29 +31,29 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 
         private bool ValidateValueObject(DddObjectSchema schema)
         {
-            return ValidateSchemaName(schema) && ValidateProperties(schema);
+            return ValidateSchemaName(schema) & ValidateProperties(schema);
         }
 
         private bool ValidateEntity(DddObjectSchema schema)
         {
-            return ValidateSchemaName(schema) && ValidateProperties(schema);
+            return ValidateSchemaName(schema) & ValidateProperties(schema);
         }
 
         private bool ValidateAggregate(DddObjectSchema schema)
         {
-            return ValidateSchemaName(schema) && ValidateProperties(schema);
+            return ValidateSchemaName(schema) & ValidateProperties(schema);
         }
 
         private bool ValidateEnumeration(DddObjectSchema schema)
         {
-            return ValidateSchemaName(schema) && ValidateProperties(schema) && ValidateValues(schema);
+            return ValidateSchemaName(schema) & ValidateProperties(schema) & ValidateValues(schema);
         }
 
         private bool ValidateSchemaName(DddObjectSchema schema)
         {
             if (!SyntaxFacts.IsValidIdentifier(schema.Name))
             {
-                diagnosticReporter.ReportDiagnostic(DddDiagnostics.GetInvalidSchemaDiagnostic(schema.Name, nameof(DddObjectSchema.Name), schema.Name));
+                diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetSchemaInvalidValueDiagnostic(schema.Name, nameof(DddObjectSchema.Name), schema.Name));
                 return false;
             }
 
@@ -70,13 +69,14 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             {
                 if (!SyntaxFacts.IsValidIdentifier(property.Name))
                 {
-                    diagnosticReporter.ReportDiagnostic(DddDiagnostics.GetInvalidSchemaDiagnostic(
+                    diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetSchemaInvalidValueDiagnostic(
                         schema.Name, $"{nameof(DddObjectProperty)}_{nameof(DddObjectProperty.Name)}", property.Name));
                     isValid = false;
                 }
+
                 if (!IsValidType(property.TypeWithoutArray))
                 {
-                    diagnosticReporter.ReportDiagnostic(DddDiagnostics.GetInvalidSchemaDiagnostic(
+                    diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetSchemaInvalidValueDiagnostic(
                         schema.Name, $"{nameof(DddObjectProperty)}_{nameof(DddObjectProperty.Type)}", property.Type));
                     isValid = false;
                 }
@@ -94,7 +94,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             {
                 if (!SyntaxFacts.IsValidIdentifier(value.Name))
                 {
-                    diagnosticReporter.ReportDiagnostic(DddDiagnostics.GetInvalidSchemaDiagnostic(
+                    diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetSchemaInvalidValueDiagnostic(
                         schema.Name, $"{nameof(DddObjectValue)}_{nameof(DddObjectValue.Name)}", value.Name));
                     isValid = false;
                 }
@@ -133,7 +133,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
                 var schemaProperty = schema.Properties.FirstOrDefault(p => p.Name == propertyName);
                 if (schemaProperty == default || !SyntaxFacts.IsValidIdentifier(propertyName))
                 {
-                    diagnosticReporter.ReportDiagnostic(DddDiagnostics.GetInvalidSchemaDiagnostic(
+                    diagnosticReporter.ReportDiagnostic(DddDiagnostic.GetSchemaInvalidValueDiagnostic(
                         schema.Name, $"{nameof(DddObjectValue)}_{nameof(DddObjectValue.Properties)}_Key", propertyName));
                     isValid = false;
                 }

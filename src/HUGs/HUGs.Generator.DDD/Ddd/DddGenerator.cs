@@ -14,13 +14,9 @@ namespace HUGs.Generator.DDD.Ddd
     {
         private static DiagnosticReporter _diagnosticReporter;
 
-        public static DddModel DddModel { get; private set; }
-        public static DddGeneratorConfiguration GeneratorConfiguration { get; private set; }
-
-
         public static void Initialize(GeneratorInitializationContext context)
         {
-            GeneratorConfiguration = new DddGeneratorConfiguration();
+            // not needed
         }
 
         public static void Execute(GeneratorExecutionContext context)
@@ -29,54 +25,47 @@ namespace HUGs.Generator.DDD.Ddd
 
             try
             {
-                if (TryLoad(context))
-                {
-                    GenerateDddModelSource(context);
-                }
+                var configuration = ConfigurationLoader.LoadConfiguration(context);
+                var dddModel = DddModelLoader.LoadDddModel(context);
+
+                GenerateDddModelSource(context, configuration, dddModel);
             }
             catch (DddLoadException e)
             {
-                _diagnosticReporter.ReportDiagnostic(DddDiagnostics.ExceptionToDiagnosticConverter(e));
+                _diagnosticReporter.ReportDiagnostic(DddDiagnostic.ExceptionToDiagnosticConverter(e));
             }
         }
 
-        private static bool TryLoad(GeneratorExecutionContext context)
+        private static void GenerateDddModelSource(
+            GeneratorExecutionContext context, 
+            DddGeneratorConfiguration configuration,
+            DddModel dddModel)
         {
-            var configuration = ConfigurationLoader.LoadConfiguration(context);
-            if (configuration is not null)
+            foreach (var objectSchema in dddModel.Schemas)
             {
-                GeneratorConfiguration = configuration;
-            }
-
-            DddModel = DddModelLoader.LoadDddModel(context);
-
-            return true;
-        }
-
-        private static void GenerateDddModelSource(GeneratorExecutionContext context)
-        {
-            foreach (var objectSchema in DddModel.ObjectSchemas)
-            {
-                AddDddObjectSchemaSource(context, objectSchema);
+                AddDddObjectSchemaSource(context, objectSchema, configuration);
             }
         }
 
-        private static void AddDddObjectSchemaSource(GeneratorExecutionContext context, DddObjectSchema objectSchema)
+        private static void AddDddObjectSchemaSource(
+            GeneratorExecutionContext context,
+            DddObjectSchema objectSchema,
+            DddGeneratorConfiguration configuration)
         {
-            var sourceCode = GenerateDddObjectCode(objectSchema);
+            var sourceCode = GenerateDddObjectCode(objectSchema, configuration);
             if (ValidateSourceCodeSyntax(sourceCode))
             {
                 context.AddSource($"{objectSchema.Name}{objectSchema.Kind}", sourceCode);
             }
         }
 
-        private static string GenerateDddObjectCode(DddObjectSchema objectSchema)
+        private static string GenerateDddObjectCode(DddObjectSchema objectSchema, DddGeneratorConfiguration configuration)
             => objectSchema.Kind switch
             {
-                DddObjectKind.ValueObject => ValueObjectGenerator.GenerateValueObjectCode(objectSchema, GeneratorConfiguration),
-                DddObjectKind.Entity => IdentifiableGenerator.GenerateEntityCode(objectSchema, GeneratorConfiguration),
-                DddObjectKind.Aggregate => IdentifiableGenerator.GenerateAggregateCode(objectSchema, GeneratorConfiguration),
-                DddObjectKind.Enumeration => EnumerationGenerator.GenerateEnumerationCode(objectSchema, GeneratorConfiguration),
+                DddObjectKind.ValueObject => ValueObjectGenerator.GenerateValueObjectCode(objectSchema, configuration),
+                DddObjectKind.Entity => IdentifiableGenerator.GenerateEntityCode(objectSchema, configuration),
+                DddObjectKind.Aggregate => IdentifiableGenerator.GenerateAggregateCode(objectSchema, configuration),
+                DddObjectKind.Enumeration => EnumerationGenerator.GenerateEnumerationCode(objectSchema, configuration),
                 _ => throw new ArgumentOutOfRangeException($"Kind '{objectSchema.Kind}' is not supported.")
             };
 
@@ -89,7 +78,7 @@ namespace HUGs.Generator.DDD.Ddd
             }
             catch (Exception)
             {
-                // TODO: diagnostics
+                // TODO: diagnostics and throw exception
                 return false;
             }
         }

@@ -2,45 +2,25 @@
 {
     public class DddObjectTargetNamespaces
     {
-        private const string DefaultValueObjectNamespace =  "HUGs.DDD.Generated.ValueObject";
-        private const string DefaultEntityNamespace = "HUGs.DDD.Generated.Entity";
-        private const string DefaultAggregateNamespace = "HUGs.DDD.Generated.Aggregate";
-        private const string DefaultEnumerationNamespace = "HUGs.DDD.Generated.Enumeration";
+        public const string DefaultValueObjectNamespace = "HUGs.DDD.Generated.ValueObject";
+        public const string DefaultEntityNamespace = "HUGs.DDD.Generated.Entity";
+        public const string DefaultAggregateNamespace = "HUGs.DDD.Generated.Aggregate";
+        public const string DefaultEnumerationNamespace = "HUGs.DDD.Generated.Enumeration";
 
-        private string valueObject;
-        private string entity;
-        private string aggregate;
-        private string enumeration;
-
-        public string ValueObject
+        public DddObjectTargetNamespaces()
         {
-            get => GetNamespace(valueObject, DefaultValueObjectNamespace);
-            set => valueObject = value;
+            ValueObject = DefaultValueObjectNamespace;
+            Entity = DefaultEntityNamespace;
+            Aggregate = DefaultAggregateNamespace;
+            Enumeration = DefaultEnumerationNamespace;
         }
 
-        public string Entity
-        {
-            get => GetNamespace(entity, DefaultEntityNamespace);
-            set => entity = value;
-        }
+        public string ValueObject { get; set; }
 
-        public string Aggregate
-        {
-            get => GetNamespace(aggregate, DefaultAggregateNamespace);
-            set => aggregate = value;
-        }
+        public string Entity { get; set; }
 
-        public string Enumeration
-        {
-            get => GetNamespace(enumeration, DefaultEnumerationNamespace);
-            set => enumeration = value;
-        }
+        public string Aggregate { get; set; }
 
-        private static string GetNamespace(string configuredNamespace, string defaultNamespace)
-        {
-            return string.IsNullOrWhiteSpace(configuredNamespace) 
-                ? defaultNamespace
-                : configuredNamespace;
-        }
+        public string Enumeration { get; set; }
     }
 }

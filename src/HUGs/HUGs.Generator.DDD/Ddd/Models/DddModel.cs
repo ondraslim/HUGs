@@ -5,16 +5,16 @@ namespace HUGs.Generator.DDD.Ddd.Models
 {
     public class DddModel
     {
-        public IList<DddObjectSchema> ObjectSchemas { get; } = new List<DddObjectSchema>();
+        public IList<DddObjectSchema> Schemas { get; } = new List<DddObjectSchema>();
         
-        public IEnumerable<DddObjectSchema> ValueObjects => ObjectSchemas.Where(s => s.Kind == DddObjectKind.ValueObject);
-        public IEnumerable<DddObjectSchema> Entities => ObjectSchemas.Where(s => s.Kind == DddObjectKind.Entity);
-        public IEnumerable<DddObjectSchema> Aggregates => ObjectSchemas.Where(s => s.Kind == DddObjectKind.Aggregate);
-        public IEnumerable<DddObjectSchema> Enumerations => ObjectSchemas.Where(s => s.Kind == DddObjectKind.Enumeration);
+        public IEnumerable<DddObjectSchema> ValueObjects => Schemas.Where(s => s.Kind == DddObjectKind.ValueObject);
+        public IEnumerable<DddObjectSchema> Entities => Schemas.Where(s => s.Kind == DddObjectKind.Entity);
+        public IEnumerable<DddObjectSchema> Aggregates => Schemas.Where(s => s.Kind == DddObjectKind.Aggregate);
+        public IEnumerable<DddObjectSchema> Enumerations => Schemas.Where(s => s.Kind == DddObjectKind.Enumeration);
 
         public void AddObjectSchema(DddObjectSchema objectSchema)
         {
-            ObjectSchemas.Add(objectSchema);
+            Schemas.Add(objectSchema);
         }
     }
 }

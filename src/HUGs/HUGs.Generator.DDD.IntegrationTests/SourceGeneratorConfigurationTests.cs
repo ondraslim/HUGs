@@ -104,7 +104,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == DddDiagnostics.MultipleConfigurationsErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostic.MultipleConfigurationsErrorId).Should().HaveCount(1);
             generatedFileTexts.Should().BeEmpty();
         }
 
@@ -120,7 +120,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == DddDiagnostics.AdditionalFileParseErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id == DddDiagnostic.AdditionalFileParseErrorId).Should().HaveCount(1);
             generatedFileTexts.Should().BeEmpty();
         }
     }

@@ -1,16 +1,19 @@
 ﻿using HUGs.Generator.Common.Exceptions;
 using Microsoft.CodeAnalysis;
-using System;
 using System.Linq;
 
 namespace HUGs.Generator.DDD.Ddd.Diagnostics
 {
-    public static class DddDiagnostics
+    public static class DddDiagnostic
     {
         public const string MultipleConfigurationsErrorId = "HUGSDDDAF01";
         public const string AdditionalFileParseErrorId = "HUGSDDDAF02";
         public const string EmptyAdditionalFileWarningId = "HUGSDDDAF03";
-        public const string InvalidValueSchemaErrorId = "HUGSDDDAF04";
+        public const string SchemaInvalidValueErrorId = "HUGSDDDAF04";
+        public const string ConfigurationInvalidValueErrorId = "HUGSDDDAF05";
+        public const string SchemaInvalidErrorId = "HUGSDDDAF06";
+        public const string ConfigurationInvalidErrorId = "HUGSDDDAF07";
+        public const string LoadErrorId = "HUGSDDDAF08";
 
         internal static readonly DiagnosticDescriptor MultipleConfigurationsError = new(
             id: MultipleConfigurationsErrorId,
@@ -37,34 +40,97 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             isEnabledByDefault: true);
 
         internal static readonly DiagnosticDescriptor InvalidValueSchemaError = new(
-            id: InvalidValueSchemaErrorId,
+            id: SchemaInvalidValueErrorId,
             title: "Invalid schema value",
             messageFormat: "Schema contains invalid value '{0}' for property '{1}' in schema '{2}'",
             category: "DddGenerator",
             DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
-        public static Diagnostic ExceptionToDiagnosticConverter(Exception e) => e switch
+
+        internal static readonly DiagnosticDescriptor InvalidSchemaError = new(
+            id: SchemaInvalidErrorId,
+            title: "Invalid Schema",
+            messageFormat: "Schema '{0}' is not valid, DDD generator failed",
+            category: "DddGenerator",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static readonly DiagnosticDescriptor ConfigurationInvalidValueError = new(
+            id: ConfigurationInvalidValueErrorId,
+            title: "Invalid configuration value",
+            messageFormat: "Configuration contains invalid value '{0}' for property '{1}' in configuration",
+            category: "DddGenerator",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static readonly DiagnosticDescriptor InvalidConfigurationError = new(
+            id: ConfigurationInvalidErrorId,
+            title: "Invalid configuration",
+            messageFormat: "Configuration '{0}' is not valid, DDD generator failed",
+            category: "DddGenerator",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static readonly DiagnosticDescriptor LoadError = new(
+            id: LoadErrorId,
+            title: "DDD Generator load failed",
+            messageFormat: "DDD generator failed to load additional files",
+            category: "DddGenerator",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        public static Diagnostic ExceptionToDiagnosticConverter(DddLoadException e) => e switch
         {
-            AdditionalFileParseException afp => GetAdditionalFileParseExceptionToDiagnostic(afp),
-            DddMultipleConfigurationsFoundException dmcf => GetMultipleConfigurationsExceptionToDiagnostic(dmcf),
-            _ => throw new ArgumentOutOfRangeException(nameof(e), e, "Cannot convert exception to diagnostic.")
+            AdditionalFileParseException ex => GetAdditionalFileParseDiagnostic(ex),
+            DddMultipleConfigurationsFoundException ex => GetMultipleConfigurationsDiagnostic(ex),
+            DddConfigurationValidationException ex => GetInvalidConfigurationDiagnostic(ex),
+            DddSchemaValidationException ex => GetInvalidSchemaDiagnostic(ex),
+            DddLoadException ex => GetLoadErrorDiagnostic(ex),
         };
 
-        private static Diagnostic GetAdditionalFileParseExceptionToDiagnostic(AdditionalFileParseException e)
+        #region Diagnostic from Exception
+
+        private static Diagnostic GetAdditionalFileParseDiagnostic(AdditionalFileParseException e)
         {
             return Diagnostic.Create(AdditionalFileParseError, Location.None, e.FilePath, e.InnerException?.Message ?? e.Message);
         }
 
-        private static Diagnostic GetMultipleConfigurationsExceptionToDiagnostic(DddMultipleConfigurationsFoundException e)
+        private static Diagnostic GetMultipleConfigurationsDiagnostic(DddMultipleConfigurationsFoundException e)
         {
             var foundFileNames = string.Join(", ", e.Files.Select(c => $"'{c}'"));
             return Diagnostic.Create(MultipleConfigurationsError, Location.None, foundFileNames);
         }
 
-        internal static Diagnostic GetInvalidSchemaDiagnostic(string value, string property, string schema)
+        private static Diagnostic GetInvalidConfigurationDiagnostic(DddConfigurationValidationException e)
+        {
+            return Diagnostic.Create(InvalidConfigurationError, Location.None, e.ConfigurationFile);
+        }
+
+        private static Diagnostic GetInvalidSchemaDiagnostic(DddSchemaValidationException e)
+        {
+            return Diagnostic.Create(InvalidSchemaError, Location.None, e.SchemaFile);
+        }
+
+        private static Diagnostic GetLoadErrorDiagnostic(DddLoadException _)
+        {
+            return Diagnostic.Create(LoadError, Location.None);
+        }
+
+        #endregion
+
+        #region Other diagnostic
+
+        internal static Diagnostic GetSchemaInvalidValueDiagnostic(string value, string property, string schema)
         {
             return Diagnostic.Create(InvalidValueSchemaError, Location.None, value, property, schema);
         }
+
+        internal static Diagnostic GetConfigurationInvalidValueDiagnostic(string value, string property)
+        {
+            return Diagnostic.Create(ConfigurationInvalidValueError, Location.None, value, property);
+        }
+
+        #endregion
     }
 }
