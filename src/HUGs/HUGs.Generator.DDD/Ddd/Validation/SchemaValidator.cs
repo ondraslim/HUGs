@@ -1,11 +1,10 @@
 ﻿using HUGs.Generator.Common.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Models;
+using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace HUGs.Generator.DDD.Ddd.Validation
 {
@@ -32,22 +31,22 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 
         private bool ValidateValueObject(DddObjectSchema schema)
         {
-            return ValidateSchemaName(schema) && ValidateProperties(schema);
+            return ValidateSchemaName(schema) & ValidateProperties(schema);
         }
 
         private bool ValidateEntity(DddObjectSchema schema)
         {
-            return ValidateSchemaName(schema) && ValidateProperties(schema);
+            return ValidateSchemaName(schema) & ValidateProperties(schema);
         }
 
         private bool ValidateAggregate(DddObjectSchema schema)
         {
-            return ValidateSchemaName(schema) && ValidateProperties(schema);
+            return ValidateSchemaName(schema) & ValidateProperties(schema);
         }
 
         private bool ValidateEnumeration(DddObjectSchema schema)
         {
-            return ValidateSchemaName(schema) && ValidateProperties(schema) && ValidateValues(schema);
+            return ValidateSchemaName(schema) & ValidateProperties(schema) & ValidateValues(schema);
         }
 
         private bool ValidateSchemaName(DddObjectSchema schema)
