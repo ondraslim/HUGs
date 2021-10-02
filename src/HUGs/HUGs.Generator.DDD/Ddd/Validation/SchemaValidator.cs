@@ -64,6 +64,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             var isValid = true;
             schema.Properties ??= new DddObjectProperty[] { };
 
+            // TODO: check property names are unique
             foreach (var property in schema.Properties)
             {
                 if (!SyntaxFacts.IsValidIdentifier(property.Name))
@@ -109,6 +110,14 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 
         private static bool IsValidType(string type)
         {
+            // decimal, double, float
+            // byte, sbyte, short, ushort, int, uint, long, ulong
+            // bool
+            // string, char
+            // guid
+            // Date, Time, DateTime, TimeSpan
+
+            // anything defined in DddModel
             try
             {
                 var typeSyntax = SyntaxFactory.ParseTypeName(type);

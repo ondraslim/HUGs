@@ -57,7 +57,7 @@ namespace HUGs.Generator.DDD.Ddd
                 .AddClassBaseTypes($"EntityId<{objectName}>");
 
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
-            var parameters = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "value") };
+            var parameters = new[] { RoslynSyntaxHelper.CreateParameterSyntax("Guid", "value") };
             classBuilder.AddConstructor(accessModifiers, className, parameters, baseCtorParams: parameters);
 
             return classBuilder.Build();
@@ -97,7 +97,7 @@ namespace HUGs.Generator.DDD.Ddd
         private static MethodDeclarationSyntax BuildOnInitializedMethod()
         {
             var methodBuilder = new MethodBuilder()
-                .SetAccessModifiers(SyntaxKind.PrivateKeyword, SyntaxKind.PartialKeyword)
+                .SetAccessModifiers(SyntaxKind.PartialKeyword)
                 .SetReturnType("void")
                 .SetName("OnInitialized");
 

@@ -7,7 +7,7 @@ namespace HUGs.DDD.Generated.Aggregate
 {
     public class PropertiesAggregateId : EntityId<PropertiesAggregate>
     {
-        public PropertiesAggregateId(string value): base(value)
+        public PropertiesAggregateId(Guid value): base(value)
         {
         }
     }
@@ -26,6 +26,6 @@ namespace HUGs.DDD.Generated.Aggregate
             OnInitialized();
         }
 
-        private partial void OnInitialized();
+        partial void OnInitialized();
     }
 }

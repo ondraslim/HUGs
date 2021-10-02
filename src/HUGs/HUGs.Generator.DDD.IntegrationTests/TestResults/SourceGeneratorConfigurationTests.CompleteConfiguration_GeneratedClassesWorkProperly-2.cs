@@ -9,7 +9,7 @@ namespace My.Desired.Namespace.Entities
 {
     public class SimpleEntityId : EntityId<SimpleEntity>
     {
-        public SimpleEntityId(string value): base(value)
+        public SimpleEntityId(Guid value): base(value)
         {
         }
     }
@@ -25,6 +25,6 @@ namespace My.Desired.Namespace.Entities
             OnInitialized();
         }
 
-        private partial void OnInitialized();
+        partial void OnInitialized();
     }
 }

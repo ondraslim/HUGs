@@ -7,7 +7,7 @@ namespace HUGs.DDD.Generated.Entity
 {
     public class ArrayPropertyEntityId : EntityId<ArrayPropertyEntity>
     {
-        public ArrayPropertyEntityId(string value): base(value)
+        public ArrayPropertyEntityId(Guid value): base(value)
         {
         }
     }
@@ -29,6 +29,6 @@ namespace HUGs.DDD.Generated.Entity
             OnInitialized();
         }
 
-        private partial void OnInitialized();
+        partial void OnInitialized();
     }
 }

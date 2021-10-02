@@ -62,11 +62,13 @@ namespace HUGs.Generator.Common
             return this;
         }
 
+        #region Add property methods
+
         public ClassBuilder AddFullProperty(string type, string name, SyntaxKind[] accessModifiers)
         {
             var accessors = new[] {
                 SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
-                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)), 
+                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
                 SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
                     .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
             };
@@ -100,8 +102,8 @@ namespace HUGs.Generator.Common
                 SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
                     .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
                     .WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PrivateKeyword)))
-            }; 
-            
+            };
+
             var propertyDeclaration = CreatePropertyDeclaration(type, name, accessModifiers, accessors);
             properties.Add(propertyDeclaration);
 
@@ -139,6 +141,8 @@ namespace HUGs.Generator.Common
             return propertyDeclaration;
         }
 
+        #endregion
+
         public ClassBuilder AddConstructor(
             SyntaxKind[] accessModifiers,
             string identifierText,
@@ -170,13 +174,16 @@ namespace HUGs.Generator.Common
             ConstructorDeclarationSyntax ctor,
             IEnumerable<ParameterSyntax> baseCtorParams)
         {
-            ctor = ctor.WithInitializer(
-                SyntaxFactory.ConstructorInitializer(SyntaxKind.BaseConstructorInitializer)
-                    .AddArgumentListArguments(
-                        baseCtorParams
-                            .Select(p => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(p.Identifier)))
-                            .ToArray()
-                    ));
+            ctor = ctor
+                .WithInitializer(
+                    SyntaxFactory
+                        .ConstructorInitializer(SyntaxKind.BaseConstructorInitializer)
+                        .AddArgumentListArguments(
+                            baseCtorParams.Select(p => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(p.Identifier))).ToArray())
+                );
+
+            // TODO: add white space or new line
+            /*.WithLeadingTrivia(SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, " "))*/
 
             return ctor;
         }
@@ -189,6 +196,7 @@ namespace HUGs.Generator.Common
 
         public ClassDeclarationSyntax Build()
         {
+            // TODO: add empty line between fields and properties
             classDeclaration = classDeclaration
                 .AddMembers(fields.ToArray())
                 .AddMembers(properties.ToArray())

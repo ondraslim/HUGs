@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace HUGs.Generator.DDD.BaseModels
 {
-    public class EntityId<T> : ValueObject, IId<string>
+    public class EntityId<T> : ValueObject, IId<Guid>
     {
-        public string Value { get; private set; }
+        public Guid Value { get; private set; }
 
-        public EntityId(string value)
+        public EntityId(Guid value)
         {
             Value = value;
         }

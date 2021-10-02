@@ -14,7 +14,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\HUGs.Generator.Common\HUGs.Generator.Common.csproj" />
-		<ProjectReference Include="..\HUGs.Generator.DDD.BaseModels\HUGs.Generator.DDD.BaseModels.csproj" />
+		<ProjectReference Include="..\HUGs.Generator.DDD.BaseModels\HUGs.Generator.DDD.Framework.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>

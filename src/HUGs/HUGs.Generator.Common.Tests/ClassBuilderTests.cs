@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using CheckTestOutput;
+﻿using CheckTestOutput;
 using HUGs.Generator.Common.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -184,7 +183,6 @@ namespace HUGs.Generator.Common.Tests
             var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
-            // TODO: weird spacing between ctor and base ctor
             check.CheckString(actualClass, fileExtension: "cs");
         }
 
@@ -235,7 +233,6 @@ namespace HUGs.Generator.Common.Tests
             var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
-            // TODO: weird spacing between AmountProperty - TextProperty
             check.CheckString(actualClass, fileExtension: "cs");
         }
     }

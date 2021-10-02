@@ -52,7 +52,6 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             return Diagnostic.Create(DddDiagnostics.DddModelInvalidError, Location.None);
         }
 
-
         private static Diagnostic GetLoadDiagnostic(LoadException _)
         {
             return Diagnostic.Create(DddDiagnostics.LoadError, Location.None);

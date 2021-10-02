@@ -7,7 +7,7 @@ namespace HUGs.DDD.Generated.Entity
 {
     public class SimpleEntityId : EntityId<SimpleEntity>
     {
-        public SimpleEntityId(string value): base(value)
+        public SimpleEntityId(Guid value): base(value)
         {
         }
     }
@@ -23,6 +23,6 @@ namespace HUGs.DDD.Generated.Entity
             OnInitialized();
         }
 
-        private partial void OnInitialized();
+        partial void OnInitialized();
     }
 }

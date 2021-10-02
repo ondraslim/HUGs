@@ -6,5 +6,7 @@
         public string Name { get; set; }
         public DddObjectProperty[] Properties { get; set; }
         public DddObjectValue[] Values { get; set; }
+
+        public string SourceCodeFileName => $"{Name}{Kind}";
     }
 }
