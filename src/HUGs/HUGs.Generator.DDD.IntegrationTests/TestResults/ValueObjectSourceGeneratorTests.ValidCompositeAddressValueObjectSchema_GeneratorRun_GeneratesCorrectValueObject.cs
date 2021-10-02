@@ -24,6 +24,7 @@ namespace HUGs.DDD.Generated.ValueObject
             this.City = City;
             this.Zip = Zip;
             this.CountryId = CountryId;
+            OnInitialized();
         }
 
         protected override IEnumerable<object> GetAtomicValues()
@@ -34,5 +35,7 @@ namespace HUGs.DDD.Generated.ValueObject
             yield return Zip;
             yield return CountryId;
         }
+
+        partial void OnInitialized();
     }
 }

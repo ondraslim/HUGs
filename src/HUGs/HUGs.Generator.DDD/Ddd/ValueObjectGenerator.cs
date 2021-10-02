@@ -1,10 +1,11 @@
 ﻿using HUGs.Generator.Common;
 using HUGs.Generator.DDD.BaseModels;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Runtime.CompilerServices;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
@@ -26,6 +27,8 @@ namespace HUGs.Generator.DDD.Ddd
             AddConstructor(classBuilder, objectSchema);
 
             classBuilder.AddMethod(GetGetAtomicValuesMethod(objectSchema));
+            classBuilder.AddMethod(DddGeneratorCommon.BuildOnInitializedMethod());
+
             syntaxBuilder.AddClass(classBuilder.Build());
 
             return syntaxBuilder.Build();
@@ -44,7 +47,11 @@ namespace HUGs.Generator.DDD.Ddd
         {
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
             var parameters = DddGeneratorCommon.CreateParametersFromProperties(valueObject.Properties);
-            var ctorBody = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(valueObject.Properties);
+
+            var propertyAssignments = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(valueObject.Properties);
+            var ctorBody = propertyAssignments
+                .Append("OnInitialized();")
+                .ToArray();
 
             classBuilder.AddConstructor(accessModifiers, valueObject.Name, parameters, ctorBody);
         }

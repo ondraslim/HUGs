@@ -9,10 +9,13 @@ namespace HUGs.DDD.Generated.ValueObject
     {
         public SimpleClass1()
         {
+            OnInitialized();
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
         }
+
+        partial void OnInitialized();
     }
 }

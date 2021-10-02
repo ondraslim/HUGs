@@ -14,6 +14,7 @@ namespace HUGs.DDD.Generated.ValueObject
         public SimpleOptionalPropertyClass(int Number)
         {
             this.Number = Number;
+            OnInitialized();
         }
 
         protected override IEnumerable<object> GetAtomicValues()
@@ -21,5 +22,7 @@ namespace HUGs.DDD.Generated.ValueObject
             yield return Number;
             yield return ComputedNumber;
         }
+
+        partial void OnInitialized();
     }
 }

@@ -1,15 +1,15 @@
 ﻿using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
+using HUGs.Generator.DDD.Ddd.Models;
+using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
-using HUGs.Generator.DDD.Ddd.Models;
-using HUGs.Generator.DDD.Ddd.Models.Configuration;
 
 namespace HUGs.Generator.DDD.Ddd
 {
-    public static class DddGeneratorCommon
+    internal static class DddGeneratorCommon
     {
         public static void AddUsings(
             RoslynSyntaxBuilder syntaxBuilder,
@@ -73,6 +73,16 @@ namespace HUGs.Generator.DDD.Ddd
                     }
                 }
             }
+        }
+
+        public static MethodDeclarationSyntax BuildOnInitializedMethod()
+        {
+            var methodBuilder = new MethodBuilder()
+                .SetAccessModifiers(SyntaxKind.PartialKeyword)
+                .SetReturnType("void")
+                .SetName("OnInitialized");
+
+            return methodBuilder.Build(methodHeaderOnly: true);
         }
 
     }

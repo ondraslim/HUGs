@@ -1,11 +1,11 @@
 ﻿using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
+using HUGs.Generator.DDD.Ddd.Models;
+using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using HUGs.Generator.DDD.Ddd.Models;
-using HUGs.Generator.DDD.Ddd.Models.Configuration;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
@@ -42,7 +42,7 @@ namespace HUGs.Generator.DDD.Ddd
             DddGeneratorCommon.AddClassProperties(classBuilder, objectSchema.Properties, withPrivateSetter: true);
             AddClassConstructor(classBuilder, objectSchema, entityIdClass.Identifier.ValueText);
 
-            classBuilder.AddMethod(BuildOnInitializedMethod());
+            classBuilder.AddMethod(DddGeneratorCommon.BuildOnInitializedMethod());
             syntaxBuilder.AddClass(classBuilder.Build());
 
             return syntaxBuilder.Build();
@@ -92,16 +92,6 @@ namespace HUGs.Generator.DDD.Ddd
                 ctorParams,
                 ctorBody
             );
-        }
-
-        private static MethodDeclarationSyntax BuildOnInitializedMethod()
-        {
-            var methodBuilder = new MethodBuilder()
-                .SetAccessModifiers(SyntaxKind.PartialKeyword)
-                .SetReturnType("void")
-                .SetName("OnInitialized");
-
-            return methodBuilder.Build(methodHeaderOnly: true);
         }
     }
 }

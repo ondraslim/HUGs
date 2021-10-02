@@ -12,11 +12,14 @@ namespace My.Desired.Namespace.ValueObjects
         public Simple1(string Text)
         {
             this.Text = Text;
+            OnInitialized();
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Text;
         }
+
+        partial void OnInitialized();
     }
 }

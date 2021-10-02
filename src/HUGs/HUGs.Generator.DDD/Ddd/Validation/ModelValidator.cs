@@ -1,7 +1,6 @@
 ﻿using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace HUGs.Generator.DDD.Ddd.Validation
@@ -37,11 +36,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 
         private bool ModelHasUniqueObjectNames(DddModel model)
         {
-            return NamesAreUnique(model.Schemas.Select(e => e.Name));
-        }
-
-        public bool NamesAreUnique(IEnumerable<string> names)
-        {
+            var names = model.Schemas.Select(e => e.Name);
             var duplicates = names.GroupBy(n => n).Where(g => g.Count() > 1).Select(d => d.Key).ToArray();
             foreach (var duplicate in duplicates)
             {

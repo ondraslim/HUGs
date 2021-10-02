@@ -12,11 +12,14 @@ namespace HUGs.DDD.Generated.ValueObject
         public SimpleOptionalPropertyClass(int Number)
         {
             this.Number = Number;
+            OnInitialized();
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Number;
         }
+
+        partial void OnInitialized();
     }
 }

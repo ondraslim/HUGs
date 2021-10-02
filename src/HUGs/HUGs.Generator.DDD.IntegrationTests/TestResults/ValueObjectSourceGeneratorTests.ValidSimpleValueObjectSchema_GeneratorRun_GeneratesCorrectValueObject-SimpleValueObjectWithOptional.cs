@@ -21,6 +21,7 @@ namespace HUGs.DDD.Generated.ValueObject
             this.Number = Number;
             this.TextOptional = TextOptional;
             this.NumberOptional = NumberOptional;
+            OnInitialized();
         }
 
         protected override IEnumerable<object> GetAtomicValues()
@@ -30,5 +31,7 @@ namespace HUGs.DDD.Generated.ValueObject
             yield return TextOptional;
             yield return NumberOptional;
         }
+
+        partial void OnInitialized();
     }
 }

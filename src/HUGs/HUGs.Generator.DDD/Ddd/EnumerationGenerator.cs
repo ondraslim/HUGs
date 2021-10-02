@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using HUGs.Generator.Common;
+﻿using HUGs.Generator.Common;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.BaseModels;
 using HUGs.Generator.DDD.Ddd.Models;

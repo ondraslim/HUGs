@@ -18,6 +18,7 @@ namespace HUGs.DDD.Generated.ValueObject
             this.Number = Number;
             this.Number2 = Number2;
             this.Text = Text;
+            OnInitialized();
         }
 
         protected override IEnumerable<object> GetAtomicValues()
@@ -26,5 +27,7 @@ namespace HUGs.DDD.Generated.ValueObject
             yield return Number2;
             yield return Text;
         }
+
+        partial void OnInitialized();
     }
 }
