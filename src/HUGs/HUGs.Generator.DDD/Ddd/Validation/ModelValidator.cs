@@ -27,7 +27,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
         {
             foreach (var schema in model.Schemas)
             {
-                if (!schemaValidator.ValidateSchema(schema))
+                if (!schemaValidator.ValidateSchema(schema, model))
                 {
                     throw new DddSchemaValidationException(schema.Name);
                 }

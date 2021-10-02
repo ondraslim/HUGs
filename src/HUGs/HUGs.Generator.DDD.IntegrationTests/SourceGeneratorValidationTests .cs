@@ -19,7 +19,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
 
         [Test]
-        public void EmptySchema_GeneratorRun_GeneratesCorrectValueObject()
+        public void EmptySchemaFile_WarningReported()
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/Empty.dddschema");
             var driver = SetupGeneratorDriver(schema);
@@ -59,7 +59,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [TestCase("Enumeration", "ValidName", true, "ValidPropertyName", "string", true, "", "ValidPropertyName", "ValidPropertyValue")]
         [TestCase("Enumeration", "ValidName", true, "ValidPropertyName", "string", true, "+InvalidValueName", "ValidPropertyName", "ValidPropertyValue")]
         [TestCase("Enumeration", "ValidName", true, "ValidPropertyName", "string", true, "ValidName", "+InvalidPropertyName", "ValidPropertyValue")]
-        public void GivenInvalidSchema_DiagnosticIsReported(
+        public void InvalidSchema_DiagnosticIsReported(
             string kind, string name,
             bool useProperties = false, string propertyName = null, string propertyType = null,
             bool useValues = false, string valueName = null, string valuePropertyName = null, string valuePropertyValue = null)
@@ -87,7 +87,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [TestCase(1, false, "", "", "", "", true, new[] { "?Invalid" })]
         [TestCase(1, false, "", "", "", "", true, new[] { "With@Invalid@Separators" })]
         [TestCase(1, false, "", "", "", "", true, new[] { "With&Invalid&Separators" })]
-        public void GivenInvalidConfiguration_DiagnosticIsReported(int expectedValueErrorCount,
+        public void InvalidConfiguration_DiagnosticIsReported(int expectedValueErrorCount,
             bool useNamespaces, string valueObjectNamespace = null, string entityNamespace = null, string aggregateNamespace = null, string enumNamespace = null,
             bool useUsings = false, string[] additionalUsings = null)
         {
@@ -114,7 +114,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [TestCase(1, "ValueObject|TestDuplicateName|2", "Entity|TestDuplicateName|2")]
         [TestCase(1, "ValueObject|TestDuplicateName|2", "Entity|TestDuplicateName|1", "Aggregate|TestDuplicateName|1", "Enumeration|TestDuplicateName|1")]
         [TestCase(2, "ValueObject|TestDuplicateValueObject|2", "Entity|TestEntity|1", "Aggregate|TestAggregate|1", "Enumeration|TestDuplicateEnum|2")]
-        public void GivenModelWithDuplicatedNamesOfTheSameType_DiagnosticIsReported(int expectedDuplicateCount, params string[] duplicates)
+        public void ModelWithDuplicatedNames_DiagnosticIsReported(int expectedDuplicateCount, params string[] duplicates)
         {
             var schemas = duplicates
                 .Select(ds => ds.Split('|'))

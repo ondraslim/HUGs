@@ -1,11 +1,11 @@
 ﻿using CheckTestOutput;
 using FluentAssertions;
+using HUGs.Generator.Common.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
-using HUGs.Generator.Common.Diagnostics;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -35,7 +35,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        public void VariousSchemas_ConfigurationTargetNamespaceIsSetForAll_ClassesAreGeneratedInDesiredNamespace()
+        public void VariousSchemas_ConfigurationTargetNamespaceSetForAll_ClassesGeneratedInDesiredNamespace()
         {
             var valueObjectSchema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
             var aggregateSchema = File.ReadAllText("../../../TestData/Schemas/Aggregates/SimpleAggregate.dddschema");
@@ -56,7 +56,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [TestCase("Aggregates/SimpleAggregate.dddschema", "AdditionalUsingsConfig")]
         [TestCase("Entities/SimpleEntity.dddschema", "AdditionalUsingsConfig")]
         [TestCase("Enumerations/SimpleEnumeration.dddschema", "AdditionalUsingsConfig")]
-        public void GivenAdditionalUsings_GeneratedClassesUseTheUsings(string schemaFilePath, string configurationFile)
+        public void AdditionalUsings_GeneratedClassesUseTheUsings(string schemaFilePath, string configurationFile)
         {
             var schema = File.ReadAllText($"../../../TestData/Schemas/{schemaFilePath}");
             var configuration1 = File.ReadAllText($"../../../TestData/Configuration/{configurationFile}.dddconfig");
@@ -72,7 +72,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        public void CompleteConfiguration_GeneratedClassesWorkProperly()
+        public void CompleteConfiguration_GeneratedCorrectly()
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
             var schema2 = File.ReadAllText("../../../TestData/Schemas/Aggregates/SimpleAggregate.dddschema");
@@ -95,7 +95,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        public void MultipleConfigurationFiles_DiagnosticErrorReportedAndNothingGenerated()
+        public void MultipleConfigurationFiles_DiagnosticErrorReported()
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
             var configuration1 = File.ReadAllText("../../../TestData/Configuration/ValueObjectNamespaceConfig.dddconfig");
@@ -112,7 +112,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [Test]
         [TestCase("SyntaxInvalidConfig1")]
         [TestCase("SyntaxInvalidConfig2")]
-        public void InvalidConfigurationFile_DiagnosticErrorReportedAndNothingGenerated(string configFile)
+        public void InvalidConfigurationFile_DiagnosticErrorReported(string configFile)
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObject.dddschema");
             var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}.dddconfig");

@@ -17,7 +17,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenRoslynSyntaxBuilder_WhenAllInfoIsFilled_CorrectlyGeneratesCode()
+        public void RAllInfoFilled_GeneratedCorrectly()
         {
             builder.AddUsings("System");
             builder.SetNamespace("HUGs.Generator.Common.Tests");

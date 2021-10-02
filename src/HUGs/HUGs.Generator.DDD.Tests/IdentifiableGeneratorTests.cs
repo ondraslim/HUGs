@@ -8,13 +8,13 @@ namespace HUGs.Generator.DDD.Tests
 {
     public class IdentifiableGeneratorTests
     {
-        private readonly OutputChecker check = new("TestResults/Identifiable");
+        private readonly OutputChecker check = new("TestResults");
         private readonly DddGeneratorConfiguration generatorConfiguration = new();
 
         [Test]
         [TestCase(DddObjectKind.Entity)]
         [TestCase(DddObjectKind.Aggregate)]
-        public void GivenEmptyIdentifiableSchema_CorrectlyGeneratesIdentifiableClasses(DddObjectKind identifiableKind)
+        public void NoPropertySchema_GeneratedCorrectly(DddObjectKind identifiableKind)
         {
             var objectSchema = new DddObjectSchema
             {
@@ -33,7 +33,7 @@ namespace HUGs.Generator.DDD.Tests
         [Test]
         [TestCase(DddObjectKind.Entity)]
         [TestCase(DddObjectKind.Aggregate)]
-        public void GivenIdentifiableSchemaWithProperties_CorrectlyGeneratesIdentifiableClasses(DddObjectKind identifiableKind)
+        public void PropertyMultipleSchema_GeneratedCorrectly(DddObjectKind identifiableKind)
         {
             var objectSchema = new DddObjectSchema
             {
@@ -56,7 +56,7 @@ namespace HUGs.Generator.DDD.Tests
         [Test]
         [TestCase(DddObjectKind.Entity)]
         [TestCase(DddObjectKind.Aggregate)]
-        public void GivenIdentifiableSchemaWithArrayProperty_CorrectlyGeneratesIdentifiableClasses(DddObjectKind identifiableKind)
+        public void ArrayPropertySchema_GeneratedCorrectly(DddObjectKind identifiableKind)
         {
             var objectSchema = new DddObjectSchema
             {
@@ -78,7 +78,7 @@ namespace HUGs.Generator.DDD.Tests
         [Test]
         [TestCase(DddObjectKind.Entity)]
         [TestCase(DddObjectKind.Aggregate)]
-        public void GivenIdentifiableSchemaWithVariousProperties_CorrectlyGeneratesIdentifiableClasses(DddObjectKind identifiableKind)
+        public void VariousPropertiesSchema_GeneratedCorrectly(DddObjectKind identifiableKind)
         {
             var objectSchema = new DddObjectSchema
             {

@@ -12,7 +12,7 @@ namespace HUGs.Generator.Common.Tests
         private readonly OutputChecker check = new("TestResults");
 
         [Test]
-        public void GivenEmptyClass_CorrectlyGeneratesEmptyClass()
+        public void EmptyClass_GeneratedCorrectly()
         {
             var classDeclaration = new ClassBuilder("TestClass1").Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
@@ -21,7 +21,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenSimpleClassWithAccessModifier_CorrectlyGeneratesClass()
+        public void EmptyClassWithAccessModifier_GeneratedCorrectly()
         {
             var builder = new ClassBuilder("TestClass2");
             builder.AddClassAccessModifiers(SyntaxKind.PublicKeyword);
@@ -34,7 +34,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenSimpleClassWithBaseClass_CorrectlyGeneratesClass()
+        public void EmptyClassWithBaseClass_GeneratedCorrectly()
         {
             var builder = new ClassBuilder("TestClass3");
             builder.AddClassBaseTypes("TestClassBase");
@@ -46,7 +46,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenSimpleClassWithField_CorrectlyGeneratesClass()
+        public void FieldClass_GeneratedCorrectly()
         {
             var builder = new ClassBuilder("TestClass4");
             builder.AddField("string", "TestField", SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword);
@@ -58,7 +58,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenSimpleClassWithFieldWithInitialization_CorrectlyGeneratesClass()
+        public void FieldWithInitializationClass_GeneratedCorrectly()
         {
             var accessModifiers = new[] { SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword };
             var objectCreationSyntax = SyntaxFactory
@@ -96,7 +96,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenSimpleClassWithProperty_CorrectlyGeneratesClass()
+        public void PropertyClass_GeneratedCorrectly()
         {
             var builder = new ClassBuilder("TestClass5");
             builder.AddFullProperty("string", "TestProperty", new[] { SyntaxKind.PublicKeyword });
@@ -108,7 +108,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenSimpleClassWithGetOnlyProperty_CorrectlyGeneratesClass()
+        public void GetOnlyPropertyClass_GeneratedCorrectly()
         {
             var builder = new ClassBuilder("TestClass6");
             builder.AddGetOnlyProperty("string", "TestProperty", new[] { SyntaxKind.PublicKeyword });
@@ -120,7 +120,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenEmptyClassConstructor_CorrectlyGeneratesEmptyConstructor()
+        public void EmptyConstructorClass_GeneratedCorrectly()
         {
             const string className = "TestClass7";
             var modifiers = new[] { SyntaxKind.ProtectedKeyword };
@@ -135,7 +135,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenClassConstructorWithParamsAndCode_CorrectlyGeneratesConstructor()
+        public void ConstructorWithParamsAndBodyClass_GeneratedCorrectly()
         {
             const string className = "TestClass8";
             var modifiers = new[] { SyntaxKind.PublicKeyword };
@@ -160,7 +160,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenClassConstructorWithParamsForBase_CorrectlyGeneratesConstructor()
+        public void ConstructorWithParamsForBaseClass_GeneratedCorrectly()
         {
             const string className = "TestClass9";
             var modifiers = new[] { SyntaxKind.PublicKeyword };
@@ -187,7 +187,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenSimpleClassWithMethod_CorrectlyGeneratesClass()
+        public void MethodClass_GeneratedCorrectly()
         {
             var method = new MethodBuilder()
                 .SetName("TestMethod")
@@ -206,7 +206,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenComplexClassWithMethod_CorrectlyGeneratesClass()
+        public void ComplexClass_GeneratedCorrectly()
         {
             var builder = new ClassBuilder("TestClass11");
 

@@ -9,6 +9,12 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 {
     internal class SchemaValidator
     {
+        private static readonly string[] AllowedPredefinedTypes = 
+        {
+            "decimal", "double", "float", "byte", "sbyte", "short", "ushort", "int", "uint", "long", "ulong",
+            "bool","string", "chart", "Date", "Time", "DateTime", "TimeSpan", "Guid"
+        };
+
         private readonly DddDiagnosticsReporter diagnosticsReporter;
 
         public SchemaValidator(DddDiagnosticsReporter diagnosticsReporter)
@@ -16,36 +22,25 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             this.diagnosticsReporter = diagnosticsReporter;
         }
 
-        public bool ValidateSchema(DddObjectSchema schema)
+        public bool ValidateSchema(DddObjectSchema schema, DddModel dddModel)
         {
+            var dddModelTypes = dddModel.Schemas.Select(s => s.Name).ToList();
             return schema.Kind switch
             {
-                DddObjectKind.ValueObject => ValidateValueObject(schema),
-                DddObjectKind.Entity => ValidateEntity(schema),
-                DddObjectKind.Aggregate => ValidateAggregate(schema),
-                DddObjectKind.Enumeration => ValidateEnumeration(schema),
+                DddObjectKind.ValueObject or DddObjectKind.Entity or DddObjectKind.Aggregate => ValidateSchema(schema, dddModelTypes),
+                DddObjectKind.Enumeration => ValidateEnumeration(schema, dddModelTypes),
                 _ => throw new ArgumentOutOfRangeException(nameof(schema.Kind))
             };
         }
 
-        private bool ValidateValueObject(DddObjectSchema schema)
+        private bool ValidateSchema(DddObjectSchema schema, ICollection<string> dddModelTypes)
         {
-            return ValidateSchemaName(schema) & ValidateProperties(schema);
+            return ValidateSchemaName(schema) & ValidateProperties(schema, dddModelTypes);
         }
 
-        private bool ValidateEntity(DddObjectSchema schema)
+        private bool ValidateEnumeration(DddObjectSchema schema, ICollection<string> dddModelTypes)
         {
-            return ValidateSchemaName(schema) & ValidateProperties(schema);
-        }
-
-        private bool ValidateAggregate(DddObjectSchema schema)
-        {
-            return ValidateSchemaName(schema) & ValidateProperties(schema);
-        }
-
-        private bool ValidateEnumeration(DddObjectSchema schema)
-        {
-            return ValidateSchemaName(schema) & ValidateProperties(schema) & ValidateValues(schema);
+            return ValidateSchema(schema, dddModelTypes) & ValidateValues(schema);
         }
 
         private bool ValidateSchemaName(DddObjectSchema schema)
@@ -59,12 +54,11 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             return true;
         }
 
-        private bool ValidateProperties(DddObjectSchema schema)
+        private bool ValidateProperties(DddObjectSchema schema, ICollection<string> dddModelTypes)
         {
-            var isValid = true;
             schema.Properties ??= new DddObjectProperty[] { };
+            var isValid = ValidatePropertyNameUniqueness(schema.Properties);
 
-            // TODO: check property names are unique
             foreach (var property in schema.Properties)
             {
                 if (!SyntaxFacts.IsValidIdentifier(property.Name))
@@ -74,7 +68,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
                     isValid = false;
                 }
 
-                if (!IsValidType(property.TypeWithoutArray))
+                if (!IsValidType(property.TypeWithoutArray, dddModelTypes))
                 {
                     diagnosticsReporter.ReportSchemaInvalidValue(
                         schema.Name, $"{nameof(DddObjectProperty)}_{nameof(DddObjectProperty.Type)}", property.Type);
@@ -83,6 +77,19 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             }
 
             return isValid;
+        }
+
+        private bool ValidatePropertyNameUniqueness(DddObjectProperty[] schemaProperties)
+        {
+            var names = schemaProperties.Select(e => e.Name);
+            var duplicates = names.GroupBy(n => n).Where(g => g.Count() > 1).Select(d => d.Key).ToArray();
+            foreach (var duplicate in duplicates)
+            {
+                // TODO: duplicated property diagnostic report
+                //diagnosticsReporter.ReportDuplicatedDddObjectNames(duplicate);
+            }
+
+            return !duplicates.Any();
         }
 
         private bool ValidateValues(DddObjectSchema schema)
@@ -108,25 +115,9 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             return isValid;
         }
 
-        private static bool IsValidType(string type)
+        private static bool IsValidType(string type, ICollection<string> dddModelTypes)
         {
-            // decimal, double, float
-            // byte, sbyte, short, ushort, int, uint, long, ulong
-            // bool
-            // string, char
-            // guid
-            // Date, Time, DateTime, TimeSpan
-
-            // anything defined in DddModel
-            try
-            {
-                var typeSyntax = SyntaxFactory.ParseTypeName(type);
-                return SyntaxFacts.IsPredefinedType(typeSyntax.Kind()) || SyntaxFacts.IsValidIdentifier(type);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return AllowedPredefinedTypes.Contains(type) || dddModelTypes.Contains(type);
         }
 
         private bool ValidateValue(DddObjectSchema schema, DddObjectValue value)
@@ -148,6 +139,6 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 
             return isValid;
         }
-        
+
     }
 }

@@ -17,7 +17,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenEmptyMethod_CorrectlyGeneratesEmptyMethod()
+        public void EmptyMethod_CorrectMethodGenerated()
         {
             var methodDeclaration = builder
                 .SetAccessModifiers(SyntaxKind.PublicKeyword)
@@ -30,7 +30,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenMethodWithSimpleBody_CorrectlyGeneratesMethodWithBody()
+        public void SimpleBodyMethod_CorrectMethodGenerated()
         {
             var methodDeclaration = builder
                 .SetAccessModifiers(SyntaxKind.PublicKeyword)
@@ -44,7 +44,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenMethodWithBody_CorrectlyGeneratesMethodWithBody()
+        public void BodyMethod_CorrectMethodGenerated()
         {
             var methodDeclaration = builder
                 .SetAccessModifiers(SyntaxKind.PublicKeyword)
@@ -59,7 +59,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenMethodWithSimpleParam_CorrectlyGeneratesMethodWithParam()
+        public void SimpleParamMethod_CorrectMethodGenerated()
         {
             var methodDeclaration = builder
                 .SetAccessModifiers(SyntaxKind.PublicKeyword)
@@ -74,7 +74,7 @@ namespace HUGs.Generator.Common.Tests
         }
 
         [Test]
-        public void GivenMethodWithTwoParams_CorrectlyGeneratesMethodWithParams()
+        public void TwoParamsMethod_CorrectMethodGenerated()
         {
             var methodDeclaration = builder
                 .SetAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.VirtualKeyword)

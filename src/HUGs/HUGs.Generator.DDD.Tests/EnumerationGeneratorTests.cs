@@ -9,11 +9,11 @@ namespace HUGs.Generator.DDD.Tests
 {
     public class EnumerationGeneratorTests
     {
-        private readonly OutputChecker check = new("TestResults/Enumeration");
+        private readonly OutputChecker check = new("TestResults");
         private readonly DddGeneratorConfiguration generatorConfiguration = new();
 
         [Test]
-        public void GivenEmptyEnumerationSchema_CorrectlyGeneratesEnumerationClass()
+        public void EmptySchema_GeneratedCorrectly()
         {
             var inputEnumerationObject = new DddObjectSchema
             {
@@ -28,7 +28,7 @@ namespace HUGs.Generator.DDD.Tests
         }
 
         [Test]
-        public void GivenEnumerationSchemaWithSingleProperty_CorrectlyGeneratesEnumerationClass()
+        public void SinglePropertySchema_GeneratedCorrectly()
         {
             var inputEnumerationObject = new DddObjectSchema
             {
@@ -55,7 +55,7 @@ namespace HUGs.Generator.DDD.Tests
         }
         
         [Test]
-        public void GivenEnumerationSchemaWithMultipleProperties_CorrectlyGeneratesEnumerationClass()
+        public void MultiplePropertySchema_GeneratedCorrectly()
         {
             var inputEnumerationObject = new DddObjectSchema
             {

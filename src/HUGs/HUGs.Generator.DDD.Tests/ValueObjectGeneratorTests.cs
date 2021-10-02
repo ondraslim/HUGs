@@ -8,11 +8,11 @@ namespace HUGs.Generator.DDD.Tests
 {
     public class ValueObjectGeneratorTests
     {
-        private readonly OutputChecker check = new("TestResults/ValueObjects");
+        private readonly OutputChecker check = new("TestResults");
         private readonly DddGeneratorConfiguration generatorConfiguration = new();
 
         [Test]
-        public void GivenEmptyValueObjectSchema_CorrectlyGeneratesValueObjectClass()
+        public void NoPropertySchema_GeneratedCorrectly()
         {
             var inputValueObject = new DddObjectSchema
             {
@@ -26,7 +26,7 @@ namespace HUGs.Generator.DDD.Tests
         }
 
         [Test]
-        public void GivenValueObjectSchemaWithSingleProperty_CorrectlyGeneratesValueObjectClass()
+        public void SinglePropertySchema_GeneratedCorrectly()
         {
             var inputValueObject = new DddObjectSchema
             {
@@ -40,7 +40,7 @@ namespace HUGs.Generator.DDD.Tests
         }
 
         [Test]
-        public void GivenValueObjectSchemaWithComputedProperty_CorrectlyGeneratesValueObjectClass()
+        public void ComputedPropertySchema_GeneratedCorrectly()
         {
             var inputValueObject = new DddObjectSchema
             {
@@ -58,7 +58,7 @@ namespace HUGs.Generator.DDD.Tests
         }
 
         [Test]
-        public void GivenValueObjectSchemaWithMultipleProperties_CorrectlyGeneratesValueObjectClass()
+        public void MultiplePropertiesSchema_GeneratedCorrectly()
         {
             var inputValueObject = new DddObjectSchema
             {
