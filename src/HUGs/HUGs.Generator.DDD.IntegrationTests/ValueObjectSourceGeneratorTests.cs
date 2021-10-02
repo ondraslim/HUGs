@@ -20,7 +20,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [TestCase("SimpleValueObject")]
         [TestCase("SimpleValueObject2")]
         [TestCase("SimpleValueObjectWithOptional")]
-        public void ValidSimpleValueObjectSchema_GeneratorRun_GeneratesCorrectValueObject(string valueObjectSchemaFile)
+        public void SimpleSchema_GeneratedCorrectly(string valueObjectSchemaFile)
         {
             var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{valueObjectSchemaFile}.dddschema");
             var driver = SetupGeneratorDriver(schema);
@@ -34,7 +34,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        public void TwoValidSimpleValueObjectSchemas_GeneratorRun_GeneratesCorrectValueObjects()
+        public void MultipleValidSchemas_GeneratedCorrectly()
         {
             var schema1 = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObjectMultiple.dddschema");
             var schema2 = File.ReadAllText("../../../TestData/Schemas/ValueObjects/SimpleValueObjectMultiple2.dddschema");
@@ -50,7 +50,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         }
 
         [Test]
-        public void ValidCompositeAddressValueObjectSchema_GeneratorRun_GeneratesCorrectValueObject()
+        public void ComplexAddressSchema_GeneratedCorrectly()
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/AddressValueObject.dddschema");
             var driver = SetupGeneratorDriver(schema);
