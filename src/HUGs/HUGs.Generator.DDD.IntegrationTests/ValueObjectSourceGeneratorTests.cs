@@ -49,7 +49,9 @@ namespace HUGs.Generator.DDD.IntegrationTests
             Check.CheckString(generatedFileTexts.Last(), checkName: "SimpleValueObject2", fileExtension: "cs");
         }
 
+        // TODO: move complex tests to another test class
         [Test]
+        [Ignore("Test not prepared")]
         public void ComplexAddressSchema_GeneratedCorrectly()
         {
             var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/AddressValueObject.dddschema");
