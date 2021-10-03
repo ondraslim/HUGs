@@ -99,8 +99,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             var duplicates = names.GroupBy(n => n).Where(g => g.Count() > 1).Select(d => d.Key).ToArray();
             foreach (var duplicate in duplicates)
             {
-                // TODO: duplicated property diagnostic report
-                //diagnosticsReporter.ReportDuplicatedDddObjectNames(duplicate);
+                diagnosticsReporter.ReportDuplicatedDddObjectNames(duplicate);
             }
 
             return !duplicates.Any();
