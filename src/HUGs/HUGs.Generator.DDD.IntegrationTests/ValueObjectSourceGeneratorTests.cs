@@ -48,36 +48,5 @@ namespace HUGs.Generator.DDD.IntegrationTests
             Check.CheckString(generatedFileTexts.First(), checkName: "SimpleValueObject1", fileExtension: "cs");
             Check.CheckString(generatedFileTexts.Last(), checkName: "SimpleValueObject2", fileExtension: "cs");
         }
-
-        // TODO: move complex tests to another test class
-        [Test]
-        [Ignore("Test not prepared")]
-        public void ComplexAddressSchema_GeneratedCorrectly()
-        {
-            var schema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/AddressValueObject.dddschema");
-            var driver = SetupGeneratorDriver(schema);
-
-            var compilationWithCountryId = CreateCompilation(@"
-namespace Test
-{
-    public class Program 
-    { 
-        public static void Main() { } 
-    }
-}
-
-public class CountryId 
-{
-    public System.Guid Id { get; set; }
-}
-");
-
-            RunGenerator(driver, compilationWithCountryId, out var diagnostics, out var generatedFileTexts);
-
-            diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(1);
-
-            Check.CheckString(generatedFileTexts.First(), fileExtension: "cs");
-        }
     }
 }
