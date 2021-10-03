@@ -2,6 +2,7 @@
 {
     public class DddObjectTargetNamespaces
     {
+        public const string DefaultDbEntityNamespace = "HUGs.DDD.Generated.DbEntity";
         public const string DefaultValueObjectNamespace = "HUGs.DDD.Generated.ValueObject";
         public const string DefaultEntityNamespace = "HUGs.DDD.Generated.Entity";
         public const string DefaultAggregateNamespace = "HUGs.DDD.Generated.Aggregate";
@@ -9,11 +10,15 @@
 
         public DddObjectTargetNamespaces()
         {
+            DbEntity = DefaultDbEntityNamespace;
             ValueObject = DefaultValueObjectNamespace;
             Entity = DefaultEntityNamespace;
             Aggregate = DefaultAggregateNamespace;
             Enumeration = DefaultEnumerationNamespace;
         }
+
+        // TODO: db entity namespace configuration test
+        public string DbEntity { get; set; }
 
         public string ValueObject { get; set; }
 
