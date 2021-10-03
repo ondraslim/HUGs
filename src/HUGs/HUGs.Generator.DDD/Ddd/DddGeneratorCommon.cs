@@ -34,9 +34,7 @@ namespace HUGs.Generator.DDD.Ddd
         {
             var parameters = properties
                 .Where(p => !p.Computed)
-                .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(
-                    p.IsArrayProperty ? $"IEnumerable<{p.FullType}>" : p.FullType,
-                    p.Name))
+                .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(p.GetCSharpType("IEnumerable"), p.Name))
                 .ToArray();
 
             return parameters;
@@ -47,7 +45,7 @@ namespace HUGs.Generator.DDD.Ddd
             var linesOfCode = properties
                 .Where(p => !p.Computed)
                 .Select(p => p.IsArrayProperty
-                    ? $"this.{p.PrivateName} = {p.Name}.ToList();"
+                    ? $"this.{p.PrivateName} = {p.Name}{(p.Optional ? "?" : "")}.ToList();"
                     : $"this.{p.Name} = {p.Name};")
                 .ToArray();
 
@@ -61,8 +59,9 @@ namespace HUGs.Generator.DDD.Ddd
                 if (property.IsArrayProperty)
                 {
                     classBuilder
-                        .AddField($"List<{property.TypeWithoutArray}>", property.PrivateName, SyntaxKind.PrivateKeyword)
-                        .AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{property.TypeWithoutArray}>", property.Name, property.PrivateName, SyntaxKind.PublicKeyword);
+                        .AddField(property.GetCSharpType(arrayCsharpType: "List"), property.PrivateName, SyntaxKind.PrivateKeyword)
+                        .AddGetOnlyPropertyWithBackingField(
+                            property.GetCSharpType(arrayCsharpType: "IReadOnlyList"), property.Name, property.PrivateName, SyntaxKind.PublicKeyword);
                 }
                 else
                 {
@@ -80,16 +79,9 @@ namespace HUGs.Generator.DDD.Ddd
 
         public static void AddDbEntityClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties)
         {
-            foreach (var property in properties)
+            foreach (var property in properties.Where(p => !p.Computed))
             {
-                if (property.IsArrayProperty)
-                {
-                    classBuilder.AddFullProperty($"ICollection<{property.TypeWithoutArray}>", property.Name, SyntaxKind.PublicKeyword);
-                }
-                else
-                {
-                    classBuilder.AddFullProperty(property.Type, property.Name, SyntaxKind.PublicKeyword);
-                }
+                classBuilder.AddFullProperty(property.GetCSharpType(), property.Name, SyntaxKind.PublicKeyword);
             }
         }
 

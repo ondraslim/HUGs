@@ -12,7 +12,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 {
     public class SourceGeneratorValidationTests : GeneratorTestBase
     {
-        private static readonly string[] Kinds = new[] { "Entity", "Aggregate", "ValueObject", "Enumeration" };
+        private static readonly string[] Kinds = { "Entity", "Aggregate", "ValueObject", "Enumeration" };
 
 
         [SetUp]

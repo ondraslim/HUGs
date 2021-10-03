@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using CheckTestOutput;
+﻿using CheckTestOutput;
 using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace HUGs.Generator.DDD.Tests
 {
