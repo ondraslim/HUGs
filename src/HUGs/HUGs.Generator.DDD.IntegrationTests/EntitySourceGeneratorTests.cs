@@ -17,7 +17,9 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
         [Test]
         [TestCase("SimpleEntity")]
-        public void ValidEntitySchema_GeneratorRun_GeneratesCorrectEntity(string fileName)
+        [TestCase("CountryEntity")]
+        [TestCase("OrderItemEntity")]
+        public void SimpleSchema_GeneratedCorrectly(string fileName)
         {
             var schema = File.ReadAllText($"../../../TestData/Schemas/Entities/{fileName}.dddschema");
             var driver = SetupGeneratorDriver(schema);

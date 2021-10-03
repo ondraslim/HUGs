@@ -4,6 +4,7 @@ using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,6 +23,11 @@ namespace HUGs.Generator.DDD.Ddd
                 "HUGs.Generator.DDD.BaseModels");
 
             syntaxBuilder.AddUsings(generatorConfiguration.AdditionalUsings.ToArray());
+
+            foreach (DddObjectKind kind in Enum.GetValues(typeof(DddObjectKind)))
+            {
+                syntaxBuilder.AddUsings(generatorConfiguration.GetTargetNamespaceForKind(kind));
+            }
         }
 
         public static ParameterSyntax[] CreateParametersFromProperties(DddObjectProperty[] properties)

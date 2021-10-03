@@ -17,8 +17,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
         [Test]
         [TestCase("SimpleAggregate")]
-        //[TestCase("OrderAggregate")]// TODO: move complex tests to another test class
-        public void ValidSimpleAggregateSchema_GeneratorRun_GeneratesCorrectAggregate(string fileName)
+        public void SimpleSchema_GeneratedCorrectly(string fileName)
         {
             var schema = File.ReadAllText($"../../../TestData/Schemas/Aggregates/{fileName}.dddschema");
             var driver = SetupGeneratorDriver(schema);

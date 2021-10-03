@@ -1,13 +1,23 @@
-﻿namespace HUGs.Generator.DDD.BaseModels
+﻿using System;
+
+namespace HUGs.Generator.DDD.BaseModels
 {
-    public class Enumeration
+    public abstract class Enumeration
     {
         private string _internalName;
 
-        public Enumeration(string internalName)
+        protected Enumeration(string internalName)
         {
             _internalName = internalName;
         }
+
+        public override string ToString()
+        {
+            return _internalName;
+        }
+
+        // TODO: implement
+        public abstract Enumeration FromString(string @string);
 
         protected bool Equals(Enumeration other)
         {

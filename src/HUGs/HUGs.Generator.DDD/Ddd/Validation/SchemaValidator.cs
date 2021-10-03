@@ -26,13 +26,25 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 
         public bool ValidateSchema(DddObjectSchema schema, DddModel dddModel)
         {
-            var dddModelTypes = dddModel.Schemas.Select(s => s.Name).ToList();
+            var dddModelTypes = GetDddModelTypes(dddModel);
+
             return schema.Kind switch
             {
                 DddObjectKind.Enumeration => ValidateEnumeration(schema, dddModelTypes),
                 DddObjectKind.ValueObject or DddObjectKind.Entity or DddObjectKind.Aggregate => ValidateSchema(schema, dddModelTypes),
                 _ => throw new ArgumentOutOfRangeException(nameof(schema.Kind))
             };
+        }
+
+        private static List<string> GetDddModelTypes(DddModel dddModel)
+        {
+            var dddModelTypes = dddModel.Schemas.Select(s => s.Name).ToList();
+            dddModelTypes.AddRange(
+                dddModel.Schemas
+                    .Where(s => s.Kind is DddObjectKind.Entity or DddObjectKind.Aggregate)
+                    .Select(s => $"{s.Name}Id"));
+
+            return dddModelTypes;
         }
 
         private bool ValidateEnumeration(DddObjectSchema schema, ICollection<string> dddModelTypes)

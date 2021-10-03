@@ -12,3 +12,5 @@ Properties:
   - Name: TotalPrice
     Type: decimal
     Computed: true
+  - Name: State
+    Type: OrderState

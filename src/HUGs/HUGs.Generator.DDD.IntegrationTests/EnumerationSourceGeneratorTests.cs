@@ -20,7 +20,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [TestCase("SimpleEnumeration")]
         [TestCase("ComplexEnumeration")]
         [TestCase("OrderStateEnumeration")]
-        public void ValidEnumerationSchema_GeneratorRun_GeneratesCorrectEnumeration(string fileName)
+        public void SimpleSchema_GeneratedCorrectly(string fileName)
         {
             var schema = File.ReadAllText($"../../../TestData/Schemas/Enumerations/{fileName}.dddschema");
             var driver = SetupGeneratorDriver(schema);
