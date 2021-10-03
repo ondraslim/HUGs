@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using HUGs.Generator.Common.Diagnostics;
+using HUGs.Generator.DDD.Ddd.Configuration;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
 using System.Text;
-using HUGs.Generator.DDD.Ddd.Validation;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -40,7 +40,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         {
             foreach (var kind in Kinds)
             {
-                foreach (var whitelistedType in SchemaValidator.WhitelistedTypes)
+                foreach (var whitelistedType in Constants.WhitelistedTypes)
                 {
                     var schema = GetSchema(kind, "TestClassName", true, "TestPropertyName", whitelistedType);
                     var driver = SetupGeneratorDriver(schema);

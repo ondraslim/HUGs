@@ -1,5 +1,7 @@
-﻿using HUGs.Generator.Common;
+﻿using System.Linq;
+using HUGs.Generator.Common;
 using HUGs.Generator.DDD.Ddd.Exceptions;
+using HUGs.Generator.DDD.Ddd.Extensions;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis.CSharp;
@@ -8,6 +10,7 @@ namespace HUGs.Generator.DDD.Ddd
 {
     internal static class DbEntityGenerator
     {
+        // TODO: add to DddGenerator
         public static string GenerateDbEntity(
             DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)
@@ -22,7 +25,6 @@ namespace HUGs.Generator.DDD.Ddd
             DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
 
             var classBuilder = PrepareDbEntityClassBuilder($"{schema.Name}DbEntity");
-            // TODO: add EntityId for Aggregate and Entity
             AddDbEntityProperties(schema, classBuilder);
 
             syntaxBuilder.AddClass(classBuilder.Build());
@@ -37,7 +39,9 @@ namespace HUGs.Generator.DDD.Ddd
                 classBuilder.AddFullProperty("Guid", "Id", SyntaxKind.PublicKeyword);
             }
 
-            DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, schema.Properties);
+            DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, schema.Properties.Where(p => p.IsWhitelistedType()));
+            //DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, schema.Properties.Where(p => !p.IsDddEnumeration));
+            // TODO: AddDbEntityClassProperty -> enumeration as string
         }
 
         private static ClassBuilder PrepareDbEntityClassBuilder(string schemaName)

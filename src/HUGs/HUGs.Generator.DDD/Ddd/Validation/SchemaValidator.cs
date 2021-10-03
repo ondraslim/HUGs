@@ -1,4 +1,5 @@
-﻿using HUGs.Generator.DDD.Ddd.Diagnostics;
+﻿using HUGs.Generator.DDD.Ddd.Configuration;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using System;
@@ -11,12 +12,6 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 {
     internal class SchemaValidator
     {
-        public static readonly string[] WhitelistedTypes = 
-        {
-            "decimal", "double", "float", "byte", "sbyte", "short", "ushort", "int", "uint", "long", "ulong",
-            "bool","string", "chart", "Date", "Time", "DateTime", "TimeSpan", "Guid"
-        };
-
         private readonly DddDiagnosticsReporter diagnosticsReporter;
 
         public SchemaValidator(DddDiagnosticsReporter diagnosticsReporter)
@@ -130,7 +125,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 
         private static bool IsValidType(string type, ICollection<string> dddModelTypes)
         {
-            return WhitelistedTypes.Contains(type) || dddModelTypes.Contains(type);
+            return Constants.WhitelistedTypes.Contains(type) || dddModelTypes.Contains(type);
         }
 
         private bool ValidateValue(DddObjectSchema schema, DddObjectValue value)
