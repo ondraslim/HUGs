@@ -6,11 +6,15 @@ using NUnit.Framework;
 using System.IO;
 using System.Linq;
 using System.Text;
+using HUGs.Generator.DDD.Ddd.Validation;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
     public class SourceGeneratorValidationTests : GeneratorTestBase
     {
+        private static readonly string[] Kinds = new[] { "Entity", "Aggregate", "ValueObject", "Enumeration" };
+
+
         [SetUp]
         public override void Setup()
         {
@@ -29,6 +33,50 @@ namespace HUGs.Generator.DDD.IntegrationTests
             diagnostics.Should().HaveCount(1);
             diagnostics.Where(d => d.Id == Diagnostics.AdditionalFileEmptyWarningId).Should().HaveCount(1);
             generatedFileTexts.Should().BeEmpty();
+        }
+
+        [Test]
+        public void PropertyWhitelistedType_NoDiagnosticReported()
+        {
+            foreach (var kind in Kinds)
+            {
+                foreach (var whitelistedType in SchemaValidator.WhitelistedTypes)
+                {
+                    var schema = GetSchema(kind, "TestClassName", true, "TestPropertyName", whitelistedType);
+                    var driver = SetupGeneratorDriver(schema);
+
+                    RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+
+                    diagnostics.Should().BeEmpty();
+                    generatedFileTexts.Should().HaveCount(1);
+                    generatedFileTexts.Where(g => g.Contains(kind) && g.Contains(whitelistedType)).Should().HaveCount(1);
+                }
+            }
+        }
+
+        [Test]
+        public void PropertyDddSchemaType_NoDiagnosticReported()
+        {
+            const string classOneName = "ClassOne";
+            const string classTwoName = "ClassTwo";
+
+            foreach (var kind in Kinds)
+            {
+                foreach (var kindOther in Kinds)
+                {
+                    var schema1 = GetSchema(kind, classOneName);
+                    var schema2 = GetSchema(kindOther, classTwoName, true, "PropertyDddReference", classOneName);
+
+                    var driver = SetupGeneratorDriver(new[] { schema1, schema2 });
+
+                    RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+
+                    diagnostics.Should().BeEmpty();
+                    generatedFileTexts.Should().HaveCount(2);
+                    generatedFileTexts.Where(g => g.Contains($"class {classOneName}")).Should().HaveCount(1);
+                    generatedFileTexts.Where(g => g.Contains($"class {classTwoName}") && g.Contains(classTwoName)).Should().HaveCount(1);
+                }
+            }
         }
 
         [Test]
@@ -63,7 +111,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [TestCase("Enumeration", "ValidName", true, "ValidPropertyName", "string", true, "", "ValidPropertyName", "ValidPropertyValue")]
         [TestCase("Enumeration", "ValidName", true, "ValidPropertyName", "string", true, "+InvalidValueName", "ValidPropertyName", "ValidPropertyValue")]
         [TestCase("Enumeration", "ValidName", true, "ValidPropertyName", "string", true, "ValidName", "+InvalidPropertyName", "ValidPropertyValue")]
-        public void InvalidSchema_DiagnosticIsReported(
+        public void InvalidSchema_DiagnosticReported(
             string kind, string name,
             bool useProperties = false, string propertyName = null, string propertyType = null,
             bool useValues = false, string valueName = null, string valuePropertyName = null, string valuePropertyValue = null)
@@ -72,7 +120,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var driver = SetupGeneratorDriver(schema);
 
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
-            
+
             generatedFileTexts.Should().BeEmpty();
             diagnostics.Where(d => d.Id == DddDiagnostics.SchemaInvalidValueErrorId).Should().HaveCount(1);
             diagnostics.Where(d => d.Id == DddDiagnostics.SchemaInvalidErrorId).Should().HaveCount(1);
@@ -91,16 +139,16 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [TestCase(1, false, "", "", "", "", true, new[] { "?Invalid" })]
         [TestCase(1, false, "", "", "", "", true, new[] { "With@Invalid@Separators" })]
         [TestCase(1, false, "", "", "", "", true, new[] { "With&Invalid&Separators" })]
-        public void InvalidConfiguration_DiagnosticIsReported(int expectedValueErrorCount,
+        public void InvalidConfiguration_DiagnosticReported(int expectedValueErrorCount,
             bool useNamespaces, string valueObjectNamespace = null, string entityNamespace = null, string aggregateNamespace = null, string enumNamespace = null,
             bool useUsings = false, string[] additionalUsings = null)
         {
             var schema = GetSchema("ValueObject", "EmptyTestValueObject");
             var configuration = GetConfiguration(useNamespaces, valueObjectNamespace, entityNamespace,
                 aggregateNamespace, enumNamespace, useUsings, additionalUsings);
-            
+
             var driver = SetupGeneratorDriver(schema, configuration);
-            
+
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             generatedFileTexts.Should().BeEmpty();
@@ -118,11 +166,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [TestCase(1, "ValueObject|TestDuplicateName|2", "Entity|TestDuplicateName|2")]
         [TestCase(1, "ValueObject|TestDuplicateName|2", "Entity|TestDuplicateName|1", "Aggregate|TestDuplicateName|1", "Enumeration|TestDuplicateName|1")]
         [TestCase(2, "ValueObject|TestDuplicateValueObject|2", "Entity|TestEntity|1", "Aggregate|TestAggregate|1", "Enumeration|TestDuplicateEnum|2")]
-        public void ModelWithDuplicatedNames_DiagnosticIsReported(int expectedDuplicateCount, params string[] duplicates)
+        public void ModelWithDuplicatedNames_DiagnosticReported(int expectedDuplicateCount, params string[] duplicates)
         {
             var schemas = duplicates
                 .Select(ds => ds.Split('|'))
-                .Select(d => new { Kind = d[0], Name = d[1], Count = int.Parse(d[2])})
+                .Select(d => new { Kind = d[0], Name = d[1], Count = int.Parse(d[2]) })
                 .Select(d => Enumerable.Repeat(GetSchema(d.Kind, d.Name), d.Count))
                 .SelectMany(a => a)
                 .ToArray();
