@@ -60,7 +60,6 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void FieldWithInitializationClass_GeneratedCorrectly()
         {
-            var accessModifiers = new[] { SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword };
             var objectCreationSyntax = SyntaxFactory
                 .ObjectCreationExpression(SyntaxFactory.IdentifierName("System.DateTime"))
                 .WithArgumentList(
@@ -87,7 +86,7 @@ namespace HUGs.Generator.Common.Tests
                     );
 
             var builder = new ClassBuilder("TestClass41");
-            builder.AddFieldWithInitialization("System.DateTime", "TestField", accessModifiers, objectCreationSyntax);
+            builder.AddFieldWithInitialization("System.DateTime", "TestField", objectCreationSyntax, SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword);
 
             var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();

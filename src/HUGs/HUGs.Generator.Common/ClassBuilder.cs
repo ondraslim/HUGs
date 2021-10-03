@@ -36,10 +36,10 @@ namespace HUGs.Generator.Common
 
         public ClassBuilder AddField(string type, string name, params SyntaxKind[] accessModifiers)
         {
-            return AddFieldWithInitialization(type, name, accessModifiers, null);
+            return AddFieldWithInitialization(type, name, null, accessModifiers);
         }
 
-        public ClassBuilder AddFieldWithInitialization(string type, string name, SyntaxKind[] accessModifiers, ObjectCreationExpressionSyntax objectCreationExpressionSyntax)
+        public ClassBuilder AddFieldWithInitialization(string type, string name, ObjectCreationExpressionSyntax objectCreationExpressionSyntax, params SyntaxKind[] accessModifiers)
         {
             var variable = SyntaxFactory.VariableDeclarator(name);
             if (objectCreationExpressionSyntax is not null)
@@ -64,7 +64,7 @@ namespace HUGs.Generator.Common
 
         #region Add property methods
 
-        public ClassBuilder AddFullProperty(string type, string name, SyntaxKind[] accessModifiers)
+        public ClassBuilder AddFullProperty(string type, string name, params SyntaxKind[] accessModifiers)
         {
             var accessors = new[] {
                 SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
@@ -114,7 +114,7 @@ namespace HUGs.Generator.Common
             string type,
             string name,
             string backingFieldName,
-            SyntaxKind[] accessModifiers)
+            params SyntaxKind[] accessModifiers)
         {
             var propertyDeclaration = SyntaxFactory
                 .PropertyDeclaration(SyntaxFactory.ParseTypeName(type), SyntaxFactory.Identifier(name))

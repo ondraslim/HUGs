@@ -54,7 +54,7 @@ namespace HUGs.Generator.DDD.Ddd
             return linesOfCode;
         }
 
-        public static void AddClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties, bool withPrivateSetter = false)
+        public static void AddDddClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties, bool withPrivateSetter = false)
         {
             foreach (var property in properties)
             {
@@ -62,10 +62,7 @@ namespace HUGs.Generator.DDD.Ddd
                 {
                     classBuilder
                         .AddField($"List<{property.TypeWithoutArray}>", property.PrivateName, SyntaxKind.PrivateKeyword)
-                        .AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{property.TypeWithoutArray}>", property.Name, property.PrivateName, new[]
-                        {
-                            SyntaxKind.PublicKeyword
-                        });
+                        .AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{property.TypeWithoutArray}>", property.Name, property.PrivateName, SyntaxKind.PublicKeyword);
                 }
                 else
                 {
@@ -77,6 +74,21 @@ namespace HUGs.Generator.DDD.Ddd
                     {
                         classBuilder.AddGetOnlyProperty(property.FullType, property.Name, SyntaxKind.PublicKeyword);
                     }
+                }
+            }
+        }
+
+        public static void AddDbEntityClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties)
+        {
+            foreach (var property in properties)
+            {
+                if (property.IsArrayProperty)
+                {
+                    classBuilder.AddFullProperty($"ICollection<{property.TypeWithoutArray}>", property.Name, SyntaxKind.PublicKeyword);
+                }
+                else
+                {
+                    classBuilder.AddFullProperty(property.Type, property.Name, SyntaxKind.PublicKeyword);
                 }
             }
         }
