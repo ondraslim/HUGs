@@ -25,6 +25,8 @@ namespace HUGs.DDD.Generated.DbEntity
 
         public ulong UlongProperty { get; set; }
 
+        public ICollection<string> ArrayProperty { get; set; }
+
         public int? OptionalProperty { get; set; }
     }
 }

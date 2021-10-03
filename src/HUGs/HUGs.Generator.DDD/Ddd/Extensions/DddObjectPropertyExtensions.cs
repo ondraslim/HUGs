@@ -10,6 +10,10 @@ namespace HUGs.Generator.DDD.Ddd.Extensions
         {
             return Constants.WhitelistedTypes.Contains(property.TypeWithoutArray);
         }
-        
+
+        public static bool IsDddModelType(this DddObjectProperty property, DddModel dddModel)
+        {
+            return dddModel.GetDddModelTypes().Contains(property.TypeWithoutArray);
+        }
     }
 }
