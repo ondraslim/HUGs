@@ -34,7 +34,7 @@ namespace HUGs.Generator.DDD.Tests
                 var schema = new DddObjectSchema
                 {
                     Kind = kind,
-                    Name = "TestClassName",
+                    Name = $"{kind}TestClass",
                     Properties = properties
                 };
 

@@ -9,8 +9,10 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class TestClassNameDbEntity
+    public class EntityTestClassDbEntity
     {
+        public Guid Id { get; set; }
+
         public string StringProperty { get; set; }
 
         public int IntProperty { get; set; }

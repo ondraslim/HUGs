@@ -9,7 +9,7 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class TestClassNameDbEntity
+    public class ValueObjectTestClassDbEntity
     {
         public string StringProperty { get; set; }
 
