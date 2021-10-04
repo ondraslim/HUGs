@@ -9,20 +9,20 @@ using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
 
-namespace My.Desired.Namespace.Aggregates
+namespace My.Desired.Namespace.Entities
 {
-    public class SimpleAggregateId : EntityId<SimpleAggregate>
+    public class SimpleEntityId : EntityId<SimpleEntity>
     {
-        public SimpleAggregateId(Guid value): base(value)
+        public SimpleEntityId(Guid value): base(value)
         {
         }
     }
 
-    public partial class SimpleAggregate : HUGs.Generator.DDD.BaseModels.Aggregate<SimpleAggregateId>
+    public partial class SimpleEntity : HUGs.Generator.DDD.BaseModels.Entity<SimpleEntityId>
     {
         public string Number { get; private set; }
 
-        public SimpleAggregate(IId<SimpleAggregateId> id, string Number)
+        public SimpleEntity(IId<SimpleEntityId> id, string Number)
         {
             Id = id;
             this.Number = Number;

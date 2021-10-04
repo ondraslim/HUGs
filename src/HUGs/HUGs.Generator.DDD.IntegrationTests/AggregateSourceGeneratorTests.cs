@@ -25,9 +25,10 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(1);
+            generatedFileTexts.Should().HaveCount(2);
 
-            Check.CheckString(generatedFileTexts.First(), checkName: fileName, fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[0], checkName: fileName, fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[1], checkName: $"{fileName}DbEntity", fileExtension: "cs");
         }
     }
 }

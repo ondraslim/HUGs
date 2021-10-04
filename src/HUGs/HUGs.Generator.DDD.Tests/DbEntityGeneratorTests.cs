@@ -15,7 +15,7 @@ namespace HUGs.Generator.DDD.Tests
         private readonly DddGeneratorConfiguration generatorConfiguration = new();
 
         [Test]
-        public void AllowedKindWithPredefinedTypes_DbEntityGenerated()
+        public void AllowedKindWithWhitelistedTypes_DbEntityGenerated()
         {
             var properties = new[] {
                 new DddObjectProperty { Name = "StringProperty", Type = "string" },
@@ -38,7 +38,10 @@ namespace HUGs.Generator.DDD.Tests
                     Properties = properties
                 };
 
-                var actualCode = DbEntityGenerator.GenerateDbEntity(schema, generatorConfiguration);
+                var model = new DddModel();
+                model.AddObjectSchema(schema);
+
+                var actualCode = DbEntityGenerator.GenerateDbEntity(schema, generatorConfiguration, model);
                 check.CheckString(actualCode, checkName: schema.SourceCodeFileName, fileExtension: "cs");
             }
         }
@@ -52,7 +55,9 @@ namespace HUGs.Generator.DDD.Tests
                 Name = "TestClassName"
             };
 
-            Action act = () => DbEntityGenerator.GenerateDbEntity(schema, generatorConfiguration);
+            var model = new DddModel();
+            model.AddObjectSchema(schema);
+            Action act = () => DbEntityGenerator.GenerateDbEntity(schema, generatorConfiguration, model);
 
             act.Should().ThrowExactly<DddSchemaKindToDbEntityNotSupportedException>();
         }

@@ -8,5 +8,6 @@
         public DddObjectValue[] Values { get; set; }
 
         public string SourceCodeFileName => $"{Name}{Kind}";
+        public string DbEntityFileName => $"{Name}DbEntity";
     }
 }

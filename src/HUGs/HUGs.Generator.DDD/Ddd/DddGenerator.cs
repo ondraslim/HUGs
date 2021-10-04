@@ -42,16 +42,32 @@ namespace HUGs.Generator.DDD.Ddd
             foreach (var schema in dddModel.Schemas)
             {
                 AddDddObjectSchemaSource(context, schema, configuration);
+
+                if (schema.Kind != DddObjectKind.Enumeration)
+                {
+                    AddDbEntitySource(context, schema, configuration, dddModel);
+                }
             }
         }
+
 
         private static void AddDddObjectSchemaSource(
             GeneratorExecutionContext context,
             DddObjectSchema schema,
             DddGeneratorConfiguration configuration)
         {
-            var sourceCode = GenerateDddObjectCode(schema, configuration);
-            context.AddSource(schema.SourceCodeFileName, sourceCode);
+            var dddObjectSourceCode = GenerateDddObjectCode(schema, configuration);
+            context.AddSource(schema.SourceCodeFileName, dddObjectSourceCode);
+        }
+
+        private static void AddDbEntitySource(
+            GeneratorExecutionContext context,
+            DddObjectSchema schema, 
+            DddGeneratorConfiguration configuration,
+            DddModel dddModel)
+        {
+            var dbEntitySourceCode = DbEntityGenerator.GenerateDbEntity(schema, configuration, dddModel);
+            context.AddSource(schema.DbEntityFileName, dbEntitySourceCode);
         }
 
         private static string GenerateDddObjectCode(DddObjectSchema schema, DddGeneratorConfiguration configuration)

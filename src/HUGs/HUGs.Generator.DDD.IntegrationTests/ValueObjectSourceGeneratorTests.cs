@@ -4,7 +4,6 @@ using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -20,17 +19,18 @@ namespace HUGs.Generator.DDD.IntegrationTests
         [TestCase("SimpleValueObject")]
         [TestCase("SimpleValueObject2")]
         [TestCase("SimpleValueObjectWithOptional")]
-        public void SimpleSchema_GeneratedCorrectly(string valueObjectSchemaFile)
+        public void SimpleSchema_GeneratedCorrectly(string fileName)
         {
-            var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{valueObjectSchemaFile}.dddschema");
+            var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{fileName}.dddschema");
             var driver = SetupGeneratorDriver(schema);
 
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(1);
+            generatedFileTexts.Should().HaveCount(2);
 
-            Check.CheckString(generatedFileTexts.First(), checkName: valueObjectSchemaFile, fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[0], checkName: fileName, fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[1], checkName: $"{fileName}DbEntity", fileExtension: "cs");
         }
 
         [Test]
@@ -43,10 +43,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(2);
+            generatedFileTexts.Should().HaveCount(4);
 
-            Check.CheckString(generatedFileTexts.First(), checkName: "SimpleValueObject1", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts.Last(), checkName: "SimpleValueObject2", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[0], checkName: "SimpleValueObject1", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[1], checkName: "SimpleValueObject1DbEntity", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[2], checkName: "SimpleValueObject2", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[3], checkName: "SimpleValueObject2DbEntity", fileExtension: "cs");
         }
     }
 }

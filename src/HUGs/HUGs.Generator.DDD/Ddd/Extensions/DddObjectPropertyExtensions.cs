@@ -15,5 +15,13 @@ namespace HUGs.Generator.DDD.Ddd.Extensions
         {
             return dddModel.GetDddModelTypes().Contains(property.TypeWithoutArray);
         }
+
+        public static bool IsDddModelTypeOfKind(this DddObjectProperty property, DddModel dddModel, DddObjectKind kind)
+        {
+            return dddModel.Schemas
+                .Where(s => s.Kind == kind)
+                .Select(s => s.Name)
+                .Contains(property.TypeWithoutArray);
+        }
     }
 }

@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using HUGs.Generator.DDD.BaseModels;
-using My.Additional.Using1;
-using My.Additional.Using2;
 using My.Desired.Namespace.Entities;
 using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
@@ -11,10 +9,8 @@ using My.Desired.Namespace.Enumerations;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class SimpleAggregateDbEntity
+    public class Simple1DbEntity
     {
-        public Guid Id { get; set; }
-
-        public string Number { get; set; }
+        public string Text { get; set; }
     }
 }

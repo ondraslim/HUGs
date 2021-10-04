@@ -29,11 +29,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(5);
+            generatedFileTexts.Should().HaveCount(9);
 
             foreach (var generatedFile in generatedFileTexts)
             {
-                var className = generatedFile.Split(' ').SkipWhile(t => t != "class").Skip(1).First();
+                var className = generatedFile.Split(' ').SkipWhile(t => t != "class").Skip(1).First().Trim();
                 Check.CheckString(generatedFile, checkName: className, fileExtension: "cs");
             }
         }

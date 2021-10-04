@@ -11,7 +11,7 @@ using My.Desired.Namespace.Enumerations;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class SimpleAggregateDbEntity
+    public class SimpleEntityDbEntity
     {
         public Guid Id { get; set; }
 
