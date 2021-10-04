@@ -9,7 +9,7 @@ using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
 
-namespace HUGs.DDD.Generated.DbEntity
+namespace My.Desired.Namespace.DbEntities
 {
     public class Simple1DbEntity
     {

@@ -17,7 +17,6 @@
             Enumeration = DefaultEnumerationNamespace;
         }
 
-        // TODO: db entity namespace configuration test
         public string DbEntity { get; set; }
 
         public string ValueObject { get; set; }
