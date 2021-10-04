@@ -11,8 +11,10 @@ using My.Desired.Namespace.Enumerations;
 
 namespace My.Desired.Namespace.DbEntities
 {
-    public class Simple1DbEntity
+    public class SimpleEntityDbEntity
     {
-        public string Text { get; set; }
+        public Guid Id { get; set; }
+
+        public string Number { get; set; }
     }
 }

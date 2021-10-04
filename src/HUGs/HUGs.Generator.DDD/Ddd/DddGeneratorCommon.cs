@@ -34,9 +34,7 @@ namespace HUGs.Generator.DDD.Ddd
         {
             var parameters = properties
                 .Where(p => !p.Computed)
-                .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(
-                    p.IsArrayProperty ? $"IEnumerable<{p.FullType}>" : p.FullType,
-                    p.Name))
+                .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(p.GetCSharpType("IEnumerable"), p.Name))
                 .ToArray();
 
             return parameters;
@@ -47,25 +45,23 @@ namespace HUGs.Generator.DDD.Ddd
             var linesOfCode = properties
                 .Where(p => !p.Computed)
                 .Select(p => p.IsArrayProperty
-                    ? $"this.{p.PrivateName} = {p.Name}.ToList();"
+                    ? $"this.{p.PrivateName} = {p.Name}{(p.Optional ? "?" : "")}.ToList();"
                     : $"this.{p.Name} = {p.Name};")
                 .ToArray();
 
             return linesOfCode;
         }
 
-        public static void AddClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties, bool withPrivateSetter = false)
+        public static void AddDddClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties, bool withPrivateSetter = false)
         {
             foreach (var property in properties)
             {
                 if (property.IsArrayProperty)
                 {
                     classBuilder
-                        .AddField($"List<{property.TypeWithoutArray}>", property.PrivateName, SyntaxKind.PrivateKeyword)
-                        .AddGetOnlyPropertyWithBackingField($"IReadOnlyList<{property.TypeWithoutArray}>", property.Name, property.PrivateName, new[]
-                        {
-                            SyntaxKind.PublicKeyword
-                        });
+                        .AddField(property.GetCSharpType(arrayCsharpType: "List"), property.PrivateName, SyntaxKind.PrivateKeyword)
+                        .AddGetOnlyPropertyWithBackingField(
+                            property.GetCSharpType(arrayCsharpType: "IReadOnlyList"), property.Name, property.PrivateName, SyntaxKind.PublicKeyword);
                 }
                 else
                 {
@@ -78,6 +74,14 @@ namespace HUGs.Generator.DDD.Ddd
                         classBuilder.AddGetOnlyProperty(property.FullType, property.Name, SyntaxKind.PublicKeyword);
                     }
                 }
+            }
+        }
+
+        public static void AddDbEntityClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties)
+        {
+            foreach (var property in properties.Where(p => !p.Computed))
+            {
+                classBuilder.AddFullProperty(property.GetCSharpType(), property.Name, SyntaxKind.PublicKeyword);
             }
         }
 

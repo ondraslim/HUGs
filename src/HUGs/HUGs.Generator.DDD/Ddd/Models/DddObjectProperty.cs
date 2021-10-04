@@ -10,15 +10,25 @@ namespace HUGs.Generator.DDD.Ddd.Models
         public bool Computed { get; set; }
 
         [YamlIgnore]
-        public bool IsArrayProperty => Type?.EndsWith("[]") ?? false;
+        public string PrivateName => $"_{Name}";
         
         [YamlIgnore]
         public string TypeWithoutArray => Type?.Replace("[]", "");
         
         [YamlIgnore]
         public string FullType => $"{TypeWithoutArray}{(Optional ? "?" : "")}";
-        
+
         [YamlIgnore]
-        public string PrivateName => $"_{Name}";
+        public bool IsArrayProperty => Type?.EndsWith("[]") ?? false;
+
+        public string GetCSharpType(string arrayCsharpType = "ICollection")
+        {
+            if (IsArrayProperty)
+            {
+                return $"{arrayCsharpType}<{TypeWithoutArray}>{(Optional ? "?" : "")}";
+            }
+
+            return FullType;
+        }
     }
 }

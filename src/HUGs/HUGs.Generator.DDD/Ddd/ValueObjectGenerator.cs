@@ -13,20 +13,20 @@ namespace HUGs.Generator.DDD.Ddd
     internal static class ValueObjectGenerator
     {
         public static string GenerateValueObjectCode(
-            DddObjectSchema objectSchema, 
+            DddObjectSchema schema, 
             DddGeneratorConfiguration generatorConfiguration)
         {
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
-            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(objectSchema.Kind));
+            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(schema.Kind));
 
             DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
 
-            var classBuilder = PrepareValueObjectClassBuilder(objectSchema.Name);
-            DddGeneratorCommon.AddClassProperties(classBuilder, objectSchema.Properties);
-            AddConstructor(classBuilder, objectSchema);
+            var classBuilder = PrepareValueObjectClassBuilder(schema.Name);
+            DddGeneratorCommon.AddDddClassProperties(classBuilder, schema.Properties);
+            AddConstructor(classBuilder, schema);
 
-            classBuilder.AddMethod(GetGetAtomicValuesMethod(objectSchema));
+            classBuilder.AddMethod(GetGetAtomicValuesMethod(schema));
             classBuilder.AddMethod(DddGeneratorCommon.BuildOnInitializedMethod());
 
             syntaxBuilder.AddClass(classBuilder.Build());
@@ -43,20 +43,20 @@ namespace HUGs.Generator.DDD.Ddd
             return classBuilder;
         }
 
-        private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema valueObject)
+        private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema schema)
         {
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
-            var parameters = DddGeneratorCommon.CreateParametersFromProperties(valueObject.Properties);
+            var parameters = DddGeneratorCommon.CreateParametersFromProperties(schema.Properties);
 
-            var propertyAssignments = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(valueObject.Properties);
+            var propertyAssignments = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(schema.Properties);
             var ctorBody = propertyAssignments
                 .Append("OnInitialized();")
                 .ToArray();
 
-            classBuilder.AddConstructor(accessModifiers, valueObject.Name, parameters, ctorBody);
+            classBuilder.AddConstructor(accessModifiers, schema.Name, parameters, ctorBody);
         }
 
-        private static MethodDeclarationSyntax GetGetAtomicValuesMethod(DddObjectSchema valueObject)
+        private static MethodDeclarationSyntax GetGetAtomicValuesMethod(DddObjectSchema schema)
         {
             var methodBuilder = new MethodBuilder();
 
@@ -65,7 +65,7 @@ namespace HUGs.Generator.DDD.Ddd
                 .SetReturnType("IEnumerable<object>")
                 .SetName("GetAtomicValues");
 
-            foreach (var prop in valueObject.Properties)
+            foreach (var prop in schema.Properties)
             {
                 methodBuilder.AddBodyLine($"yield return {prop.Name};");
             }

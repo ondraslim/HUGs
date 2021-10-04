@@ -39,29 +39,45 @@ namespace HUGs.Generator.DDD.Ddd
             DddGeneratorConfiguration configuration,
             DddModel dddModel)
         {
-            foreach (var objectSchema in dddModel.Schemas)
+            foreach (var schema in dddModel.Schemas)
             {
-                AddDddObjectSchemaSource(context, objectSchema, configuration);
+                AddDddObjectSchemaSource(context, schema, configuration);
+
+                if (schema.Kind != DddObjectKind.Enumeration)
+                {
+                    AddDbEntitySource(context, schema, configuration, dddModel);
+                }
             }
         }
 
+
         private static void AddDddObjectSchemaSource(
             GeneratorExecutionContext context,
-            DddObjectSchema objectSchema,
+            DddObjectSchema schema,
             DddGeneratorConfiguration configuration)
         {
-            var sourceCode = GenerateDddObjectCode(objectSchema, configuration);
-            context.AddSource(objectSchema.SourceCodeFileName, sourceCode);
+            var dddObjectSourceCode = GenerateDddObjectCode(schema, configuration);
+            context.AddSource(schema.SourceCodeFileName, dddObjectSourceCode);
         }
 
-        private static string GenerateDddObjectCode(DddObjectSchema objectSchema, DddGeneratorConfiguration configuration)
-            => objectSchema.Kind switch
+        private static void AddDbEntitySource(
+            GeneratorExecutionContext context,
+            DddObjectSchema schema, 
+            DddGeneratorConfiguration configuration,
+            DddModel dddModel)
+        {
+            var dbEntitySourceCode = DbEntityGenerator.GenerateDbEntity(schema, configuration, dddModel);
+            context.AddSource(schema.DbEntityFileName, dbEntitySourceCode);
+        }
+
+        private static string GenerateDddObjectCode(DddObjectSchema schema, DddGeneratorConfiguration configuration)
+            => schema.Kind switch
             {
-                DddObjectKind.ValueObject => ValueObjectGenerator.GenerateValueObjectCode(objectSchema, configuration),
-                DddObjectKind.Entity => IdentifiableGenerator.GenerateEntityCode(objectSchema, configuration),
-                DddObjectKind.Aggregate => IdentifiableGenerator.GenerateAggregateCode(objectSchema, configuration),
-                DddObjectKind.Enumeration => EnumerationGenerator.GenerateEnumerationCode(objectSchema, configuration),
-                _ => throw new ArgumentOutOfRangeException($"Kind '{objectSchema.Kind}' is not supported.")
+                DddObjectKind.ValueObject => ValueObjectGenerator.GenerateValueObjectCode(schema, configuration),
+                DddObjectKind.Entity => IdentifiableGenerator.GenerateEntityCode(schema, configuration),
+                DddObjectKind.Aggregate => IdentifiableGenerator.GenerateAggregateCode(schema, configuration),
+                DddObjectKind.Enumeration => EnumerationGenerator.GenerateEnumerationCode(schema, configuration),
+                _ => throw new ArgumentOutOfRangeException($"Kind '{schema.Kind}' is not supported.")
             };
 
     }

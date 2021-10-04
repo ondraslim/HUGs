@@ -13,34 +13,34 @@ namespace HUGs.Generator.DDD.Ddd
     internal class IdentifiableGenerator
     {
         public static string GenerateAggregateCode(
-            DddObjectSchema aggregate,
+            DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)
         {
-            return GenerateIdentifiableObjectCode(aggregate, generatorConfiguration);
+            return GenerateIdentifiableObjectCode(schema, generatorConfiguration);
         }
 
         public static string GenerateEntityCode(
-            DddObjectSchema entity,
+            DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)
         {
-            return GenerateIdentifiableObjectCode(entity, generatorConfiguration);
+            return GenerateIdentifiableObjectCode(schema, generatorConfiguration);
         }
 
         private static string GenerateIdentifiableObjectCode(
-            DddObjectSchema objectSchema,
+            DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)
         {
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
-            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(objectSchema.Kind));
+            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(schema.Kind));
             DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
 
-            var entityIdClass = PrepareEntityIdClass(objectSchema.Name);
+            var entityIdClass = PrepareEntityIdClass(schema.Name);
             syntaxBuilder.AddClass(entityIdClass);
 
-            var classBuilder = PrepareIdentifiableClassBuilder(objectSchema, entityIdClass.Identifier.ValueText);
-            DddGeneratorCommon.AddClassProperties(classBuilder, objectSchema.Properties, withPrivateSetter: true);
-            AddClassConstructor(classBuilder, objectSchema, entityIdClass.Identifier.ValueText);
+            var classBuilder = PrepareIdentifiableClassBuilder(schema, entityIdClass.Identifier.ValueText);
+            DddGeneratorCommon.AddDddClassProperties(classBuilder, schema.Properties, withPrivateSetter: true);
+            AddClassConstructor(classBuilder, schema, entityIdClass.Identifier.ValueText);
 
             classBuilder.AddMethod(DddGeneratorCommon.BuildOnInitializedMethod());
             syntaxBuilder.AddClass(classBuilder.Build());
@@ -63,24 +63,24 @@ namespace HUGs.Generator.DDD.Ddd
             return classBuilder.Build();
         }
 
-        private static ClassBuilder PrepareIdentifiableClassBuilder(DddObjectSchema objectSchema, string entityIdClassIdentifier)
+        private static ClassBuilder PrepareIdentifiableClassBuilder(DddObjectSchema schema, string entityIdClassIdentifier)
         {
-            var classBuilder = new ClassBuilder(objectSchema.Name)
+            var classBuilder = new ClassBuilder(schema.Name)
                     .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
-                    .AddClassBaseTypes($"HUGs.Generator.DDD.BaseModels.{objectSchema.Kind}<{entityIdClassIdentifier}>");
+                    .AddClassBaseTypes($"HUGs.Generator.DDD.BaseModels.{schema.Kind}<{entityIdClassIdentifier}>");
 
             return classBuilder;
         }
 
-        private static void AddClassConstructor(ClassBuilder classBuilder, DddObjectSchema objectSchema, string entityIdClassIdentifier)
+        private static void AddClassConstructor(ClassBuilder classBuilder, DddObjectSchema schema, string entityIdClassIdentifier)
         {
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
 
-            var propertyParams = DddGeneratorCommon.CreateParametersFromProperties(objectSchema.Properties);
+            var propertyParams = DddGeneratorCommon.CreateParametersFromProperties(schema.Properties);
             var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax($"IId<{entityIdClassIdentifier}>", "id") };
             var ctorParams = ctorBaseParams.Concat(propertyParams).ToArray();
 
-            var propertyAssignments = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(objectSchema.Properties);
+            var propertyAssignments = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(schema.Properties);
             var ctorBody = new[] { "Id = id;" }
                 .Concat(propertyAssignments)
                 .Append("OnInitialized();")
@@ -88,7 +88,7 @@ namespace HUGs.Generator.DDD.Ddd
 
             classBuilder.AddConstructor(
                 accessModifiers,
-                objectSchema.Name,
+                schema.Name,
                 ctorParams,
                 ctorBody
             );

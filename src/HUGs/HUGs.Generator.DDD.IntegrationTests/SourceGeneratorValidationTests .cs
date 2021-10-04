@@ -1,18 +1,18 @@
 ﻿using FluentAssertions;
 using HUGs.Generator.Common.Diagnostics;
+using HUGs.Generator.DDD.Ddd.Configuration;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
 using System.Text;
-using HUGs.Generator.DDD.Ddd.Validation;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
     public class SourceGeneratorValidationTests : GeneratorTestBase
     {
-        private static readonly string[] Kinds = new[] { "Entity", "Aggregate", "ValueObject", "Enumeration" };
+        private static readonly string[] Kinds = { "Entity", "Aggregate", "ValueObject", "Enumeration" };
 
 
         [SetUp]
@@ -40,7 +40,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
         {
             foreach (var kind in Kinds)
             {
-                foreach (var whitelistedType in SchemaValidator.WhitelistedTypes)
+                foreach (var whitelistedType in Constants.WhitelistedTypes)
                 {
                     var schema = GetSchema(kind, "TestClassName", true, "TestPropertyName", whitelistedType);
                     var driver = SetupGeneratorDriver(schema);
@@ -48,8 +48,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
                     RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
                     diagnostics.Should().BeEmpty();
-                    generatedFileTexts.Should().HaveCount(1);
-                    generatedFileTexts.Where(g => g.Contains(kind) && g.Contains(whitelistedType)).Should().HaveCount(1);
+                    generatedFileTexts.Should().HaveCount(kind == "Enumeration" ? 1 : 2);
                 }
             }
         }
@@ -72,9 +71,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
                     RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
                     diagnostics.Should().BeEmpty();
-                    generatedFileTexts.Should().HaveCount(2);
-                    generatedFileTexts.Where(g => g.Contains($"class {classOneName}")).Should().HaveCount(1);
-                    generatedFileTexts.Where(g => g.Contains($"class {classTwoName}") && g.Contains(classTwoName)).Should().HaveCount(1);
+
+                    var expectedGeneratedFileCount = 4;
+                    if (kind == "Enumeration") expectedGeneratedFileCount--;
+                    if (kindOther == "Enumeration") expectedGeneratedFileCount--;
+                    generatedFileTexts.Should().HaveCount(expectedGeneratedFileCount);
                 }
             }
         }

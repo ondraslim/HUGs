@@ -14,19 +14,19 @@ namespace HUGs.Generator.DDD.Ddd
     internal static class EnumerationGenerator
     {
         public static string GenerateEnumerationCode(
-            DddObjectSchema objectSchema,
+            DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)
         {
             var syntaxBuilder = new RoslynSyntaxBuilder();
 
-            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(objectSchema.Kind));
+            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(schema.Kind));
 
             DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
 
-            var classBuilder = PrepareEnumerationClassBuilder(objectSchema.Name);
-            DddGeneratorCommon.AddClassProperties(classBuilder, objectSchema.Properties);
-            AddConstructor(classBuilder, objectSchema);
-            AddEnumerationFields(classBuilder, objectSchema);
+            var classBuilder = PrepareEnumerationClassBuilder(schema.Name);
+            DddGeneratorCommon.AddDddClassProperties(classBuilder, schema.Properties);
+            AddConstructor(classBuilder, schema);
+            AddEnumerationFields(classBuilder, schema);
 
             syntaxBuilder.AddClass(classBuilder.Build());
 
@@ -42,36 +42,37 @@ namespace HUGs.Generator.DDD.Ddd
             return classBuilder;
         }
 
-        private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema enumeration)
+        private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema schema)
         {
             var accessModifiers = new[] { SyntaxKind.PrivateKeyword };
             
             var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "internalName") };
-            var propertyParams = DddGeneratorCommon.CreateParametersFromProperties(enumeration.Properties);
+            var propertyParams = DddGeneratorCommon.CreateParametersFromProperties(schema.Properties);
             var ctorParams = ctorBaseParams.Concat(propertyParams).ToArray();
 
-            var ctorBody = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(enumeration.Properties);
+            var ctorBody = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(schema.Properties);
 
             classBuilder.AddConstructor(
                 accessModifiers,
-                enumeration.Name,
+                schema.Name,
                 ctorParams,
                 ctorBody,
                 ctorBaseParams);
         }
 
-        private static void AddEnumerationFields(ClassBuilder classBuilder, DddObjectSchema enumeration)
+        private static void AddEnumerationFields(ClassBuilder classBuilder, DddObjectSchema schema)
         {
-            var accessModifiers = new[] { SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword };
-            foreach (var value in enumeration.Values)
+            foreach (var value in schema.Values)
             {
-                var objectCreationSyntax = PrepareEnumFieldObjectCreationSyntax(enumeration, value);
-                classBuilder.AddFieldWithInitialization(enumeration.Name, value.Name, accessModifiers, objectCreationSyntax);
+                var objectCreationSyntax = PrepareEnumFieldObjectCreationSyntax(schema, value);
+                classBuilder.AddFieldWithInitialization(
+                    schema.Name, value.Name, objectCreationSyntax, 
+                    SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword);
             }
         }
 
         private static ObjectCreationExpressionSyntax PrepareEnumFieldObjectCreationSyntax(
-            DddObjectSchema enumeration,
+            DddObjectSchema schema,
             DddObjectValue value)
         {
             var nameofArgument = SyntaxFactory.Argument(
@@ -94,16 +95,16 @@ namespace HUGs.Generator.DDD.Ddd
             );
 
             var prepareEnumFieldObjectCreationSyntax = SyntaxFactory
-                .ObjectCreationExpression(SyntaxFactory.IdentifierName(enumeration.Name))
+                .ObjectCreationExpression(SyntaxFactory.IdentifierName(schema.Name))
                 .AddArgumentListArguments(nameofArgument)
-                .AddArgumentListArguments(value.Properties.Select(i => ArgumentSyntax(i.Key, i.Value, enumeration)).ToArray());
+                .AddArgumentListArguments(value.Properties.Select(i => ArgumentSyntax(i.Key, i.Value, schema)).ToArray());
 
             return prepareEnumFieldObjectCreationSyntax;
         }
 
-        private static ArgumentSyntax ArgumentSyntax(string propertyName, string propertyValue, DddObjectSchema enumeration)
+        private static ArgumentSyntax ArgumentSyntax(string propertyName, string propertyValue, DddObjectSchema schema)
         {
-            if (enumeration.Properties.Any(p => p.Name == propertyName && p.Type == "string"))
+            if (schema.Properties.Any(p => p.Name == propertyName && p.Type == "string"))
             {
                 return SyntaxFactory.Argument(
                     SyntaxFactory.LiteralExpression(

@@ -17,6 +17,10 @@
 		<ProjectReference Include="..\HUGs.Generator.DDD.BaseModels\HUGs.Generator.DDD.Framework.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Ddd\Configuration\" />
+	</ItemGroup>
+
 	<PropertyGroup>
 		<GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
 	</PropertyGroup>

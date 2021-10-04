@@ -29,9 +29,10 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(1);
+            generatedFileTexts.Should().HaveCount(2);
 
-            Check.CheckString(generatedFileTexts.First(), checkName: $"{schemaFile}_{configFile}", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[0], checkName: $"{schemaFile}_{configFile}", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[1], checkName: $"{schemaFile}_{configFile}_DbEntity", fileExtension: "cs");
         }
 
         [Test]
@@ -45,18 +46,20 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(2);
+            generatedFileTexts.Should().HaveCount(4);
 
-            Check.CheckString(generatedFileTexts.First(), checkName: "First", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts.Last(), checkName: "Second", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[0], checkName: "First", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[1], checkName: "FirstDbEntity", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[2], checkName: "Second", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[3], checkName: "SecondDbEntity", fileExtension: "cs");
         }
 
         [Test]
         [TestCase("ValueObjects/SimpleValueObject.dddschema", "AdditionalUsingsConfig")]
         [TestCase("Aggregates/SimpleAggregate.dddschema", "AdditionalUsingsConfig")]
         [TestCase("Entities/SimpleEntity.dddschema", "AdditionalUsingsConfig")]
-        [TestCase("Enumerations/SimpleEnumeration.dddschema", "AdditionalUsingsConfig")]
-        public void AdditionalUsings_GeneratedClassesUseTheUsings(string schemaFilePath, string configurationFile)
+        [TestCase("Enumerations/SimpleEnumeration.dddschema", "AdditionalUsingsConfig", false)]
+        public void AdditionalUsings_GeneratedClassesUseTheUsings(string schemaFilePath, string configurationFile, bool dbEntityExpectedToBeGenerated = true)
         {
             var schema = File.ReadAllText($"../../../TestData/Schemas/{schemaFilePath}");
             var configuration1 = File.ReadAllText($"../../../TestData/Configuration/{configurationFile}.dddconfig");
@@ -64,11 +67,21 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
-            diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(1);
+            var expectedGeneratedFiles = 1;
+            if (dbEntityExpectedToBeGenerated)
+            {
+                expectedGeneratedFiles++;
+            }
 
-            var checkName = schemaFilePath.SkipWhile(c => c != '/').Skip(1).TakeWhile(c => c != '.').ToArray();
-            Check.CheckString(generatedFileTexts.First(), checkName: new string(checkName), fileExtension: "cs");
+            diagnostics.Should().BeEmpty();
+            generatedFileTexts.Should().HaveCount(expectedGeneratedFiles);
+
+            var checkName = new string(schemaFilePath.SkipWhile(c => c != '/').Skip(1).TakeWhile(c => c != '.').ToArray());
+            Check.CheckString(generatedFileTexts[0], checkName: checkName, fileExtension: "cs");
+            if (dbEntityExpectedToBeGenerated)
+            {
+                Check.CheckString(generatedFileTexts[1], checkName: $"{checkName}DbEntity", fileExtension: "cs");
+            }
         }
 
         [Test]
@@ -85,7 +98,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(4);
+            generatedFileTexts.Should().HaveCount(7);
 
             for (var index = 0; index < generatedFileTexts.Length; index++)
             {
