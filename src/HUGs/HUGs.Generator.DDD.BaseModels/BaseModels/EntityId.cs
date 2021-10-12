@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HUGs.Generator.DDD.BaseModels
+namespace HUGs.Generator.DDD.Framework.BaseModels
 {
     public class EntityId<T> : ValueObject, IId<Guid>
     {

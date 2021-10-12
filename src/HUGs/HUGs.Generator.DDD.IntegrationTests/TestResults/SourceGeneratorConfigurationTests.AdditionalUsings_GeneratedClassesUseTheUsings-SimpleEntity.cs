@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
+using HUGs.Generator.DDD.Framework.BaseModels;
+using HUGs.Generator.DDD.Framework.Mapping;
 using My.Additional.Using1;
 using My.Additional.Using2;
 using HUGs.DDD.Generated.Entity;
@@ -18,7 +19,7 @@ namespace HUGs.DDD.Generated.Entity
         }
     }
 
-    public partial class SimpleEntity : HUGs.Generator.DDD.BaseModels.Entity<SimpleEntityId>
+    public partial class SimpleEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<SimpleEntityId>
     {
         public string Number { get; private set; }
 

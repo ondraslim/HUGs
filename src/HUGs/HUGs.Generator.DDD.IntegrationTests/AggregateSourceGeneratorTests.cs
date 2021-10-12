@@ -3,7 +3,6 @@ using FluentAssertions;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
 using System.IO;
-using System.Linq;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {

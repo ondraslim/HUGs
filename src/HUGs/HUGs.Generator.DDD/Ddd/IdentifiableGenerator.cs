@@ -5,28 +5,12 @@ using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
 {
-    internal class IdentifiableGenerator
+    internal abstract class IdentifiableGenerator
     {
-        public static string GenerateAggregateCode(
-            DddObjectSchema schema,
-            DddGeneratorConfiguration generatorConfiguration)
-        {
-            return GenerateIdentifiableObjectCode(schema, generatorConfiguration);
-        }
-
-        public static string GenerateEntityCode(
-            DddObjectSchema schema,
-            DddGeneratorConfiguration generatorConfiguration)
-        {
-            return GenerateIdentifiableObjectCode(schema, generatorConfiguration);
-        }
-
-        private static string GenerateIdentifiableObjectCode(
+        protected static string GenerateIdentifiableObjectCode(
             DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)
         {
@@ -67,7 +51,7 @@ namespace HUGs.Generator.DDD.Ddd
         {
             var classBuilder = new ClassBuilder(schema.Name)
                     .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
-                    .AddClassBaseTypes($"HUGs.Generator.DDD.BaseModels.{schema.Kind}<{entityIdClassIdentifier}>");
+                    .AddClassBaseTypes($"HUGs.Generator.DDD.Framework.BaseModels.{schema.Kind}<{entityIdClassIdentifier}>");
 
             return classBuilder;
         }

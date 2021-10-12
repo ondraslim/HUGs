@@ -50,7 +50,6 @@ namespace HUGs.Generator.DDD.Ddd
             }
         }
 
-
         private static void AddDddObjectSchemaSource(
             GeneratorExecutionContext context,
             DddObjectSchema schema,
@@ -74,8 +73,8 @@ namespace HUGs.Generator.DDD.Ddd
             => schema.Kind switch
             {
                 DddObjectKind.ValueObject => ValueObjectGenerator.GenerateValueObjectCode(schema, configuration),
-                DddObjectKind.Entity => IdentifiableGenerator.GenerateEntityCode(schema, configuration),
-                DddObjectKind.Aggregate => IdentifiableGenerator.GenerateAggregateCode(schema, configuration),
+                DddObjectKind.Entity => EntityGenerator.GenerateEntityCode(schema, configuration),
+                DddObjectKind.Aggregate => AggregateGenerator.GenerateAggregateCode(schema, configuration),
                 DddObjectKind.Enumeration => EnumerationGenerator.GenerateEnumerationCode(schema, configuration),
                 _ => throw new ArgumentOutOfRangeException($"Kind '{schema.Kind}' is not supported.")
             };

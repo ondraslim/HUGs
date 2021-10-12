@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
+using HUGs.Generator.DDD.Framework.BaseModels;
+using HUGs.Generator.DDD.Framework.Mapping;
 using My.Additional.Using1;
 using My.Additional.Using2;
 using My.Desired.Namespace.Entities;
@@ -11,7 +12,7 @@ using My.Desired.Namespace.Enumerations;
 
 namespace My.Desired.Namespace.Enumerations
 {
-    public class SimpleEnumeration : HUGs.Generator.DDD.BaseModels.Enumeration
+    public class SimpleEnumeration : HUGs.Generator.DDD.Framework.BaseModels.Enumeration
     {
         public static readonly SimpleEnumeration SampleEnumeration = new SimpleEnumeration(nameof(SampleEnumeration), "PropertyNameValue");
         public string Name { get; }

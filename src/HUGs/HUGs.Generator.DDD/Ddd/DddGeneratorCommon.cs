@@ -20,7 +20,8 @@ namespace HUGs.Generator.DDD.Ddd
                 "System",
                 "System.Linq",
                 "System.Collections.Generic",
-                "HUGs.Generator.DDD.BaseModels");
+                "HUGs.Generator.DDD.Framework.BaseModels",
+                "HUGs.Generator.DDD.Framework.Mapping");
 
             syntaxBuilder.AddUsings(generatorConfiguration.AdditionalUsings.ToArray());
 

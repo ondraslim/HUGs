@@ -1,28 +1,29 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
+using HUGs.Generator.DDD.Framework.BaseModels;
+using HUGs.Generator.DDD.Framework.Mapping;
 using HUGs.DDD.Generated.Entity;
 using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
 
-namespace HUGs.DDD.Generated.Aggregate
+namespace HUGs.DDD.Generated.Entity
 {
-    public class PropertiesAggregateId : EntityId<PropertiesAggregate>
+    public class PropertiesEntityId : EntityId<PropertiesEntity>
     {
-        public PropertiesAggregateId(Guid value): base(value)
+        public PropertiesEntityId(Guid value): base(value)
         {
         }
     }
 
-    public partial class PropertiesAggregate : HUGs.Generator.DDD.BaseModels.Aggregate<PropertiesAggregateId>
+    public partial class PropertiesEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<PropertiesEntityId>
     {
         public string Text { get; private set; }
 
         public double? Number { get; private set; }
 
-        public PropertiesAggregate(IId<PropertiesAggregateId> id, string Text, double? Number)
+        public PropertiesEntity(IId<PropertiesEntityId> id, string Text, double? Number)
         {
             Id = id;
             this.Text = Text;
