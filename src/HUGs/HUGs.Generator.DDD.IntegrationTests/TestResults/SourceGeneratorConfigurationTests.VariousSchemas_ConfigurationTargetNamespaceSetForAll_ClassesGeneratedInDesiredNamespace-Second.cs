@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using HUGs.Generator.DDD.BaseModels;
+using HUGs.Generator.DDD.Framework.BaseModels;
+using HUGs.Generator.DDD.Framework.Mapping;
 using My.Desired.Namespace.Entities;
 using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
@@ -16,7 +17,7 @@ namespace My.Desired.Namespace.Aggregates
         }
     }
 
-    public partial class SimpleAggregate : HUGs.Generator.DDD.BaseModels.Aggregate<SimpleAggregateId>
+    public partial class SimpleAggregate : HUGs.Generator.DDD.Framework.BaseModels.Aggregate<SimpleAggregateId>
     {
         public string Number { get; private set; }
 

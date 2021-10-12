@@ -1,4 +1,4 @@
-﻿namespace HUGs.Generator.DDD.BaseModels
+﻿namespace HUGs.Generator.DDD.Framework.BaseModels
 {
     public abstract class Entity<TKey> : IEntity<TKey>
     {
