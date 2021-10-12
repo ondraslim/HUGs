@@ -61,7 +61,7 @@ namespace HUGs.Generator.Common.Tests
         public void FieldWithInitializationClass_GeneratedCorrectly()
         {
             var objectCreationSyntax = SyntaxFactory
-                .ObjectCreationExpression(SyntaxFactory.IdentifierName("System.DateTime"))
+                .ImplicitObjectCreationExpression()
                 .WithArgumentList(
                     SyntaxFactory.ArgumentList(
                         SyntaxFactory.SeparatedList<ArgumentSyntax>(

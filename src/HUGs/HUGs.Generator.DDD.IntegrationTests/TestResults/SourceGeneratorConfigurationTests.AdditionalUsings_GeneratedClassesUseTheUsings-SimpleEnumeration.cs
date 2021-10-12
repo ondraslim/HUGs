@@ -14,7 +14,7 @@ namespace HUGs.DDD.Generated.Enumeration
 {
     public class SimpleEnumeration : HUGs.Generator.DDD.Framework.BaseModels.Enumeration
     {
-        public static readonly SimpleEnumeration SampleEnumeration = new SimpleEnumeration(nameof(SampleEnumeration), "PropertyNameValue");
+        public static readonly SimpleEnumeration SampleEnumeration = new(nameof(SampleEnumeration), "PropertyNameValue");
         public string Name { get; }
 
         private SimpleEnumeration(string internalName, string Name): base(internalName)

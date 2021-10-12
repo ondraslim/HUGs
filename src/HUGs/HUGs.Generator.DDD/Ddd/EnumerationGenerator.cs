@@ -71,7 +71,7 @@ namespace HUGs.Generator.DDD.Ddd
             }
         }
 
-        private static ObjectCreationExpressionSyntax PrepareEnumFieldObjectCreationSyntax(
+        private static ImplicitObjectCreationExpressionSyntax PrepareEnumFieldObjectCreationSyntax(
             DddObjectSchema schema,
             DddObjectValue value)
         {
@@ -95,7 +95,7 @@ namespace HUGs.Generator.DDD.Ddd
             );
 
             var prepareEnumFieldObjectCreationSyntax = SyntaxFactory
-                .ObjectCreationExpression(SyntaxFactory.IdentifierName(schema.Name))
+                .ImplicitObjectCreationExpression()
                 .AddArgumentListArguments(nameofArgument)
                 .AddArgumentListArguments(value.Properties.Select(i => ArgumentSyntax(i.Key, i.Value, schema)).ToArray());
 

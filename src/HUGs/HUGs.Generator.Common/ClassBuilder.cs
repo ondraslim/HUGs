@@ -39,7 +39,11 @@ namespace HUGs.Generator.Common
             return AddFieldWithInitialization(type, name, null, accessModifiers);
         }
 
-        public ClassBuilder AddFieldWithInitialization(string type, string name, ObjectCreationExpressionSyntax objectCreationExpressionSyntax, params SyntaxKind[] accessModifiers)
+        public ClassBuilder AddFieldWithInitialization(
+            string type, 
+            string name,
+            ImplicitObjectCreationExpressionSyntax objectCreationExpressionSyntax, 
+            params SyntaxKind[] accessModifiers)
         {
             var variable = SyntaxFactory.VariableDeclarator(name);
             if (objectCreationExpressionSyntax is not null)

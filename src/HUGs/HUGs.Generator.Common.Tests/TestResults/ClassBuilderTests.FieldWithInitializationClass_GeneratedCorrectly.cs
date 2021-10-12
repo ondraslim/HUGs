@@ -1,4 +1,4 @@
 class TestClass41
 {
-    private readonly System.DateTime TestField = new System.DateTime(2021, 12, 12);
+    private readonly System.DateTime TestField = new(2021, 12, 12);
 }

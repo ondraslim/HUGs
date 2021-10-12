@@ -12,9 +12,9 @@ namespace HUGs.DDD.Generated.Enumeration
 {
     public class ComplexEnumeration : HUGs.Generator.DDD.Framework.BaseModels.Enumeration
     {
-        public static readonly ComplexEnumeration SampleEnumeration1 = new ComplexEnumeration(nameof(SampleEnumeration1), "PropertyNameValue1", 1);
-        public static readonly ComplexEnumeration SampleEnumeration2 = new ComplexEnumeration(nameof(SampleEnumeration2), "PropertyNameValue2", 2);
-        public static readonly ComplexEnumeration SampleEnumeration3 = new ComplexEnumeration(nameof(SampleEnumeration3), "PropertyNameValue3", 3);
+        public static readonly ComplexEnumeration SampleEnumeration1 = new(nameof(SampleEnumeration1), "PropertyNameValue1", 1);
+        public static readonly ComplexEnumeration SampleEnumeration2 = new(nameof(SampleEnumeration2), "PropertyNameValue2", 2);
+        public static readonly ComplexEnumeration SampleEnumeration3 = new(nameof(SampleEnumeration3), "PropertyNameValue3", 3);
         public string Name { get; }
 
         public int Amount { get; }

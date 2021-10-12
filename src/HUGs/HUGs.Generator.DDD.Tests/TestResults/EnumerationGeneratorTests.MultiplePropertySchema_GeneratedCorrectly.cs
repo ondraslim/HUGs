@@ -12,8 +12,8 @@ namespace HUGs.DDD.Generated.Enumeration
 {
     public class OrderState2 : HUGs.Generator.DDD.Framework.BaseModels.Enumeration
     {
-        public static readonly OrderState2 Created = new OrderState2(nameof(Created), "Created", 1);
-        public static readonly OrderState2 Canceled = new OrderState2(nameof(Canceled), "Canceled", 42);
+        public static readonly OrderState2 Created = new(nameof(Created), "Created", 1);
+        public static readonly OrderState2 Canceled = new(nameof(Canceled), "Canceled", 42);
         public string Name { get; }
 
         public int Count { get; }

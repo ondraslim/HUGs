@@ -41,7 +41,7 @@ namespace HUGs.Generator.DDD.Framework.BaseModels
     }
 
 
-
+    // TODO: FromString example?
     public class OrderState : Enumeration
     {
         public static readonly OrderState Created = new(nameof(Created), "Created");
