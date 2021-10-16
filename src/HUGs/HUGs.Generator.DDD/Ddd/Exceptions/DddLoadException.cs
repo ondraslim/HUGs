@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 
 namespace HUGs.Generator.DDD.Ddd.Exceptions
 {
-    public class DddLoadException : LoadException
+    public class DddLoadException : GeneratorLoadException
     {
         public DddLoadException()
         {

@@ -1,33 +1,30 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis;
+using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace HUGs.Generator.DDD.Ddd.Exceptions
 {
     public class DddSchemaValidationException : DddValidationException
     {
-        public string SchemaFile { get; }
-
-        public DddSchemaValidationException(string schemaFile)
+        public DddSchemaValidationException(ICollection<Diagnostic> errorDiagnostics)
+            : base(errorDiagnostics)
         {
-            SchemaFile = schemaFile;
         }
 
-        protected DddSchemaValidationException(string schemaFile, SerializationInfo info, StreamingContext context) 
+        protected DddSchemaValidationException(SerializationInfo info, StreamingContext context) 
             : base(info, context)
         {
-            SchemaFile = schemaFile;
         }
 
-        public DddSchemaValidationException(string schemaFile, string message) 
-            : base(message)
+        public DddSchemaValidationException(string message, ICollection<Diagnostic> errorDiagnostics) 
+            : base(message, errorDiagnostics)
         {
-            SchemaFile = schemaFile;
         }
 
-        public DddSchemaValidationException(string schemaFile, string message, Exception innerException) 
-            : base(message, innerException)
+        public DddSchemaValidationException(string message, Exception innerException, ICollection<Diagnostic> errorDiagnostics) 
+            : base(message, innerException, errorDiagnostics)
         {
-            SchemaFile = schemaFile;
         }
     }
 }

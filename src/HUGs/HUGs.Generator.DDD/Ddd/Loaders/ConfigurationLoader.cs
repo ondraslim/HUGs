@@ -1,28 +1,18 @@
 ﻿using HUGs.Generator.Common.Exceptions;
-using HUGs.Generator.DDD.Ddd.Diagnostics;
+using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using HUGs.Generator.DDD.Ddd.Validation;
 using Microsoft.CodeAnalysis;
 using System;
 using System.IO;
 using System.Linq;
-using HUGs.Generator.DDD.Ddd.Exceptions;
 
 namespace HUGs.Generator.DDD.Ddd.Loaders
 {
     public static class ConfigurationLoader
     {
-        private static ConfigurationValidator _configurationValidator;
-
-        private static void InitializeDependencies(GeneratorExecutionContext context)
-        {
-            _configurationValidator = new ConfigurationValidator(new DddDiagnosticsReporter(context));
-        }
-
         public static DddGeneratorConfiguration LoadConfiguration(GeneratorExecutionContext context)
         {
-            InitializeDependencies(context);
-
             var configurationFile = GetDddConfiguration(context);
             return LoadConfiguration(configurationFile);
         }
@@ -45,11 +35,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
         private static DddGeneratorConfiguration LoadConfiguration(AdditionalText configurationFile)
         {
             var configuration = BuildConfiguration(configurationFile);
-            if (!_configurationValidator.ValidateConfiguration(configuration))
-            {
-                throw new DddConfigurationValidationException(configurationFile.Path);
-            }
-
+            ConfigurationValidator.ValidateConfiguration(configuration);
             return configuration;
         }
 

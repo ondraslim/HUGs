@@ -76,5 +76,21 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             category: "DddGenerator",
             DiagnosticSeverity.Error,
             isEnabledByDefault: true);
+
+
+        public static Diagnostic GetSchemaInvalidValueDiagnostic(string value, string property, string schema)
+        {
+            return Diagnostic.Create(SchemaInvalidValueError, Location.None, value, property, schema);
+        }
+
+        public static Diagnostic GetConfigurationInvalidValueDiagnostic(string value, string property)
+        {
+            return Diagnostic.Create(ConfigurationInvalidValueError, Location.None, value, property);
+        }
+
+        public static Diagnostic GetDuplicatedDddObjectNamesDiagnostic(string duplicatedName)
+        {
+            return Diagnostic.Create(DddModelDuplicatedNamesError, Location.None, duplicatedName);
+        }
     }
 }

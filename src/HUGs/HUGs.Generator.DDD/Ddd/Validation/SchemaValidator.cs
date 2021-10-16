@@ -1,6 +1,8 @@
 ﻿using HUGs.Generator.DDD.Ddd.Diagnostics;
+using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Extensions;
 using HUGs.Generator.DDD.Ddd.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
@@ -10,115 +12,108 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.IntegrationTests")]
 namespace HUGs.Generator.DDD.Ddd.Validation
 {
-    internal class SchemaValidator
+    internal static class SchemaValidator
     {
-        private readonly DddDiagnosticsReporter diagnosticsReporter;
+        private static readonly ICollection<Diagnostic> ValidationErrors = new List<Diagnostic>();
 
-        public SchemaValidator(DddDiagnosticsReporter diagnosticsReporter)
+        public static void ValidateSchema(DddObjectSchema schema, DddModel dddModel)
         {
-            this.diagnosticsReporter = diagnosticsReporter;
-        }
+            ValidationErrors.Clear();
 
-        public bool ValidateSchema(DddObjectSchema schema, DddModel dddModel)
-        {
-            // TODO: refactor not to use bool
-            return schema.Kind switch
+            Action<DddObjectSchema, DddModel> validation = schema.Kind switch
             {
-                DddObjectKind.Enumeration => ValidateEnumeration(schema, dddModel),
-                DddObjectKind.ValueObject or DddObjectKind.Entity or DddObjectKind.Aggregate => ValidateSchemaCommon(schema, dddModel),
-                _ => throw new ArgumentOutOfRangeException(nameof(schema.Kind))
+                DddObjectKind.Enumeration => ValidateEnumeration,
+                DddObjectKind.ValueObject or DddObjectKind.Entity or DddObjectKind.Aggregate => ValidateSchemaCommon,
+                _ => throw new ArgumentOutOfRangeException()
             };
+
+            validation(schema, dddModel);
+
+            if (ValidationErrors.Any())
+            {
+                throw new DddSchemaValidationException(ValidationErrors);
+            }
         }
 
-        private bool ValidateEnumeration(DddObjectSchema schema, DddModel dddModel)
+        private static void ValidateEnumeration(DddObjectSchema schema, DddModel dddModel)
         {
-            return ValidateSchemaCommon(schema, dddModel) & ValidateValues(schema);
+            ValidateSchemaCommon(schema, dddModel);
+            ValidateValues(schema);
         }
 
-        private bool ValidateSchemaCommon(DddObjectSchema schema, DddModel dddModel)
+        private static void ValidateSchemaCommon(DddObjectSchema schema, DddModel dddModel)
         {
-            return ValidateSchemaName(schema) & ValidateProperties(schema, dddModel);
+            ValidateSchemaName(schema);
+            ValidateProperties(schema, dddModel);
         }
 
-        private bool ValidateSchemaName(DddObjectSchema schema)
+        private static void ValidateSchemaName(DddObjectSchema schema)
         {
             if (!SyntaxFacts.IsValidIdentifier(schema.Name))
             {
-                diagnosticsReporter.ReportSchemaInvalidValue(schema.Name, nameof(DddObjectSchema.Name), schema.Name);
-                return false;
+                var diagnostic = DddDiagnostics.GetSchemaInvalidValueDiagnostic(schema.Name, nameof(DddObjectSchema.Name), schema.Name);
+                ValidationErrors.Add(diagnostic);
             }
-
-            return true;
         }
 
-        private bool ValidateProperties(DddObjectSchema schema, DddModel dddModel)
+        private static void ValidateProperties(DddObjectSchema schema, DddModel dddModel)
         {
             schema.Properties ??= new DddObjectProperty[] { };
-            var isValid = ValidatePropertyNameUniqueness(schema.Properties);
+            
+            ValidatePropertyNameUniqueness(schema.Properties);
 
             foreach (var property in schema.Properties)
             {
-                if (!SyntaxFacts.IsValidIdentifier(property.Name) )
+                if (!SyntaxFacts.IsValidIdentifier(property.Name))
                 {
-                    diagnosticsReporter.ReportSchemaInvalidValue(
-                        schema.Name, $"{nameof(DddObjectProperty)}_{nameof(DddObjectProperty.Name)}", property.Name);
-                    isValid = false;
+                    var diagnostic = DddDiagnostics.GetSchemaInvalidValueDiagnostic(
+                        property.Name, $"{nameof(DddObjectProperty)}_{nameof(DddObjectProperty.Name)}", schema.Name);
+                    ValidationErrors.Add(diagnostic);
                 }
 
-                if (!HasPropertyValidType(property, dddModel))
+                if (!IsValidPropertyType(property, dddModel))
                 {
-                    diagnosticsReporter.ReportSchemaInvalidValue(
-                        schema.Name, $"{nameof(DddObjectProperty)}_{nameof(DddObjectProperty.Type)}", property.Type);
-                    isValid = false;
+                    var diagnostic = DddDiagnostics.GetSchemaInvalidValueDiagnostic(
+                        property.Type,$"{nameof(DddObjectProperty)}_{nameof(DddObjectProperty.Type)}", schema.Name);
+                    ValidationErrors.Add(diagnostic);
                 }
             }
-
-            return isValid;
         }
 
-        private bool ValidatePropertyNameUniqueness(DddObjectProperty[] schemaProperties)
+        private static void ValidatePropertyNameUniqueness(IEnumerable<DddObjectProperty> schemaProperties)
         {
             var names = schemaProperties.Select(e => e.Name);
-            var duplicates = names.GroupBy(n => n).Where(g => g.Count() > 1).Select(d => d.Key).ToArray();
-            foreach (var duplicate in duplicates)
+            var duplicatedNames = names.GroupBy(n => n).Where(g => g.Count() > 1).Select(d => d.Key).ToArray();
+            foreach (var duplicatedName in duplicatedNames)
             {
-                diagnosticsReporter.ReportDuplicatedDddObjectNames(duplicate);
+                ValidationErrors.Add(DddDiagnostics.GetDuplicatedDddObjectNamesDiagnostic(duplicatedName));
             }
-
-            return !duplicates.Any();
         }
 
-        private bool ValidateValues(DddObjectSchema schema)
+        private static void ValidateValues(DddObjectSchema schema)
         {
-            var isValid = true;
             schema.Values ??= new DddObjectValue[] { };
 
             foreach (var value in schema.Values)
             {
                 if (!SyntaxFacts.IsValidIdentifier(value.Name))
                 {
-                    diagnosticsReporter.ReportSchemaInvalidValue(
-                        schema.Name, $"{nameof(DddObjectValue)}_{nameof(DddObjectValue.Name)}", value.Name);
-                    isValid = false;
+                    var diagnostic = DddDiagnostics.GetSchemaInvalidValueDiagnostic(
+                        value.Name, $"{nameof(DddObjectValue)}_{nameof(DddObjectValue.Name)}", schema.Name);
+                    ValidationErrors.Add(diagnostic);
                 }
 
-                if (!ValidateValue(schema, value))
-                {
-                    isValid = false;
-                }
+                ValidateValue(schema, value);
             }
-
-            return isValid;
         }
 
-        private static bool HasPropertyValidType(DddObjectProperty property, DddModel dddModel)
+        private static bool IsValidPropertyType(DddObjectProperty property, DddModel dddModel)
         {
-            return property.IsWhitelistedType() || property.IsDddModelType(dddModel);
+            return property.IsWhitelistedType() || property.IsKnownDddModelType(dddModel);
         }
 
-        private bool ValidateValue(DddObjectSchema schema, DddObjectValue value)
+        private static void ValidateValue(DddObjectSchema schema, DddObjectValue value)
         {
-            var isValid = true;
             value.Properties ??= new Dictionary<string, string>();
 
             foreach (var property in value.Properties)
@@ -128,12 +123,10 @@ namespace HUGs.Generator.DDD.Ddd.Validation
                 var schemaProperty = schema.Properties.FirstOrDefault(p => p.Name == propertyName);
                 if (schemaProperty == default || !SyntaxFacts.IsValidIdentifier(propertyName))
                 {
-                    diagnosticsReporter.ReportSchemaInvalidValue(schema.Name, $"{nameof(DddObjectValue)}_{nameof(DddObjectValue.Properties)}_Key", propertyName);
-                    isValid = false;
+                    var diagnostic = DddDiagnostics.GetSchemaInvalidValueDiagnostic(propertyName, $"{nameof(DddObjectValue)}_{nameof(DddObjectValue.Properties)}_Key", schema.Name);
+                    ValidationErrors.Add(diagnostic);
                 }
             }
-
-            return isValid;
         }
 
     }

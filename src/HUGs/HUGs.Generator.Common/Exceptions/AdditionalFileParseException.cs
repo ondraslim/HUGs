@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace HUGs.Generator.Common.Exceptions
 {
-    public class AdditionalFileParseException : LoadException
+    public class AdditionalFileParseException : GeneratorLoadException
     {
         public string FilePath { get; }
 

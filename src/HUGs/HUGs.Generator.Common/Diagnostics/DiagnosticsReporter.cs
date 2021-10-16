@@ -1,5 +1,6 @@
 ﻿using HUGs.Generator.Common.Exceptions;
 using Microsoft.CodeAnalysis;
+using System;
 
 namespace HUGs.Generator.Common.Diagnostics
 {
@@ -12,25 +13,30 @@ namespace HUGs.Generator.Common.Diagnostics
             this.generatorExecutionContext = generatorExecutionContext;
         }
 
+        public virtual void ReportDiagnostic(Exception e)
+        {
+            switch (e)
+            {
+                case AdditionalFileParseException ex:
+                    ReportAdditionalFileParse(ex);
+                    break;
+            }
+        }
+
         protected void ReportDiagnostic(Diagnostic diagnostic)
         {
             generatorExecutionContext.ReportDiagnostic(diagnostic);
         }
 
-        protected static Diagnostic GetAdditionalFileParseDiagnostic(AdditionalFileParseException e)
+        protected void ReportAdditionalFileParse(AdditionalFileParseException e)
         {
-            return Diagnostic.Create(Diagnostics.AdditionalFileParseError, Location.None, e.FilePath, e.InnerException?.Message ?? e.Message);
+            var diagnostic = Diagnostic.Create(Diagnostics.AdditionalFileParseError, Location.None, e.FilePath, e.InnerException?.Message ?? e.Message);
+            ReportDiagnostic(diagnostic);
         }
 
         public void ReportEmptyAdditionalFile(string additionalFilePath)
         {
             var diagnostic = Diagnostic.Create(Diagnostics.AdditionalFileEmptyWarning, Location.None, DiagnosticSeverity.Warning, additionalFilePath);
-            ReportDiagnostic(diagnostic);
-        }
-
-        public void ReportGeneratedCodeValidationError(string sourceCodeFileName)
-        {
-            var diagnostic = Diagnostic.Create(Diagnostics.AdditionalFileEmptyWarning, Location.None, DiagnosticSeverity.Error, sourceCodeFileName);
             ReportDiagnostic(diagnostic);
         }
 

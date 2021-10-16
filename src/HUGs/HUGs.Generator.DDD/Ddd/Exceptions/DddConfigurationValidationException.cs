@@ -1,33 +1,31 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis;
+using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace HUGs.Generator.DDD.Ddd.Exceptions
 {
     public class DddConfigurationValidationException : DddValidationException
     {
-        public string ConfigurationFile { get; }
 
-        public DddConfigurationValidationException(string configurationFile)
+        public DddConfigurationValidationException(ICollection<Diagnostic> errorDiagnostics) 
+            : base(errorDiagnostics)
         {
-            ConfigurationFile = configurationFile;
         }
 
-        protected DddConfigurationValidationException(string configurationFile, SerializationInfo info, StreamingContext context)
+        protected DddConfigurationValidationException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            ConfigurationFile = configurationFile;
         }
 
-        public DddConfigurationValidationException(string configurationFile, string message) 
-            : base(message)
+        public DddConfigurationValidationException(string message, ICollection<Diagnostic> errorDiagnostics) 
+            : base(message, errorDiagnostics)
         {
-            ConfigurationFile = configurationFile;
         }
 
-        public DddConfigurationValidationException(string configurationFile, string message, Exception innerException) 
-            : base(message, innerException)
+        public DddConfigurationValidationException(string message, Exception innerException, ICollection<Diagnostic> errorDiagnostics) 
+            : base(message, innerException, errorDiagnostics)
         {
-            ConfigurationFile = configurationFile;
         }
     }
 }
