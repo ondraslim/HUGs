@@ -1,6 +1,5 @@
 ﻿using HUGs.Generator.Common.Exceptions;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
-using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Validation;
 using Microsoft.CodeAnalysis;
@@ -14,12 +13,10 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
     public class DddModelLoader
     {
         private static DddDiagnosticsReporter _diagnosticsReporter;
-        private static ModelValidator _modelValidator;
 
         private static void InitializeDependencies(GeneratorExecutionContext context)
         {
             _diagnosticsReporter = new DddDiagnosticsReporter(context);
-            _modelValidator = new ModelValidator(_diagnosticsReporter, new SchemaValidator(_diagnosticsReporter));
         }
 
         public static DddModel LoadDddModel(GeneratorExecutionContext context)
@@ -41,10 +38,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
         private static DddModel LoadDddModel(IEnumerable<AdditionalText> dddSchemas)
         {
             var model = BuildDddModel(dddSchemas);
-            if (!_modelValidator.ValidateModel(model))
-            {
-                throw new DddModelValidationException();
-            }
+            DddModelValidator.ValidateModel(model);
             return model;
         }
 

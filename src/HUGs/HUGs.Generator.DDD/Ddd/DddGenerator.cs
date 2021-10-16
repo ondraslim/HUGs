@@ -28,7 +28,7 @@ namespace HUGs.Generator.DDD.Ddd
 
                 GenerateDddModelSource(context, configuration, dddModel);
             }
-            catch (LoadException e)
+            catch (GeneratorLoadException e)
             {
                 _diagnosticsReporter.ReportDiagnostic(e);
             }

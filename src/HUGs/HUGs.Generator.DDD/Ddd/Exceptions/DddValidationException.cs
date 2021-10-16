@@ -1,12 +1,17 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis;
+using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace HUGs.Generator.DDD.Ddd.Exceptions
 {
     public class DddValidationException : DddLoadException
     {
-        public DddValidationException()
+        public ICollection<Diagnostic> ErrorDiagnostics { get; }
+
+        public DddValidationException(ICollection<Diagnostic> errorDiagnostics)
         {
+            ErrorDiagnostics = errorDiagnostics;
         }
 
         protected DddValidationException(SerializationInfo info, StreamingContext context) 
@@ -14,14 +19,16 @@ namespace HUGs.Generator.DDD.Ddd.Exceptions
         {
         }
 
-        public DddValidationException(string message) 
+        public DddValidationException(string message, ICollection<Diagnostic> errorDiagnostics) 
             : base(message)
         {
+            ErrorDiagnostics = errorDiagnostics;
         }
 
-        public DddValidationException(string message, Exception innerException)
+        public DddValidationException(string message, Exception innerException, ICollection<Diagnostic> errorDiagnostics)
             : base(message, innerException)
         {
+            ErrorDiagnostics = errorDiagnostics;
         }
     }
 }

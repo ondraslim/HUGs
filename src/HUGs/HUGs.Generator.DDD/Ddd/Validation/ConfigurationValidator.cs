@@ -1,69 +1,63 @@
 ﻿using HUGs.Generator.DDD.Ddd.Diagnostics;
+using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using System.Collections.Generic;
 using System.Linq;
 
 
 namespace HUGs.Generator.DDD.Ddd.Validation
 {
-    internal class ConfigurationValidator
+    internal static class ConfigurationValidator
     {
-        private readonly DddDiagnosticsReporter diagnosticReporter;
+        private static readonly ICollection<Diagnostic> ValidationErrors = new List<Diagnostic>();
 
-        public ConfigurationValidator(DddDiagnosticsReporter diagnosticReporter)
+        public static void ValidateConfiguration(DddGeneratorConfiguration configuration)
         {
-            this.diagnosticReporter = diagnosticReporter;
+            ValidationErrors.Clear();
+
+            ValidateTargetNamespaces(configuration.TargetNamespaces);
+            ValidateAdditionalUsings(configuration.AdditionalUsings);
+
+            if (ValidationErrors.Any())
+            {
+                throw new DddConfigurationValidationException(ValidationErrors);
+            }
         }
 
-        public bool ValidateConfiguration(DddGeneratorConfiguration configuration)
-        {
-            return ValidateTargetNamespaces(configuration.TargetNamespaces) &
-                   ValidateAdditionalUsings(configuration.AdditionalUsings);
-        }
-
-        private bool ValidateTargetNamespaces(DddObjectTargetNamespaces targetNamespaces)
+        private static void ValidateTargetNamespaces(DddObjectTargetNamespaces targetNamespaces)
         {
             targetNamespaces ??= new DddObjectTargetNamespaces();
 
-            return ValidateTargetNamespace(targetNamespaces.Aggregate, nameof(DddGeneratorConfiguration.TargetNamespaces.Aggregate), DddObjectTargetNamespaces.DefaultAggregateNamespace) &
-                   ValidateTargetNamespace(targetNamespaces.Entity, nameof(DddGeneratorConfiguration.TargetNamespaces.Entity), DddObjectTargetNamespaces.DefaultEntityNamespace) &
-                   ValidateTargetNamespace(targetNamespaces.Enumeration, nameof(DddGeneratorConfiguration.TargetNamespaces.Enumeration), DddObjectTargetNamespaces.DefaultEnumerationNamespace) &
-                   ValidateTargetNamespace(targetNamespaces.ValueObject, nameof(DddGeneratorConfiguration.TargetNamespaces.ValueObject), DddObjectTargetNamespaces.DefaultValueObjectNamespace);
+            ValidateTargetNamespace(targetNamespaces.Aggregate, nameof(DddObjectTargetNamespaces.Aggregate));
+            ValidateTargetNamespace(targetNamespaces.Entity, nameof(DddObjectTargetNamespaces.Entity));
+            ValidateTargetNamespace(targetNamespaces.Enumeration, nameof(DddObjectTargetNamespaces.Enumeration));
+            ValidateTargetNamespace(targetNamespaces.ValueObject, nameof(DddObjectTargetNamespaces.ValueObject));
         }
 
-        private bool ValidateTargetNamespace(string @namespace, string namespaceTarget, string defaultValue)
+        private static void ValidateTargetNamespace(string @namespace, string namespaceTarget)
         {
-            if (string.IsNullOrWhiteSpace(@namespace))
-            {
-                @namespace = defaultValue;
-            }
-
             if (!@namespace.Split('.').All(SyntaxFacts.IsValidIdentifier))
             {
-                diagnosticReporter.ReportConfigurationInvalidValue(
+                var diagnostic = DddDiagnostics.GetConfigurationInvalidValueDiagnostic(
                     namespaceTarget, $"{nameof(DddGeneratorConfiguration.TargetNamespaces)}_{namespaceTarget}");
-
-                return false;
+                ValidationErrors.Add(diagnostic);
             }
-
-            return true;
         }
 
-        private bool ValidateAdditionalUsings(string[] additionalUsings)
+        private static void ValidateAdditionalUsings(string[] additionalUsings)
         {
             additionalUsings ??= new string[] { };
 
-            var isValid = true;
             foreach (var additionalUsing in additionalUsings)
             {
                 if (!additionalUsing.Split('.').All(SyntaxFacts.IsValidIdentifier))
                 {
-                    diagnosticReporter.ReportConfigurationInvalidValue(additionalUsing, nameof(DddGeneratorConfiguration.AdditionalUsings));
-                    isValid = false;
+                    var diagnostic = DddDiagnostics.GetConfigurationInvalidValueDiagnostic(additionalUsing, nameof(DddGeneratorConfiguration.AdditionalUsings));
+                    ValidationErrors.Add(diagnostic);
                 }
             }
-
-            return isValid;
         }
     }
 }
