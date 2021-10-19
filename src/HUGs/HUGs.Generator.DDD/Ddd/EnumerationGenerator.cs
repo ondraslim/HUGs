@@ -1,12 +1,13 @@
 ﻿using HUGs.Generator.Common;
+using HUGs.Generator.Common.Builders;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Framework.BaseModels;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using HUGs.Generator.DDD.Framework.BaseModels;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
@@ -17,29 +18,32 @@ namespace HUGs.Generator.DDD.Ddd
             DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)
         {
-            var syntaxBuilder = new RoslynSyntaxBuilder();
+            var enumerationClass = PrepareEnumerationClassDeclaration(schema);
 
-            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(schema.Kind));
-
+            var syntaxBuilder = RoslynSyntaxBuilder.Create();
             DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
+            return syntaxBuilder
+                .SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(schema.Kind))
+                .AddClass(enumerationClass)
+                .Build();
+        }
 
-            var classBuilder = PrepareEnumerationClassBuilder(schema.Name);
+        private static ClassDeclarationSyntax PrepareEnumerationClassDeclaration(DddObjectSchema schema)
+        {
+            var classBuilder = CreateEnumerationClassBuilder(schema.Name);
             DddGeneratorCommon.AddDddClassProperties(classBuilder, schema.Properties);
             AddConstructor(classBuilder, schema);
             AddEnumerationFields(classBuilder, schema);
 
-            syntaxBuilder.AddClass(classBuilder.Build());
-
-            return syntaxBuilder.Build();
+            return classBuilder.Build();
         }
 
-        private static ClassBuilder PrepareEnumerationClassBuilder(string enumerationName)
+        private static ClassBuilder CreateEnumerationClassBuilder(string enumerationName)
         {
-            var classBuilder = new ClassBuilder(enumerationName)
+            return ClassBuilder.Create()
+                .SetClassName(enumerationName)
                 .AddClassAccessModifiers(SyntaxKind.PublicKeyword)
                 .AddClassBaseTypes(typeof(Enumeration).FullName);
-
-            return classBuilder;
         }
 
         private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema schema)
@@ -53,8 +57,8 @@ namespace HUGs.Generator.DDD.Ddd
             var ctorBody = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(schema.Properties);
 
             classBuilder.AddConstructor(
-                accessModifiers,
                 schema.Name,
+                accessModifiers,
                 ctorParams,
                 ctorBody,
                 ctorBaseParams);

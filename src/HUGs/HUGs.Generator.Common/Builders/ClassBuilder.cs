@@ -1,12 +1,13 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using HUGs.Generator.Common.Builders.ClassBuilderStages;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HUGs.Generator.Common
+namespace HUGs.Generator.Common.Builders
 {
-    public class ClassBuilder
+    public class ClassBuilder : ISetNameStage
     {
         private ClassDeclarationSyntax classDeclaration;
 
@@ -15,9 +16,16 @@ namespace HUGs.Generator.Common
         private readonly List<MethodDeclarationSyntax> methods = new();
         private readonly List<ConstructorDeclarationSyntax> constructors = new();
 
-        public ClassBuilder(string className)
+        private ClassBuilder()
         {
-            classDeclaration = SyntaxFactory.ClassDeclaration(className);
+        }
+
+        public static ISetNameStage Create() => new ClassBuilder();
+
+        public ClassBuilder SetClassName(string name)
+        {
+            classDeclaration = SyntaxFactory.ClassDeclaration(name);
+            return this;
         }
 
         public ClassBuilder AddClassAccessModifiers(params SyntaxKind[] accessModifiers)
@@ -148,13 +156,24 @@ namespace HUGs.Generator.Common
         #endregion
 
         public ClassBuilder AddConstructor(
-            SyntaxKind[] accessModifiers,
             string identifierText,
-            ParameterSyntax[] parameters,
+            SyntaxKind[] accessModifiers = null,
+            ParameterSyntax[] parameters = null,
             string[] linesOfCode = null,
             ParameterSyntax[] baseCtorParams = null)
         {
             var ctor = SyntaxFactory.ConstructorDeclaration(identifierText);
+
+            // TODO: refactor IFs?
+            if (parameters is not null)
+            {
+                ctor = ctor.AddParameterListParameters(parameters);
+            }
+
+            if (accessModifiers is not null)
+            {
+                ctor = ctor.AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray());
+            }
 
             if (baseCtorParams is not null)
             {
@@ -162,8 +181,6 @@ namespace HUGs.Generator.Common
             }
 
             ctor = ctor
-                .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
-                .AddParameterListParameters(parameters)
                 .AddBodyStatements(
                     (linesOfCode ?? new string[] { })
                     .Select(b => SyntaxFactory.ParseStatement(b))

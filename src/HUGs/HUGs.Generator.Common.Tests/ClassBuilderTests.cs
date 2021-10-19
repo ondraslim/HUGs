@@ -1,4 +1,5 @@
 ﻿using CheckTestOutput;
+using HUGs.Generator.Common.Builders;
 using HUGs.Generator.Common.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -14,7 +15,7 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void EmptyClass_GeneratedCorrectly()
         {
-            var classDeclaration = new ClassBuilder("TestClass1").Build();
+            var classDeclaration = ClassBuilder.Create().SetClassName("TestClass1").Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -23,11 +24,11 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void EmptyClassWithAccessModifier_GeneratedCorrectly()
         {
-            var builder = new ClassBuilder("TestClass2");
-            builder.AddClassAccessModifiers(SyntaxKind.PublicKeyword);
-            builder.AddClassAccessModifiers(SyntaxKind.AbstractKeyword);
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName("TestClass2")
+                .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.AbstractKeyword)
+                .Build();
 
-            var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -36,10 +37,11 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void EmptyClassWithBaseClass_GeneratedCorrectly()
         {
-            var builder = new ClassBuilder("TestClass3");
-            builder.AddClassBaseTypes("TestClassBase");
-
-            var classDeclaration = builder.Build();
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName("TestClass3")
+                .AddClassBaseTypes("TestClassBase")
+                .Build();
+            
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -48,10 +50,11 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void FieldClass_GeneratedCorrectly()
         {
-            var builder = new ClassBuilder("TestClass4");
-            builder.AddField("string", "TestField", SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword);
-
-            var classDeclaration = builder.Build();
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName("TestClass4")
+                .AddField("string", "TestField", SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword)
+                .Build();
+            
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -85,10 +88,11 @@ namespace HUGs.Generator.Common.Tests
                         )
                     );
 
-            var builder = new ClassBuilder("TestClass41");
-            builder.AddFieldWithInitialization("System.DateTime", "TestField", objectCreationSyntax, SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword);
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName("TestClass5")
+                .AddFieldWithInitialization("System.DateTime", "TestField", objectCreationSyntax, SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword)
+                .Build();
 
-            var classDeclaration = builder.Build();
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -97,10 +101,11 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void PropertyClass_GeneratedCorrectly()
         {
-            var builder = new ClassBuilder("TestClass5");
-            builder.AddFullProperty("string", "TestProperty", new[] { SyntaxKind.PublicKeyword });
-
-            var classDeclaration = builder.Build();
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName("TestClass6")
+                .AddFullProperty("string", "TestProperty", new[] { SyntaxKind.PublicKeyword })
+                .Build();
+            
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -109,10 +114,11 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void GetOnlyPropertyClass_GeneratedCorrectly()
         {
-            var builder = new ClassBuilder("TestClass6");
-            builder.AddGetOnlyProperty("string", "TestProperty", new[] { SyntaxKind.PublicKeyword });
-
-            var classDeclaration = builder.Build();
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName("TestClass7")
+                .AddGetOnlyProperty("string", "TestProperty", SyntaxKind.PublicKeyword)
+                .Build();
+            
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -121,13 +127,13 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void EmptyConstructorClass_GeneratedCorrectly()
         {
-            const string className = "TestClass7";
-            var modifiers = new[] { SyntaxKind.ProtectedKeyword };
+            const string className = "TestClass8";
 
-            var builder = new ClassBuilder(className);
-            builder.AddConstructor(modifiers, className, new ParameterSyntax[] { });
-
-            var classDeclaration = builder.Build();
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName(className)
+                .AddConstructor(className, accessModifiers: new[] { SyntaxKind.ProtectedKeyword })
+                .Build();
+            
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -136,7 +142,7 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void ConstructorWithParamsAndBodyClass_GeneratedCorrectly()
         {
-            const string className = "TestClass8";
+            const string className = "TestClass9";
             var modifiers = new[] { SyntaxKind.PublicKeyword };
             var parameters = new[]
             {
@@ -149,10 +155,11 @@ namespace HUGs.Generator.Common.Tests
                 "var fullText = $\"{number}x {text}\";"
             };
 
-            var builder = new ClassBuilder(className);
-            builder.AddConstructor(modifiers, className, parameters, linesOfCode);
-
-            var classDeclaration = builder.Build();
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName(className)
+                .AddConstructor(className, modifiers, parameters, linesOfCode)
+                .Build();
+            
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -161,7 +168,7 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void ConstructorWithParamsForBaseClass_GeneratedCorrectly()
         {
-            const string className = "TestClass9";
+            const string className = "TestClass10";
             var modifiers = new[] { SyntaxKind.PublicKeyword };
             var paramForBase = RoslynSyntaxHelper.CreateParameterSyntax("string", "paramForBase");
             var parameters = new[]
@@ -176,10 +183,11 @@ namespace HUGs.Generator.Common.Tests
                 "var fullText = $\"{number}x {text}\";"
             };
 
-            var builder = new ClassBuilder(className);
-            builder.AddConstructor(modifiers, className, parameters, linesOfCode, new[] { paramForBase });
-
-            var classDeclaration = builder.Build();
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName(className)
+                .AddConstructor(className, modifiers, parameters, linesOfCode, new[] { paramForBase })
+                .Build();
+            
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -188,17 +196,18 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void MethodClass_GeneratedCorrectly()
         {
-            var method = new MethodBuilder()
+            var method = MethodBuilder.Create()
                 .SetName("TestMethod")
-                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
+                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
                 .Build();
 
-            var builder = new ClassBuilder("TestClass10");
-            builder.AddMethod(method);
-
-            var classDeclaration = builder.Build();
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName("TestClass11")
+                .AddMethod(method)
+                .Build();
+            
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");
@@ -207,29 +216,25 @@ namespace HUGs.Generator.Common.Tests
         [Test]
         public void ComplexClass_GeneratedCorrectly()
         {
-            var builder = new ClassBuilder("TestClass11");
-
-            builder
-                .AddClassAccessModifiers(SyntaxKind.ProtectedKeyword)
-                .AddClassAccessModifiers(SyntaxKind.AbstractKeyword)
-                .AddClassBaseTypes("BaseType", "IRandomInterface");
-
-            builder
-                .AddField("int", "AmountField", SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword)
-                .AddField("string", "TextField", SyntaxKind.PublicKeyword)
-                .AddFullProperty("int", "AmountProperty", new[] { SyntaxKind.PrivateKeyword })
-                .AddGetOnlyProperty("string", "TextProperty", new[] { SyntaxKind.PublicKeyword });
-
-            var method = new MethodBuilder()
+            var method = MethodBuilder.Create()
                 .SetName("TestMethod")
-                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .SetReturnType("void")
+                .SetAccessModifiers(SyntaxKind.PublicKeyword)
                 .AddBodyLine("System.Console.WriteLine(\"Hello World!\");")
                 .Build();
 
-            builder.AddMethod(method);
-
-            var classDeclaration = builder.Build();
+            var classDeclaration = ClassBuilder.Create()
+                .SetClassName("TestClass12")
+                .AddClassAccessModifiers(SyntaxKind.ProtectedKeyword)
+                .AddClassAccessModifiers(SyntaxKind.AbstractKeyword)
+                .AddClassBaseTypes("BaseType", "IRandomInterface")
+                .AddField("int", "AmountField", SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword)
+                .AddField("string", "TextField", SyntaxKind.PublicKeyword)
+                .AddFullProperty("int", "AmountProperty", SyntaxKind.PrivateKeyword)
+                .AddGetOnlyProperty("string", "TextProperty", SyntaxKind.PublicKeyword)
+                .AddMethod(method)
+                .Build();
+            
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();
 
             check.CheckString(actualClass, fileExtension: "cs");

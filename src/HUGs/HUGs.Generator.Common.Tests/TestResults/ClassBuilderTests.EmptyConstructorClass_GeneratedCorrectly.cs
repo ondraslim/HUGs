@@ -1,6 +1,6 @@
-class TestClass7
+class TestClass8
 {
-    protected TestClass7()
+    protected TestClass8()
     {
     }
 }

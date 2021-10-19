@@ -1,33 +1,41 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using HUGs.Generator.Common.Builders.RoslynSyntaxBuilderStages;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HUGs.Generator.Common
+namespace HUGs.Generator.Common.Builders
 {
-    public class RoslynSyntaxBuilder
+    public class RoslynSyntaxBuilder : IAddUsingsStage, IAddClassStage
+
     {
         private CompilationUnitSyntax compilationUnitSyntax = SyntaxFactory.CompilationUnit();
         private NamespaceDeclarationSyntax @namespace;
         private readonly List<ClassDeclarationSyntax> classes = new();
 
-        public RoslynSyntaxBuilder AddUsings(params string[] names)
+        private RoslynSyntaxBuilder()
+        {
+        }
+
+        public static IAddUsingsStage Create() => new RoslynSyntaxBuilder();
+
+        public IAddUsingsStage AddUsings(params string[] usings)
         {
             compilationUnitSyntax = compilationUnitSyntax.AddUsings(
-                names.Select(u => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(u)))
+                usings.Select(u => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(u)))
                     .ToArray());
 
             return this;
         }
 
-        public RoslynSyntaxBuilder SetNamespace(string ns)
+        public IAddClassStage SetNamespace(string ns)
         {
             @namespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(ns)).NormalizeWhitespace();
             return this;
         }
 
-        public RoslynSyntaxBuilder AddClass(ClassDeclarationSyntax classDeclaration)
+        public IAddClassStage AddClass(ClassDeclarationSyntax classDeclaration)
         {
             classes.Add(classDeclaration);
             return this;

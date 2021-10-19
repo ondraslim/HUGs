@@ -4,10 +4,16 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
+using HUGs.Generator.Common.Builders.MethodBuilderStages;
 
-namespace HUGs.Generator.Common
+namespace HUGs.Generator.Common.Builders
 {
-    public class MethodBuilder
+    public class MethodBuilder : 
+        ISetNameStage, 
+        ISetReturnTypeStage,
+        ISetAccessModifiersStage, 
+        IAddParametersStage, 
+        IAddBodyLineStage
     {
         private SyntaxToken[] accessModifiers;
         private TypeSyntax returnType;
@@ -15,30 +21,36 @@ namespace HUGs.Generator.Common
         private readonly List<ParameterSyntax> parameters = new();
         private readonly List<string> body = new();
 
-        public MethodBuilder SetAccessModifiers(params SyntaxKind[] modifiers)
+        private MethodBuilder()
         {
-            accessModifiers = modifiers.Select(SyntaxFactory.Token).ToArray();
-            return this;
-        }
-        public MethodBuilder SetReturnType(string type)
-        {
-            returnType = SyntaxFactory.ParseTypeName(type);
-            return this;
         }
 
-        public MethodBuilder SetName(string methodName)
+        public static ISetNameStage Create() => new MethodBuilder();
+
+        public ISetReturnTypeStage SetName(string methodName)
         {
             name = methodName;
             return this;
         }
 
-        public MethodBuilder AddParameter(string paramName, string type)
+        public IAddParametersStage SetAccessModifiers(params SyntaxKind[] modifiers)
+        {
+            accessModifiers = modifiers.Select(SyntaxFactory.Token).ToArray();
+            return this;
+        }
+        public ISetAccessModifiersStage SetReturnType(string type)
+        {
+            returnType = SyntaxFactory.ParseTypeName(type);
+            return this;
+        }
+
+        public IAddParametersStage AddParameter(string paramName, string type)
         {
             parameters.Add(RoslynSyntaxHelper.CreateParameterSyntax(type, paramName));
             return this;
         }
 
-        public MethodBuilder AddBodyLine(string line)
+        public IAddBodyLineStage AddBodyLine(string line)
         {
             body.Add(line);
             return this;

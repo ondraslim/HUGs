@@ -1,4 +1,4 @@
-protected abstract class TestClass11 : BaseType, IRandomInterface
+protected abstract class TestClass12 : BaseType, IRandomInterface
 {
     private readonly int AmountField;
     public string TextField;

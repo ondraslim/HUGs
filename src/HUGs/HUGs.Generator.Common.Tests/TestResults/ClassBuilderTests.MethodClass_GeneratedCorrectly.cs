@@ -1,4 +1,4 @@
-class TestClass10
+class TestClass11
 {
     public void TestMethod()
     {

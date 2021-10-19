@@ -1,4 +1,4 @@
-class TestClass5
+class TestClass6
 {
     public string TestProperty { get; set; }
 }

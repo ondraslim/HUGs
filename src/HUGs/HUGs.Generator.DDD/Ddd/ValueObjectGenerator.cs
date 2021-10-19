@@ -1,11 +1,11 @@
-﻿using HUGs.Generator.Common;
+﻿using HUGs.Generator.Common.Builders;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Framework.BaseModels;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using HUGs.Generator.DDD.Framework.BaseModels;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
@@ -16,31 +16,34 @@ namespace HUGs.Generator.DDD.Ddd
             DddObjectSchema schema, 
             DddGeneratorConfiguration generatorConfiguration)
         {
-            var syntaxBuilder = new RoslynSyntaxBuilder();
+            var valueObjectClass = PrepareValueObjectClassDeclaration(schema);
 
-            syntaxBuilder.SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(schema.Kind));
-
+            var syntaxBuilder = RoslynSyntaxBuilder.Create();
             DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
+            return syntaxBuilder
+                .SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(schema.Kind))
+                .AddClass(valueObjectClass)
+                .Build();
+        }
 
-            var classBuilder = PrepareValueObjectClassBuilder(schema.Name);
+        private static ClassDeclarationSyntax PrepareValueObjectClassDeclaration(DddObjectSchema schema)
+        {
+            var classBuilder = CreateValueObjectClassBuilder(schema.Name);
             DddGeneratorCommon.AddDddClassProperties(classBuilder, schema.Properties);
             AddConstructor(classBuilder, schema);
 
-            classBuilder.AddMethod(GetGetAtomicValuesMethod(schema));
-            classBuilder.AddMethod(DddGeneratorCommon.BuildOnInitializedMethod());
-
-            syntaxBuilder.AddClass(classBuilder.Build());
-
-            return syntaxBuilder.Build();
+            return classBuilder
+                .AddMethod(GetGetAtomicValuesMethod(schema))
+                .AddMethod(DddGeneratorCommon.BuildOnInitializedMethod())
+                .Build();
         }
 
-        private static ClassBuilder PrepareValueObjectClassBuilder(string valueObjectName)
+        private static ClassBuilder CreateValueObjectClassBuilder(string valueObjectName)
         {
-            var classBuilder = new ClassBuilder(valueObjectName)
+            return ClassBuilder.Create()
+                .SetClassName(valueObjectName)
                 .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
                 .AddClassBaseTypes(typeof(ValueObject).FullName);
-
-            return classBuilder;
         }
 
         private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema schema)
@@ -53,17 +56,15 @@ namespace HUGs.Generator.DDD.Ddd
                 .Append("OnInitialized();")
                 .ToArray();
 
-            classBuilder.AddConstructor(accessModifiers, schema.Name, parameters, ctorBody);
+            classBuilder.AddConstructor(schema.Name, accessModifiers, parameters, ctorBody);
         }
 
         private static MethodDeclarationSyntax GetGetAtomicValuesMethod(DddObjectSchema schema)
         {
-            var methodBuilder = new MethodBuilder();
-
-            methodBuilder
-                .SetAccessModifiers(SyntaxKind.ProtectedKeyword, SyntaxKind.OverrideKeyword)
+            var methodBuilder = MethodBuilder.Create()
+                .SetName("GetAtomicValues")
                 .SetReturnType("IEnumerable<object>")
-                .SetName("GetAtomicValues");
+                .SetAccessModifiers(SyntaxKind.ProtectedKeyword, SyntaxKind.OverrideKeyword);
 
             foreach (var prop in schema.Properties)
             {
