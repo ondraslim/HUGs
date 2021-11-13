@@ -91,7 +91,7 @@ namespace HUGs.Generator.DDD.Ddd
             var method = MethodBuilder.Create()
                 .SetName(nameof(DbEntityMapper<object, object>.ToDbEntity))
                 .SetReturnType(schema.DbEntityClassName)
-                .SetAccessModifiers(SyntaxKind.PublicKeyword)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.OverrideKeyword)
                 .AddParameter("obj", schema.DddObjectClassName)
                 .AddBodyLine(body.NormalizeWhitespace().ToFullString())
                 .Build();
@@ -199,7 +199,7 @@ namespace HUGs.Generator.DDD.Ddd
             var method = MethodBuilder.Create()
                 .SetName(nameof(DbEntityMapper<object, object>.ToDddObject))
                 .SetReturnType(schema.DddObjectClassName)
-                .SetAccessModifiers(SyntaxKind.PublicKeyword)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.OverrideKeyword)
                 .AddParameter("obj", schema.DbEntityClassName)
                 .AddBodyLine(body)
                 .Build();

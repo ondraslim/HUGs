@@ -16,7 +16,7 @@ namespace HUGs.DDD.Generated.DbEntity
         {
         }
 
-        public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
+        public override SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
         {
             return new SimpleAggregateDbEntity
             {
@@ -30,7 +30,7 @@ namespace HUGs.DDD.Generated.DbEntity
             };
         }
 
-        public SimpleAggregateAggregate ToDddObject(SimpleAggregateDbEntity obj)
+        public override SimpleAggregateAggregate ToDddObject(SimpleAggregateDbEntity obj)
         {
             return new SimpleAggregateAggregate
             (
