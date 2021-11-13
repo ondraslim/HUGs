@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HUGs.Generator.DDD.Framework.BaseModels
+﻿namespace HUGs.Generator.DDD.Framework.BaseModels
 {
     public abstract class Enumeration
     {
@@ -15,9 +13,7 @@ namespace HUGs.Generator.DDD.Framework.BaseModels
         {
             return InternalName;
         }
-
-        // TODO: implement
-        //public abstract Enumeration FromString(string @string);
+        public abstract Enumeration FromString(string @string);
 
         protected bool Equals(Enumeration other)
         {
@@ -35,32 +31,6 @@ namespace HUGs.Generator.DDD.Framework.BaseModels
         public override int GetHashCode()
         {
             return (InternalName != null ? InternalName.GetHashCode() : 0);
-        }
-
-        // TODO: converter
-    }
-
-
-    // TODO: FromString example?
-    public class OrderState : Enumeration
-    {
-        public static readonly OrderState Created = new(nameof(Created), "Created");
-        public static readonly OrderState Canceled = new(nameof(Canceled), "Canceled");
-        public string Name { get; }
-
-        private OrderState(string internalName, string Name) : base(internalName)
-        {
-            this.Name = Name;
-        }
-
-        public static OrderState FromString(string @string)
-        {
-            return @string switch
-            {
-                nameof(Created) => Created,
-                nameof(Canceled) => Canceled,
-                _ => throw new ArgumentOutOfRangeException(nameof(@string), @string, null)
-            };
         }
     }
 

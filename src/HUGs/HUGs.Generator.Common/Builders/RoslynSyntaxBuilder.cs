@@ -62,6 +62,15 @@ namespace HUGs.Generator.Common.Builders
                 GetFormattedObjectCreation
             );
 
+            normalized = normalized.ReplaceNodes(
+                normalized.DescendantNodes().OfType<SwitchExpressionSyntax>(),
+                GetFormattedSwitchExpression
+            );
+
+            normalized = normalized.ReplaceNodes(
+                normalized.DescendantNodes().OfType<ReturnStatementSyntax>(),
+                (original, rewritten) => rewritten.WithSemicolonToken(original.SemicolonToken.WithLeadingTrivia()));
+
             return normalized.ToFullString();
         }
 
@@ -102,5 +111,25 @@ namespace HUGs.Generator.Common.Builders
                     )))
                 );
         }
+
+        private SyntaxNode GetFormattedSwitchExpression(SwitchExpressionSyntax original, SwitchExpressionSyntax rewritten)
+        {
+            var indentation = rewritten.Ancestors().OfType<StatementSyntax>().First().GetLeadingTrivia();
+
+            return rewritten
+                .WithOpenBraceToken(rewritten.OpenBraceToken.WithTrailingTrivia())
+                .WithCloseBraceToken(rewritten.CloseBraceToken
+                    .WithLeadingTrivia(
+                        SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed).AddRange(indentation)
+                    )
+                    .WithTrailingTrivia()
+                )
+                .WithArms(SyntaxFactory.SeparatedList(
+                    rewritten.Arms.Select(e => e.WithLeadingTrivia(
+                        SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed).AddRange(indentation).Add(SyntaxFactory.Tab)
+                    )
+                )));
+        }
+
     }
 }

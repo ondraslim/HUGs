@@ -28,9 +28,10 @@ namespace HUGs.DDD.Generated.Enumeration
         {
             return name switch
             {
-            "Created" => Created, "Canceled" => Canceled, _ => throw new ArgumentOutOfRangeException()}
-
-            ;
+            	"Created" => Created,
+            	"Canceled" => Canceled,
+            	_ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 }
