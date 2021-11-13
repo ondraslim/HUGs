@@ -10,24 +10,23 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class SimpleEntityMapper : DbEntityMapper<SimpleEntityEntity, SimpleEntityDbEntity>
+    public class Simple3Mapper : DbEntityMapper<Simple3ValueObject, Simple3DbEntity>
     {
-        public SimpleEntityMapper(IDbEntityMapperFactory factory): base(factory)
+        public Simple3Mapper(IDbEntityMapperFactory factory): base(factory)
         {
         }
 
-        public SimpleEntityDbEntity ToDbEntity(SimpleEntityEntity obj)
+        public Simple3DbEntity ToDbEntity(Simple3ValueObject obj)
         {
-            return new SimpleEntityDbEntity
+            return new Simple3DbEntity
             {
+            	Text = obj.Text
             };
         }
 
-        public SimpleEntityDbEntity ToDbEntity(SimpleEntityEntity obj)
+        public Simple3DbEntity ToDbEntity(Simple3ValueObject obj)
         {
-            return new SimpleEntityDbEntity
-            (
-            );
+            return new Simple3DbEntity(obj.Text);
         }
     }
 }

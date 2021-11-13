@@ -20,28 +20,13 @@ namespace HUGs.DDD.Generated.DbEntity
         {
             return new SimpleAggregateDbEntity
             {
-            	SimpleString = obj.SimpleString,
-            	SimpleNumber = obj.SimpleNumber,
-            	SimpleOptional = obj.SimpleOptional,
-            	SimpleCollection = obj.SimpleCollection,
-            	SimpleEntity = obj.SimpleEntity,
-            	SimpleValueObject = obj.SimpleValueObject,
-            	SimpleEntityId = obj.SimpleEntityId
+            	Number = obj.Number
             };
         }
 
         public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
         {
-            return new SimpleAggregateDbEntity
-            (
-            	obj.SimpleString,
-            	obj.SimpleNumber,
-            	obj.SimpleOptional,
-            	obj.SimpleCollection,
-            	obj.SimpleEntity,
-            	obj.SimpleValueObject,
-            	obj.SimpleEntityId
-            );
+            return new SimpleAggregateDbEntity(obj.Number);
         }
     }
 }

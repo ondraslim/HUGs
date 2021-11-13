@@ -20,14 +20,13 @@ namespace HUGs.DDD.Generated.DbEntity
         {
             return new SimpleEntityDbEntity
             {
+            	Number = obj.Number
             };
         }
 
         public SimpleEntityDbEntity ToDbEntity(SimpleEntityEntity obj)
         {
-            return new SimpleEntityDbEntity
-            (
-            );
+            return new SimpleEntityDbEntity(obj.Number);
         }
     }
 }

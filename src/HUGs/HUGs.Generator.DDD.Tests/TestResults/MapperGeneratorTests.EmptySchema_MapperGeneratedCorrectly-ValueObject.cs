@@ -18,7 +18,16 @@ namespace HUGs.DDD.Generated.DbEntity
 
         public SimpleValueObjectDbEntity ToDbEntity(SimpleValueObjectValueObject obj)
         {
-            return new SimpleValueObjectDbEntity{};
+            return new SimpleValueObjectDbEntity
+            {
+            };
+        }
+
+        public SimpleValueObjectDbEntity ToDbEntity(SimpleValueObjectValueObject obj)
+        {
+            return new SimpleValueObjectDbEntity
+            (
+            );
         }
     }
 }
