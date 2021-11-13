@@ -23,24 +23,24 @@ namespace HUGs.DDD.Generated.DbEntity
             	SimpleString = obj.SimpleString,
             	SimpleNumber = obj.SimpleNumber,
             	SimpleOptional = obj.SimpleOptional,
-            	SimpleCollection = obj.SimpleCollection,
-            	SimpleEntity = obj.SimpleEntity,
-            	SimpleValueObject = obj.SimpleValueObject,
-            	SimpleEntityId = obj.SimpleEntityId
+            	SimpleCollection = MapDbEntityCollection(obj.SimpleCollection),
+            	SimpleEntity = MapChildDbEntity(obj.SimpleEntity),
+            	SimpleValueObject = MapChildDbEntity(obj.SimpleValueObject),
+            	SimpleEntityId = MapDbEntityId(obj.SimpleEntityId)
             };
         }
 
-        public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
+        public SimpleAggregateAggregate ToDddObject(SimpleAggregateDbEntity obj)
         {
-            return new SimpleAggregateDbEntity
+            return new SimpleAggregateAggregate
             (
             	obj.SimpleString,
             	obj.SimpleNumber,
             	obj.SimpleOptional,
-            	obj.SimpleCollection,
-            	obj.SimpleEntity,
-            	obj.SimpleValueObject,
-            	obj.SimpleEntityId
+            	MapDddObjectCollection(obj.SimpleCollection),
+            	MapChildDddObject(obj.SimpleEntity),
+            	MapChildDddObject(obj.SimpleValueObject),
+            	MapDddObjectId(obj.SimpleEntityId)
             );
         }
     }

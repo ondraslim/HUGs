@@ -8,8 +8,10 @@ using System.Linq;
 namespace HUGs.Generator.Common.Builders
 {
     public class RoslynSyntaxBuilder : IAddUsingsStage, IAddClassStage
-
     {
+
+        public static readonly SyntaxAnnotation ObjectCreationWithNewLines = new(nameof(ObjectCreationWithNewLines));
+
         private CompilationUnitSyntax compilationUnitSyntax = SyntaxFactory.CompilationUnit();
         private NamespaceDeclarationSyntax @namespace;
         private readonly List<ClassDeclarationSyntax> classes = new();
@@ -54,6 +56,12 @@ namespace HUGs.Generator.Common.Builders
                 GetFormattedObjectInitializer                    
             );
 
+            normalized = normalized.ReplaceNodes(
+                normalized.DescendantNodes().OfType<ObjectCreationExpressionSyntax>()
+                    .Where(i => i.HasAnnotation(ObjectCreationWithNewLines)),
+                GetFormattedObjectCreation
+            );
+
             return normalized.ToFullString();
         }
 
@@ -73,6 +81,26 @@ namespace HUGs.Generator.Common.Builders
                         SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed).AddRange(indentation).Add(SyntaxFactory.Tab)
                     )
                 )));
+        }
+
+        private SyntaxNode GetFormattedObjectCreation(ObjectCreationExpressionSyntax original, ObjectCreationExpressionSyntax rewritten)
+        {
+            var indentation = rewritten.Ancestors().OfType<StatementSyntax>().First().GetLeadingTrivia();
+
+            return rewritten.WithArgumentList(
+                rewritten.ArgumentList!
+                    .WithOpenParenToken(rewritten.ArgumentList.OpenParenToken.WithLeadingTrivia(
+                        SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed).AddRange(indentation)
+                    ))
+                    .WithCloseParenToken(rewritten.ArgumentList.CloseParenToken.WithLeadingTrivia(
+                        SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed).AddRange(indentation)
+                    ))
+                    .WithArguments(SyntaxFactory.SeparatedList(
+                        rewritten.ArgumentList.Arguments.Select(e => e.WithLeadingTrivia(
+                            SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed).AddRange(indentation).Add(SyntaxFactory.Tab)
+                        )
+                    )))
+                );
         }
     }
 }

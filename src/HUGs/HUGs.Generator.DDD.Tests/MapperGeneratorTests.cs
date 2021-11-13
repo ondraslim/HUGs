@@ -43,15 +43,15 @@ namespace HUGs.Generator.DDD.Tests
                 Name = $"SimpleAggregate",
                 Properties = new DddObjectProperty[]
                 {
-                    new() { Name = "SimpleString", Type = "string" },
-                    new() { Name = "SimpleNumber", Type = "int" },
-                    new() { Name = "SimpleComputed", Type = "string", Computed = true },
-                    new() { Name = "SimpleOptional", Type = "string", Optional = true },
-                    new() { Name = "SimpleCollection", Type = "int[]" },
-                    new() { Name = "SimpleComputedCollection", Type = "int[]", Computed = true },
-                    new() { Name = "SimpleEntity", Type = "DddEntity" },
-                    new() { Name = "SimpleValueObject", Type = "DddValueObject" },
-                    new() { Name = "SimpleEntityId", Type = "DddEntityId" },
+                    new() { Name = "SimpleString", Type = "string", ResolvedType = new DddPrimitiveType("string") },
+                    new() { Name = "SimpleNumber", Type = "int", ResolvedType = new DddPrimitiveType("int") },
+                    new() { Name = "SimpleComputed", Type = "string", Computed = true, ResolvedType = new DddPrimitiveType("string") },
+                    new() { Name = "SimpleOptional", Type = "string", Optional = true, ResolvedType = new DddPrimitiveType("string") },
+                    new() { Name = "SimpleCollection", Type = "int[]", ResolvedType = new DddCollectionType(new DddPrimitiveType("int")) },
+                    new() { Name = "SimpleComputedCollection", Type = "int[]", Computed = true, ResolvedType = new DddCollectionType(new DddPrimitiveType("int")) },
+                    new() { Name = "SimpleEntity", Type = "DddEntity", ResolvedType = new DddModelType("DddEntity", DddObjectKind.Entity) },
+                    new() { Name = "SimpleValueObject", Type = "DddValueObject", ResolvedType = new DddModelType("DddValueObject", DddObjectKind.ValueObject) },
+                    new() { Name = "SimpleEntityId", Type = "DddEntityId", ResolvedType = new DddIdType("DddEntity") },
                 }
             };
 

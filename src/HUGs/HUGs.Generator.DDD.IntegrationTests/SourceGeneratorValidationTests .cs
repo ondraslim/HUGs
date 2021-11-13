@@ -48,7 +48,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
                     RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
                     diagnostics.Should().BeEmpty();
-                    generatedFileTexts.Should().HaveCount(kind == "Enumeration" ? 1 : 2);
+                    generatedFileTexts.Should().HaveCount(kind == "Enumeration" ? 1 : 3);
                 }
             }
         }
@@ -72,9 +72,9 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
                     diagnostics.Should().BeEmpty();
 
-                    var expectedGeneratedFileCount = 4;
-                    if (kind == "Enumeration") expectedGeneratedFileCount--;
-                    if (kindOther == "Enumeration") expectedGeneratedFileCount--;
+                    var expectedGeneratedFileCount = 6;
+                    if (kind == "Enumeration") expectedGeneratedFileCount -= 2;
+                    if (kindOther == "Enumeration") expectedGeneratedFileCount -= 2;
                     generatedFileTexts.Should().HaveCount(expectedGeneratedFileCount);
                 }
             }

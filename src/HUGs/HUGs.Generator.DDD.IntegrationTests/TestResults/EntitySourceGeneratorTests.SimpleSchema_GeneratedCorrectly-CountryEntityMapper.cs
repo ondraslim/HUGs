@@ -28,7 +28,12 @@ namespace HUGs.DDD.Generated.DbEntity
 
         public OrderItemDbEntity ToDbEntity(OrderItemEntity obj)
         {
-            return new OrderItemDbEntity(obj.Name, obj.Price, obj.Amount);
+            return new OrderItemDbEntity
+            (
+            	obj.Name,
+            	obj.Price,
+            	obj.Amount
+            );
         }
     }
 }

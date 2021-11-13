@@ -3,6 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using HUGs.Generator.DDD.Framework.BaseModels;
 using HUGs.Generator.DDD.Framework.Mapping;
+using My.Additional.Using1;
+using My.Additional.Using2;
 using HUGs.DDD.Generated.Entity;
 using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
@@ -10,23 +12,23 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class SimpleEntityMapper : DbEntityMapper<SimpleEntityEntity, SimpleEntityDbEntity>
+    public class SimpleAggregateMapper : DbEntityMapper<SimpleAggregateAggregate, SimpleAggregateDbEntity>
     {
-        public SimpleEntityMapper(IDbEntityMapperFactory factory): base(factory)
+        public SimpleAggregateMapper(IDbEntityMapperFactory factory): base(factory)
         {
         }
 
-        public SimpleEntityDbEntity ToDbEntity(SimpleEntityEntity obj)
+        public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
         {
-            return new SimpleEntityDbEntity
+            return new SimpleAggregateDbEntity
             {
             	Number = obj.Number
             };
         }
 
-        public SimpleEntityDbEntity ToDbEntity(SimpleEntityEntity obj)
+        public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
         {
-            return new SimpleEntityDbEntity
+            return new SimpleAggregateDbEntity
             (
             	obj.Number
             );

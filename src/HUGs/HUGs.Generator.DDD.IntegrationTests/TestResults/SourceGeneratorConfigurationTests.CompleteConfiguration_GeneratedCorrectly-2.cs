@@ -28,7 +28,10 @@ namespace My.Desired.Namespace.DbEntities
 
         public Simple1DbEntity ToDbEntity(Simple1ValueObject obj)
         {
-            return new Simple1DbEntity(obj.Text);
+            return new Simple1DbEntity
+            (
+            	obj.Text
+            );
         }
     }
 }

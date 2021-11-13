@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using HUGs.Generator.Common.Builders;
+﻿using HUGs.Generator.Common.Builders;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
@@ -9,7 +7,7 @@ using HUGs.Generator.DDD.Framework.Mapping;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Formatting;
+using System.Linq;
 
 namespace HUGs.Generator.DDD.Ddd
 {
@@ -68,8 +66,6 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static void AddToDbEntityMethod(ClassBuilder classBuilder, DddObjectSchema schema, DddModel dddModel)
         {
-            var param = RoslynSyntaxHelper.CreateParameterSyntax(schema.DddObjectClassName, "obj");
-
             var properties = schema.Properties.Where(p => !p.Computed).ToList();
 
             var body = SyntaxFactory.ReturnStatement(
@@ -80,15 +76,11 @@ namespace HUGs.Generator.DDD.Ddd
                     SyntaxFactory.InitializerExpression(
                         SyntaxKind.ObjectInitializerExpression,
                         SyntaxFactory.SeparatedList<ExpressionSyntax>(
-                            properties.Select((p, i) =>
+                            properties.Select(p =>
                                 SyntaxFactory.AssignmentExpression(
                                     SyntaxKind.SimpleAssignmentExpression,
                                     SyntaxFactory.IdentifierName(p.Name),
-                                    SyntaxFactory.MemberAccessExpression(
-                                            SyntaxKind.SimpleMemberAccessExpression,
-                                            SyntaxFactory.IdentifierName(param.Identifier),
-                                            SyntaxFactory.IdentifierName(p.Name)
-                                        )
+                                    GenerateDbEntityMappedValue(p)
                                 )
                             )
                         )
@@ -107,8 +99,112 @@ namespace HUGs.Generator.DDD.Ddd
             classBuilder.AddMethod(method);
         }
 
+        private static ExpressionSyntax WrapMethodCallExpresion(string methodName, ExpressionSyntax argument)
+        {
+            return SyntaxFactory.InvocationExpression(
+                SyntaxFactory.IdentifierName(methodName),
+                SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] {
+                    SyntaxFactory.Argument(argument)
+                }))
+            );
+        }
+
+        private static ExpressionSyntax GenerateDbEntityMappedValue(DddObjectProperty property)
+        {
+            var member = SyntaxFactory.MemberAccessExpression(
+                SyntaxKind.SimpleMemberAccessExpression,
+                SyntaxFactory.IdentifierName("obj"),
+                SyntaxFactory.IdentifierName(property.Name)
+            );
+
+            if (property.ResolvedType is DddCollectionType)
+            {
+                return WrapMethodCallExpresion("MapDbEntityCollection", member);
+            }
+            else if (property.ResolvedType is DddModelType modelType)
+            {
+                if (modelType.Kind == DddObjectKind.Enumeration)
+                {
+                    return WrapMethodCallExpresion("MapDbEntityEnumeration", member);
+                }
+                else
+                {
+                    return WrapMethodCallExpresion("MapChildDbEntity", member);
+                }
+            }
+            else if (property.ResolvedType is DddIdType)
+            {
+                return WrapMethodCallExpresion("MapDbEntityId", member);
+            }
+            else
+            {
+                return member;
+            }
+        }
+
+        private static ExpressionSyntax GenerateDddObjectMappedValue(DddObjectProperty property)
+        {
+            var member = SyntaxFactory.MemberAccessExpression(
+                SyntaxKind.SimpleMemberAccessExpression,
+                SyntaxFactory.IdentifierName("obj"),
+                SyntaxFactory.IdentifierName(property.Name)
+            );
+
+            if (property.ResolvedType is DddCollectionType)
+            {
+                return WrapMethodCallExpresion("MapDddObjectCollection", member);
+            }
+            else if (property.ResolvedType is DddModelType modelType)
+            {
+                if (modelType.Kind == DddObjectKind.Enumeration)
+                {
+                    return WrapMethodCallExpresion("MapDddObjectEnumeration", member);
+                }
+                else
+                {
+                    return WrapMethodCallExpresion("MapChildDddObject", member);
+                }
+            }
+            else if (property.ResolvedType is DddIdType)
+            {
+                return WrapMethodCallExpresion("MapDddObjectId", member);
+            }
+            else
+            {
+                return member;
+            }
+        }
+
         private static void AddToDddObjectMethod(ClassBuilder classBuilder, DddObjectSchema schema, DddModel dddModel)
         {
+            var properties = schema.Properties.Where(p => !p.Computed).ToList();
+            var body = SyntaxFactory.ReturnStatement(
+                SyntaxFactory.ObjectCreationExpression(
+                    SyntaxFactory.ParseTypeName(schema.DddObjectClassName)
+                )
+                .WithAdditionalAnnotations(RoslynSyntaxBuilder.ObjectCreationWithNewLines)
+                .WithArgumentList(
+                    SyntaxFactory.ArgumentList(
+                        SyntaxFactory.SeparatedList(
+                            properties.Select(p =>
+                                SyntaxFactory.Argument(
+                                    GenerateDddObjectMappedValue(p)
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+
+            var method = MethodBuilder.Create()
+                .SetName(nameof(DbEntityMapper<object, object>.ToDddObject))
+                .SetReturnType(schema.DddObjectClassName)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword)
+                .AddParameter("obj", schema.DbEntityClassName)
+                .AddBodyLine(body)
+                .Build();
+
+            classBuilder.AddMethod(method);
         }
     }
 }

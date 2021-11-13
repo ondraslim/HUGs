@@ -22,15 +22,22 @@ namespace HUGs.DDD.Generated.DbEntity
             {
             	Number = obj.Number,
             	CreatedDate = obj.CreatedDate,
-            	Items = obj.Items,
-            	ShippingAddress = obj.ShippingAddress,
-            	State = obj.State
+            	Items = MapDbEntityCollection(obj.Items),
+            	ShippingAddress = MapChildDbEntity(obj.ShippingAddress),
+            	State = MapDbEntityEnumeration(obj.State)
             };
         }
 
         public OrderDbEntity ToDbEntity(OrderAggregate obj)
         {
-            return new OrderDbEntity(obj.Number, obj.CreatedDate, obj.Items, obj.ShippingAddress, obj.State);
+            return new OrderDbEntity
+            (
+            	obj.Number,
+            	obj.CreatedDate,
+            	obj.Items,
+            	obj.ShippingAddress,
+            	obj.State
+            );
         }
     }
 }

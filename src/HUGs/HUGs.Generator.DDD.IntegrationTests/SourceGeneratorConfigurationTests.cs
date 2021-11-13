@@ -29,10 +29,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(2);
+            generatedFileTexts.Should().HaveCount(3);
 
             Check.CheckString(generatedFileTexts[0], checkName: $"{schemaFile}_{configFile}", fileExtension: "cs");
             Check.CheckString(generatedFileTexts[1], checkName: $"{schemaFile}_{configFile}_DbEntity", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[2], checkName: $"{schemaFile}_{configFile}_Mapper", fileExtension: "cs");
         }
 
         [Test]
@@ -70,7 +71,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var expectedGeneratedFiles = 1;
             if (dbEntityExpectedToBeGenerated)
             {
-                expectedGeneratedFiles++;
+                expectedGeneratedFiles += 2;
             }
 
             diagnostics.Should().BeEmpty();
@@ -81,6 +82,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             if (dbEntityExpectedToBeGenerated)
             {
                 Check.CheckString(generatedFileTexts[1], checkName: $"{checkName}DbEntity", fileExtension: "cs");
+                Check.CheckString(generatedFileTexts[2], checkName: $"{checkName}Mapper", fileExtension: "cs");
             }
         }
 
@@ -98,7 +100,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(7);
+            generatedFileTexts.Should().HaveCount(10);
 
             for (var index = 0; index < generatedFileTexts.Length; index++)
             {

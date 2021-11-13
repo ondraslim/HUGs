@@ -26,7 +26,10 @@ namespace HUGs.DDD.Generated.DbEntity
 
         public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
         {
-            return new SimpleAggregateDbEntity(obj.Number);
+            return new SimpleAggregateDbEntity
+            (
+            	obj.Number
+            );
         }
     }
 }

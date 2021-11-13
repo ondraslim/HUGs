@@ -39,7 +39,19 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
         {
             var model = BuildDddModel(dddSchemas);
             DddModelValidator.ValidateModel(model);
+            ResolvePropertyTypes(model);
             return model;
+        }
+
+        private static void ResolvePropertyTypes(DddModel model)
+        {
+            foreach (var schema in model.Schemas)
+            {
+                foreach (var prop in schema.Properties)
+                {
+                    prop.ResolvedType = DddType.Parse(prop.Type, model);
+                }
+            }
         }
 
         private static DddModel BuildDddModel(IEnumerable<AdditionalText> schemaFiles)

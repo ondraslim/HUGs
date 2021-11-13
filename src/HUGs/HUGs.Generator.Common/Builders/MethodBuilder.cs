@@ -19,7 +19,7 @@ namespace HUGs.Generator.Common.Builders
         private TypeSyntax returnType;
         private string name;
         private readonly List<ParameterSyntax> parameters = new();
-        private readonly List<string> body = new();
+        private readonly List<StatementSyntax> body = new();
 
         private MethodBuilder()
         {
@@ -52,14 +52,19 @@ namespace HUGs.Generator.Common.Builders
 
         public IAddBodyLineStage AddBodyLine(string line)
         {
+            body.Add(SyntaxFactory.ParseStatement(line));
+            return this;
+        }
+
+        public IAddBodyLineStage AddBodyLine(StatementSyntax line)
+        {
             body.Add(line);
             return this;
         }
 
         public MethodDeclarationSyntax Build(bool methodHeaderOnly = false)
         {
-            var statements = body.Select(b => SyntaxFactory.ParseStatement(b)).ToArray();
-            var methodBody = SyntaxFactory.Block(statements);
+            var methodBody = SyntaxFactory.Block(body);
             
             var methodDeclaration = SyntaxFactory.MethodDeclaration(returnType, name)
                 .AddModifiers(accessModifiers)

@@ -26,7 +26,10 @@ namespace HUGs.DDD.Generated.DbEntity
 
         public CountryDbEntity ToDbEntity(CountryEntity obj)
         {
-            return new CountryDbEntity(obj.Name);
+            return new CountryDbEntity
+            (
+            	obj.Name
+            );
         }
     }
 }
