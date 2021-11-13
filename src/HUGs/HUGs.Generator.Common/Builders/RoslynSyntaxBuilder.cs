@@ -46,7 +46,33 @@ namespace HUGs.Generator.Common.Builders
             @namespace = @namespace.AddMembers(classes.ToArray());
             compilationUnitSyntax = compilationUnitSyntax.AddMembers(@namespace);
 
-            return compilationUnitSyntax.NormalizeWhitespace().ToFullString();
+            var normalized = compilationUnitSyntax.NormalizeWhitespace();
+
+            normalized = normalized.ReplaceNodes(
+                normalized.DescendantNodes().OfType<InitializerExpressionSyntax>()
+                    .Where(i => i.IsKind(SyntaxKind.ObjectInitializerExpression)),
+                GetFormattedObjectInitializer                    
+            );
+
+            return normalized.ToFullString();
+        }
+
+        private SyntaxNode GetFormattedObjectInitializer(InitializerExpressionSyntax original, InitializerExpressionSyntax rewritten)
+        {
+            var indentation = rewritten.Ancestors().OfType<StatementSyntax>().First().GetLeadingTrivia();
+            
+            return rewritten
+                .WithOpenBraceToken(rewritten.OpenBraceToken.WithLeadingTrivia(
+                    SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed).AddRange(indentation)
+                ))
+                .WithCloseBraceToken(rewritten.CloseBraceToken.WithLeadingTrivia(
+                    SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed).AddRange(indentation)
+                ))
+                .WithExpressions(SyntaxFactory.SeparatedList(
+                    rewritten.Expressions.Select(e => e.WithLeadingTrivia(
+                        SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed).AddRange(indentation).Add(SyntaxFactory.Tab)
+                    )
+                )));
         }
     }
 }

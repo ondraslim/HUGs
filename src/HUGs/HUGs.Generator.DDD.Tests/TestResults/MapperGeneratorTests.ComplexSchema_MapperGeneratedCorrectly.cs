@@ -18,7 +18,16 @@ namespace HUGs.DDD.Generated.DbEntity
 
         public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
         {
-            return new SimpleAggregateDbEntity{SimpleString = obj.SimpleString, SimpleNumber = obj.SimpleNumber, SimpleOptional = obj.SimpleOptional, SimpleCollection = obj.SimpleCollection, SimpleEntity = obj.SimpleEntity, SimpleValueObject = obj.SimpleValueObject, SimpleEntityId = obj.SimpleEntityId};
+            return new SimpleAggregateDbEntity
+            {
+            	SimpleString = obj.SimpleString,
+            	SimpleNumber = obj.SimpleNumber,
+            	SimpleOptional = obj.SimpleOptional,
+            	SimpleCollection = obj.SimpleCollection,
+            	SimpleEntity = obj.SimpleEntity,
+            	SimpleValueObject = obj.SimpleValueObject,
+            	SimpleEntityId = obj.SimpleEntityId
+            };
         }
     }
 }

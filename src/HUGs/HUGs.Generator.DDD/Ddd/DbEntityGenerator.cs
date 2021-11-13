@@ -33,7 +33,7 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static ClassDeclarationSyntax PrepareDbEntityClassDeclaration(DddObjectSchema schema, DddModel dddModel)
         {
-            var classBuilder = CreateDbEntityClassBuilder($"{schema.Name}DbEntity");
+            var classBuilder = CreateDbEntityClassBuilder(schema.DbEntityClassName);
             AddDbEntityProperties(schema, dddModel, classBuilder);
             return classBuilder.Build();
         }

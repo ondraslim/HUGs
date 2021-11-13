@@ -8,6 +8,7 @@
         public const string DefaultAggregateNamespace = "HUGs.DDD.Generated.Aggregate";
         public const string DefaultEnumerationNamespace = "HUGs.DDD.Generated.Enumeration";
 
+        // TODO: add namespace for Mapper
         public DddObjectTargetNamespaces()
         {
             DbEntity = DefaultDbEntityNamespace;

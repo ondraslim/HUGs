@@ -42,7 +42,7 @@ namespace HUGs.Generator.DDD.Tests
                 model.AddObjectSchema(schema);
 
                 var actualCode = DbEntityGenerator.GenerateDbEntity(schema, generatorConfiguration, model);
-                check.CheckString(actualCode, checkName: schema.SourceCodeFileName, fileExtension: "cs");
+                check.CheckString(actualCode, checkName: schema.DddObjectClassName, fileExtension: "cs");
             }
         }
 

@@ -46,8 +46,19 @@ namespace HUGs.Generator.DDD.Ddd
                 if (schema.Kind != DddObjectKind.Enumeration)
                 {
                     AddDbEntitySource(context, schema, configuration, dddModel);
+                    AddMapperSource(context, schema, configuration, dddModel);
                 }
             }
+        }
+
+        private static void AddMapperSource(
+            GeneratorExecutionContext context, 
+            DddObjectSchema schema, 
+            DddGeneratorConfiguration configuration,
+            DddModel dddModel)
+        {
+            var mapperSourceCode = MapperGenerator.GenerateMapperCode(schema, configuration, dddModel);
+            context.AddSource(schema.MapperClassName, mapperSourceCode);
         }
 
         private static void AddDddObjectSchemaSource(
@@ -56,7 +67,7 @@ namespace HUGs.Generator.DDD.Ddd
             DddGeneratorConfiguration configuration)
         {
             var dddObjectSourceCode = GenerateDddObjectCode(schema, configuration);
-            context.AddSource(schema.SourceCodeFileName, dddObjectSourceCode);
+            context.AddSource(schema.DddObjectClassName, dddObjectSourceCode);
         }
 
         private static void AddDbEntitySource(
@@ -66,10 +77,12 @@ namespace HUGs.Generator.DDD.Ddd
             DddModel dddModel)
         {
             var dbEntitySourceCode = DbEntityGenerator.GenerateDbEntity(schema, configuration, dddModel);
-            context.AddSource(schema.DbEntityFileName, dbEntitySourceCode);
+            context.AddSource(schema.DbEntityClassName, dbEntitySourceCode);
         }
 
-        private static string GenerateDddObjectCode(DddObjectSchema schema, DddGeneratorConfiguration configuration)
+        private static string GenerateDddObjectCode(
+            DddObjectSchema schema,
+            DddGeneratorConfiguration configuration)
             => schema.Kind switch
             {
                 DddObjectKind.ValueObject => ValueObjectGenerator.GenerateValueObjectCode(schema, configuration),
