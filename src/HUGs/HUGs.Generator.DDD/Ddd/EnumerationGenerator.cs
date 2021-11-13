@@ -1,5 +1,4 @@
-﻿using HUGs.Generator.Common;
-using HUGs.Generator.Common.Builders;
+﻿using HUGs.Generator.Common.Builders;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
@@ -22,6 +21,7 @@ namespace HUGs.Generator.DDD.Ddd
 
             var syntaxBuilder = RoslynSyntaxBuilder.Create();
             DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
+
             return syntaxBuilder
                 .SetNamespace(generatorConfiguration.GetTargetNamespaceForKind(schema.Kind))
                 .AddClass(enumerationClass)
@@ -35,7 +35,50 @@ namespace HUGs.Generator.DDD.Ddd
             AddConstructor(classBuilder, schema);
             AddEnumerationFields(classBuilder, schema);
 
-            return classBuilder.Build();
+            var fromStringMethod = PrepareFromStringMethod(schema);
+
+            return classBuilder
+                .AddMethod(fromStringMethod)
+                .Build();
+        }
+
+        private static MethodDeclarationSyntax PrepareFromStringMethod(DddObjectSchema schema)
+        {
+            var body = SyntaxFactory.ReturnStatement(
+                SyntaxFactory.SwitchExpression(
+                    SyntaxFactory.IdentifierName("name"))
+                .WithArms(
+                    SyntaxFactory.SeparatedList(
+                        schema.Values.Select(GetSwitchArm)
+                            .Concat(new[] {
+                                SyntaxFactory.SwitchExpressionArm(
+                                    SyntaxFactory.DiscardPattern(),
+                                    SyntaxFactory.ThrowExpression(
+                                        SyntaxFactory.ObjectCreationExpression(
+                                            SyntaxFactory.IdentifierName("ArgumentOutOfRangeException"))
+                                        .WithArgumentList(SyntaxFactory.ArgumentList())))
+                            })
+                    )
+                )
+            );
+
+            return MethodBuilder.Create()
+                .SetName("FromString")
+                .SetReturnType(schema.DddObjectClassName)
+                .SetAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword)
+                .AddParameter("name", "string")
+                .AddBodyLine(body)
+                .Build();
+        }
+
+        private static SwitchExpressionArmSyntax GetSwitchArm(DddObjectValue dddObjectValue)
+        {
+            return SyntaxFactory.SwitchExpressionArm(
+                SyntaxFactory.ConstantPattern(
+                    SyntaxFactory.LiteralExpression(
+                        SyntaxKind.StringLiteralExpression,
+                        SyntaxFactory.Literal(dddObjectValue.Name))),
+                SyntaxFactory.IdentifierName(dddObjectValue.Name));
         }
 
         private static ClassBuilder CreateEnumerationClassBuilder(string enumerationName)
@@ -49,7 +92,7 @@ namespace HUGs.Generator.DDD.Ddd
         private static void AddConstructor(ClassBuilder classBuilder, DddObjectSchema schema)
         {
             var accessModifiers = new[] { SyntaxKind.PrivateKeyword };
-            
+
             var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax("string", "internalName") };
             var propertyParams = DddGeneratorCommon.CreateParametersFromProperties(schema.Properties);
             var ctorParams = ctorBaseParams.Concat(propertyParams).ToArray();
@@ -70,7 +113,7 @@ namespace HUGs.Generator.DDD.Ddd
             {
                 var objectCreationSyntax = PrepareEnumFieldObjectCreationSyntax(schema, value);
                 classBuilder.AddFieldWithInitialization(
-                    schema.Name, value.Name, objectCreationSyntax, 
+                    schema.Name, value.Name, objectCreationSyntax,
                     SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword);
             }
         }

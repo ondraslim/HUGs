@@ -15,5 +15,14 @@ namespace HUGs.DDD.Generated.Enumeration
         private SimpleClass1(string internalName): base(internalName)
         {
         }
+
+        public static SimpleClass1Enumeration FromString(string name)
+        {
+            return name switch
+            {
+            _ => throw new ArgumentOutOfRangeException()}
+
+            ;
+        }
     }
 }
