@@ -1,9 +1,10 @@
-﻿using System;
-using CheckTestOutput;
+﻿using CheckTestOutput;
 using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace HUGs.Generator.DDD.Tests
@@ -36,7 +37,13 @@ namespace HUGs.Generator.DDD.Tests
             {
                 Kind = DddObjectKind.Enumeration,
                 Name = "OrderState",
-                Properties = new DddObjectProperty[] { new() { Name = "Name", Type = "string" } },
+                Properties = new DddObjectProperty[] 
+                {
+                    new()
+                    {
+                        Name = "Name", Type = "string", ResolvedType = new DddPrimitiveType("string")
+                    }
+                },
                 Values = new DddObjectValue[]
                 {
                     new()
@@ -55,7 +62,7 @@ namespace HUGs.Generator.DDD.Tests
             var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject, generatorConfiguration);
             check.CheckString(actualCode, fileExtension: "cs");
         }
-        
+
         [Test]
         public void MultiplePropertySchema_GeneratedCorrectly()
         {
@@ -65,8 +72,8 @@ namespace HUGs.Generator.DDD.Tests
                 Name = "OrderState2",
                 Properties = new DddObjectProperty[]
                 {
-                    new() { Name = "Name", Type = "string" },
-                    new() { Name = "Count", Type = "int" }
+                    new() { Name = "Name", Type = "string", ResolvedType = new DddPrimitiveType("string") },
+                    new() { Name = "Count", Type = "int", ResolvedType = new DddPrimitiveType("int") }
                 },
                 Values = new DddObjectValue[]
                 {

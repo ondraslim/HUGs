@@ -1,13 +1,14 @@
 ﻿using HUGs.Generator.Common.Builders;
+using HUGs.Generator.Common.Builders.RoslynSyntaxBuilderStages;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using HUGs.Generator.Common.Builders.RoslynSyntaxBuilderStages;
 
 namespace HUGs.Generator.DDD.Ddd
 {
@@ -36,7 +37,15 @@ namespace HUGs.Generator.DDD.Ddd
         {
             var parameters = properties
                 .Where(p => !p.Computed)
-                .Select(p => RoslynSyntaxHelper.CreateParameterSyntax(p.GetCSharpType("IEnumerable"), p.Name))
+                .Select(p =>
+                {
+                    if (p.ResolvedType is DddCollectionType collectionType)
+                    {
+                        return RoslynSyntaxHelper.CreateParameterSyntax(collectionType.ToString("IEnumerable"), p.Name);
+                    }
+
+                    return RoslynSyntaxHelper.CreateParameterSyntax(p.ResolvedType.ToString(), p.Name);
+                })
                 .ToArray();
 
             return parameters;
@@ -46,8 +55,8 @@ namespace HUGs.Generator.DDD.Ddd
         {
             var linesOfCode = properties
                 .Where(p => !p.Computed)
-                .Select(p => p.IsArrayProperty
-                    ? $"this.{p.PrivateName} = {p.Name}{(p.Optional ? "?" : "")}.ToList();"
+                .Select(p => p.ResolvedType is DddCollectionType
+                    ? $"this.{p.PrivateName} = {p.Name}{(p.ResolvedType.IsNullable ? "?" : "")}.ToList();"
                     : $"this.{p.Name} = {p.Name};")
                 .ToArray();
 
@@ -58,22 +67,22 @@ namespace HUGs.Generator.DDD.Ddd
         {
             foreach (var property in properties)
             {
-                if (property.IsArrayProperty)
+                if (property.ResolvedType is DddCollectionType collectionType)
                 {
                     classBuilder
-                        .AddField(property.GetCSharpType(arrayCsharpType: "List"), property.PrivateName, SyntaxKind.PrivateKeyword)
+                        .AddField(collectionType.ToString(arrayType: "List"), property.PrivateName, SyntaxKind.PrivateKeyword)
                         .AddGetOnlyPropertyWithBackingField(
-                            property.GetCSharpType(arrayCsharpType: "IReadOnlyList"), property.Name, property.PrivateName, SyntaxKind.PublicKeyword);
+                            collectionType.ToString(arrayType: "IReadOnlyList"), property.Name, property.PrivateName, SyntaxKind.PublicKeyword);
                 }
                 else
                 {
                     if (withPrivateSetter)
                     {
-                        classBuilder.AddPropertyWithPrivateSetter(property.FullType, property.Name, SyntaxKind.PublicKeyword);
+                        classBuilder.AddPropertyWithPrivateSetter(property.ResolvedType.ToString(), property.Name, SyntaxKind.PublicKeyword);
                     }
                     else
                     {
-                        classBuilder.AddGetOnlyProperty(property.FullType, property.Name, SyntaxKind.PublicKeyword);
+                        classBuilder.AddGetOnlyProperty(property.ResolvedType.ToString(), property.Name, SyntaxKind.PublicKeyword);
                     }
                 }
             }
@@ -82,8 +91,8 @@ namespace HUGs.Generator.DDD.Ddd
         public static void AddDbEntityClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties)
         {
             foreach (var property in properties.Where(p => !p.Computed))
-            {
-                classBuilder.AddFullProperty(property.GetCSharpType(), property.Name, SyntaxKind.PublicKeyword);
+            { 
+                classBuilder.AddFullProperty(property.ResolvedType.ToString(), property.Name, SyntaxKind.PublicKeyword);
             }
         }
 

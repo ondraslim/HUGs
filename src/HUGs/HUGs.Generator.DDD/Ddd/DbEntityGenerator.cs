@@ -1,8 +1,8 @@
 ﻿using HUGs.Generator.Common.Builders;
 using HUGs.Generator.DDD.Ddd.Exceptions;
-using HUGs.Generator.DDD.Ddd.Extensions;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
@@ -13,15 +13,14 @@ namespace HUGs.Generator.DDD.Ddd
     {
         public static string GenerateDbEntity(
             DddObjectSchema schema,
-            DddGeneratorConfiguration generatorConfiguration,
-            DddModel dddModel)
+            DddGeneratorConfiguration generatorConfiguration)
         {
             if (schema.Kind is DddObjectKind.Enumeration)
             {
                 throw new DddSchemaKindDbEntityNotSupportedException();
             }
 
-            var dbEntityClass = PrepareDbEntityClassDeclaration(schema, dddModel);
+            var dbEntityClass = PrepareDbEntityClassDeclaration(schema);
 
             var syntaxBuilder = RoslynSyntaxBuilder.Create();
             DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
@@ -31,10 +30,10 @@ namespace HUGs.Generator.DDD.Ddd
                 .Build();
         }
 
-        private static ClassDeclarationSyntax PrepareDbEntityClassDeclaration(DddObjectSchema schema, DddModel dddModel)
+        private static ClassDeclarationSyntax PrepareDbEntityClassDeclaration(DddObjectSchema schema)
         {
             var classBuilder = CreateDbEntityClassBuilder(schema.DbEntityClassName);
-            AddDbEntityProperties(schema, dddModel, classBuilder);
+            AddDbEntityProperties(schema, classBuilder);
             return classBuilder.Build();
         }
 
@@ -45,30 +44,30 @@ namespace HUGs.Generator.DDD.Ddd
                 .AddClassAccessModifiers(SyntaxKind.PublicKeyword);
         }
 
-        private static void AddDbEntityProperties(DddObjectSchema schema, DddModel dddModel, ClassBuilder classBuilder)
+        private static void AddDbEntityProperties(DddObjectSchema schema, ClassBuilder classBuilder)
         {
             if (schema.Kind is DddObjectKind.Aggregate or DddObjectKind.Entity)
             {
                 classBuilder.AddFullProperty("Guid", "Id", SyntaxKind.PublicKeyword);
             }
 
-            AddWhitelistedProperties(schema, classBuilder);
-            AddDddTypeProperties(schema, dddModel, classBuilder);
+            AddPrimitiveTypeProperties(schema, classBuilder);
+            AddDddTypeProperties(schema, classBuilder);
         }
 
-        private static void AddWhitelistedProperties(DddObjectSchema schema, ClassBuilder classBuilder)
+        private static void AddPrimitiveTypeProperties(DddObjectSchema schema, ClassBuilder classBuilder)
         {
-            var whitelistedProperties = schema.Properties.Where(p => p.IsPrimitiveType());
-            DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, whitelistedProperties);
+            var primitiveProps = schema.Properties.Where(p => p.ResolvedType is DddPrimitiveType);
+            DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, primitiveProps);
         }
         
-        private static void AddDddTypeProperties(DddObjectSchema schema, DddModel dddModel, ClassBuilder classBuilder)
-        {
-            var dddTypeProperties = schema.Properties.Where(p => !p.IsPrimitiveType()).ToList();
+        private static void AddDddTypeProperties(DddObjectSchema schema, ClassBuilder classBuilder)
+        { 
+            var dddTypeProperties = schema.Properties.Where(p => p.ResolvedType is not DddPrimitiveType).ToList();
             
-            DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, dddTypeProperties.Where(p => !p.IsDddModelTypeOfKind(dddModel, DddObjectKind.Enumeration)));
+            DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, dddTypeProperties.Where(p => p.ResolvedType is not DddModelType { Kind: DddObjectKind.Enumeration }));
             
-            foreach (var property in dddTypeProperties.Where(p => p.IsDddModelTypeOfKind(dddModel, DddObjectKind.Enumeration)))
+            foreach (var property in dddTypeProperties.Where(p => p.ResolvedType is DddModelType { Kind: DddObjectKind.Enumeration }))
             {
                 classBuilder.AddFullProperty("string", property.Name, SyntaxKind.PublicKeyword);
             }

@@ -3,6 +3,7 @@ using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using HUGs.Generator.DDD.Framework.Mapping;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

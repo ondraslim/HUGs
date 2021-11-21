@@ -1,6 +1,7 @@
 ﻿using HUGs.Generator.Common.Exceptions;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Models;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using HUGs.Generator.DDD.Ddd.Validation;
 using Microsoft.CodeAnalysis;
 using System;

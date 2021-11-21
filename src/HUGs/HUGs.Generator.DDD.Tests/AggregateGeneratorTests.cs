@@ -2,6 +2,7 @@
 using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using NUnit.Framework;
 using System;
 
@@ -36,8 +37,8 @@ namespace HUGs.Generator.DDD.Tests
                 Name = "PropertiesAggregate",
                 Properties = new DddObjectProperty[]
                 {
-                    new() { Name = "Text", Type = "string" },
-                    new() { Name = "Number", Optional = true, Type = "double" }
+                    new() { Name = "Text", Type = "string", ResolvedType = new DddPrimitiveType("string") },
+                    new() { Name = "Number", Type = "double?", ResolvedType = new DddPrimitiveType("double?") }
                 }
             };
 
@@ -55,7 +56,7 @@ namespace HUGs.Generator.DDD.Tests
                 Name = "SimpleArrayPropertyAggregate",
                 Properties = new DddObjectProperty[]
                 {
-                    new() { Name = "Items", Type = "OrderItem[]" },
+                    new() { Name = "Items", Type = "OrderItem[]", ResolvedType = new DddCollectionType(new DddModelType("OrderItem", DddObjectKind.ValueObject)) },
                 }
             };
 
@@ -73,9 +74,9 @@ namespace HUGs.Generator.DDD.Tests
                 Name = "ArrayPropertyAggregate",
                 Properties = new DddObjectProperty[]
                 {
-                    new() { Name = "Text", Type = "string" },
-                    new() { Name = "Items", Type = "OrderItem[]" },
-                    new() { Name = "Number", Optional = true, Type = "double" }
+                    new() { Name = "Text", Type = "string", ResolvedType = new DddPrimitiveType("string") },
+                    new() { Name = "Items", Type = "OrderItem[]", ResolvedType = new DddCollectionType(new DddModelType("OrderItem", DddObjectKind.ValueObject)) },
+                    new() { Name = "Number", Type = "double?", ResolvedType = new DddPrimitiveType("double?") }
                 }
             };
 

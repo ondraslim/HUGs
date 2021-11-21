@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using HUGs.Generator.Common.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
 using System.Text;
-using HUGs.Generator.DDD.Ddd.Models;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {

@@ -4,8 +4,7 @@ Properties:
   - Name: Street
     Type: string
   - Name: Street2
-    Type: string
-    Optional: true
+    Type: string?
   - Name: City
     Type: string
   - Name: Zip

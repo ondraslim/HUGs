@@ -2,6 +2,7 @@
 using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
 using System;
@@ -25,7 +26,7 @@ namespace HUGs.Generator.DDD.Tests
                 Name = $"Simple{kind}",
                 Properties = Array.Empty<DddObjectProperty>()
             };
-
+            
             var actualCode = MapperGenerator.GenerateMapperCode(objectSchema, generatorConfiguration);
             
             check.CheckString(actualCode, checkName: TestHelper.GetGeneratedFileClass(actualCode), fileExtension: "cs");
@@ -45,7 +46,7 @@ namespace HUGs.Generator.DDD.Tests
                     new() { Name = "SimpleString", Type = "string", ResolvedType = new DddPrimitiveType("string") },
                     new() { Name = "SimpleNumber", Type = "int", ResolvedType = new DddPrimitiveType("int") },
                     new() { Name = "SimpleComputed", Type = "string", Computed = true, ResolvedType = new DddPrimitiveType("string") },
-                    new() { Name = "SimpleOptional", Type = "string", Optional = true, ResolvedType = new DddPrimitiveType("string") },
+                    new() { Name = "SimpleOptional", Type = "string?", ResolvedType = new DddPrimitiveType("string?") },
                     new() { Name = "SimpleCollection", Type = "int[]", ResolvedType = new DddCollectionType(new DddPrimitiveType("int")) },
                     new() { Name = "SimpleComputedCollection", Type = "int[]", Computed = true, ResolvedType = new DddCollectionType(new DddPrimitiveType("int")) },
                     new() { Name = "SimpleEntity", Type = "DddEntity", ResolvedType = new DddModelType("DddEntity", DddObjectKind.Entity) },
