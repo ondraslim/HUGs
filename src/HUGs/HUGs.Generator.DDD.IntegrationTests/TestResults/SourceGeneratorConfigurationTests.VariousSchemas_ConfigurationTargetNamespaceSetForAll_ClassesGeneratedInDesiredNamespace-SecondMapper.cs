@@ -8,25 +8,26 @@ using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
 
-namespace HUGs.DDD.Generated.DbEntity
+namespace My.Desired.Namespace.Aggregates
 {
-    public class SimpleAggregateMapper : DbEntityMapper<SimpleAggregateAggregate, SimpleAggregateDbEntity>
+    public class SimpleAggregateId : EntityId<SimpleAggregate>
     {
-        public SimpleAggregateMapper(IDbEntityMapperFactory factory): base(factory)
+        public SimpleAggregateId(Guid value): base(value)
         {
+        }
+    }
+
+    public partial class SimpleAggregate : HUGs.Generator.DDD.Framework.BaseModels.Aggregate<SimpleAggregateId>
+    {
+        public string Number { get; private set; }
+
+        public SimpleAggregate(IId<SimpleAggregateId> id, string Number)
+        {
+            Id = id;
+            this.Number = Number;
+            OnInitialized();
         }
 
-        public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
-        {
-            return new SimpleAggregateDbEntity
-            {
-            	Number = obj.Number
-            };
-        }
-
-        public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
-        {
-            return new SimpleAggregateDbEntity(obj.Number);
-        }
+        partial void OnInitialized();
     }
 }

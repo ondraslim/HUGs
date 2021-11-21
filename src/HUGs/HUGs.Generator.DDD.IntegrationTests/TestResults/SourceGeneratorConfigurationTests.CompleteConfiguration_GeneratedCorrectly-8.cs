@@ -12,23 +12,23 @@ using My.Desired.Namespace.Enumerations;
 
 namespace My.Desired.Namespace.DbEntities
 {
-    public class SimpleAggregateMapper : DbEntityMapper<SimpleAggregate, SimpleAggregateDbEntity>
+    public class SimpleEntityMapper : DbEntityMapper<SimpleEntity, SimpleEntityDbEntity>
     {
-        public SimpleAggregateMapper(IDbEntityMapperFactory factory): base(factory)
+        public SimpleEntityMapper(IDbEntityMapperFactory factory): base(factory)
         {
         }
 
-        public override SimpleAggregateDbEntity ToDbEntity(SimpleAggregate obj)
+        public override SimpleEntityDbEntity ToDbEntity(SimpleEntity obj)
         {
-            return new SimpleAggregateDbEntity
+            return new SimpleEntityDbEntity
             {
             	Number = obj.Number
             };
         }
 
-        public override SimpleAggregate ToDddObject(SimpleAggregateDbEntity obj)
+        public override SimpleEntity ToDddObject(SimpleEntityDbEntity obj)
         {
-            return new SimpleAggregate
+            return new SimpleEntity
             (
             	obj.Number
             );

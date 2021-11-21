@@ -10,13 +10,13 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class SimpleOptionalMapper : DbEntityMapper<SimpleOptionalValueObject, SimpleOptionalDbEntity>
+    public class SimpleOptionalMapper : DbEntityMapper<SimpleOptional, SimpleOptionalDbEntity>
     {
         public SimpleOptionalMapper(IDbEntityMapperFactory factory): base(factory)
         {
         }
 
-        public SimpleOptionalDbEntity ToDbEntity(SimpleOptionalValueObject obj)
+        public override SimpleOptionalDbEntity ToDbEntity(SimpleOptional obj)
         {
             return new SimpleOptionalDbEntity
             {
@@ -27,9 +27,15 @@ namespace HUGs.DDD.Generated.DbEntity
             };
         }
 
-        public SimpleOptionalDbEntity ToDbEntity(SimpleOptionalValueObject obj)
+        public override SimpleOptional ToDddObject(SimpleOptionalDbEntity obj)
         {
-            return new SimpleOptionalDbEntity(obj.Text, obj.Number, obj.TextOptional, obj.NumberOptional);
+            return new SimpleOptional
+            (
+            	obj.Text,
+            	obj.Number,
+            	obj.TextOptional,
+            	obj.NumberOptional
+            );
         }
     }
 }

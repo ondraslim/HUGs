@@ -47,12 +47,13 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(4);
+            generatedFileTexts.Should().HaveCount(6);
 
             Check.CheckString(generatedFileTexts[0], checkName: "First", fileExtension: "cs");
             Check.CheckString(generatedFileTexts[1], checkName: "FirstDbEntity", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[1], checkName: "FirstMapper", fileExtension: "cs");
             Check.CheckString(generatedFileTexts[2], checkName: "Second", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[3], checkName: "SecondDbEntity", fileExtension: "cs");
+            Check.CheckString(generatedFileTexts[3], checkName: "SecondMapper", fileExtension: "cs");
         }
 
         [Test]
