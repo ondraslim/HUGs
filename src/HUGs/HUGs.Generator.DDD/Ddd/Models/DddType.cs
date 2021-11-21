@@ -23,33 +23,33 @@ namespace HUGs.Generator.DDD.Ddd.Models
                     IsNullable = isNullable
                 };
             }
-            else if (DddPrimitiveType.PrimitiveTypes.Contains(type))
+
+            if (DddPrimitiveType.PrimitiveTypes.Contains(type))
             {
                 return new DddPrimitiveType(type)
                 {
                     IsNullable = isNullable
                 };
-            } 
-            else if (model.Schemas.FirstOrDefault(s => s.Name == type) is DddObjectSchema schema)
+            }
+
+            if (model.Schemas.FirstOrDefault(s => s.Name == type) is DddObjectSchema schema)
             {
                 return new DddModelType(schema.Name, schema.Kind)
                 {
                     IsNullable = isNullable
                 };
             }
-            else if (model.Schemas.FirstOrDefault(s => s.Name == type + "Id" && s.Kind == DddObjectKind.Aggregate || s.Kind == DddObjectKind.Entity) is DddObjectSchema schema2)
+
+            if (model.Schemas.FirstOrDefault(s => s.Name == $"{type}Id" && s.Kind == DddObjectKind.Aggregate || s.Kind == DddObjectKind.Entity) is DddObjectSchema schema2)
             {
                 return new DddIdType(schema2.Name)
                 {
                     IsNullable = isNullable
                 };
             }
-            else
-            {
-                throw new InvalidOperationException($"Invalid type {type}!");
-            }
-        }
 
+            throw new InvalidOperationException($"Invalid type '{type}'!");
+        }
     }
 
     public class DddCollectionType : DddType
@@ -60,13 +60,12 @@ namespace HUGs.Generator.DDD.Ddd.Models
         {
             if (elementType.IsNullable)
             {
-                throw new InvalidOperationException($"Collections can not contain nullable types!");
+                throw new InvalidOperationException("Collections can not contain nullable types!");
             }
             ElementType = elementType;
         }
 
-        public override string ToString() => ElementType.ToString() + "[]" + (IsNullable ? "?" : "");
-
+        public override string ToString() => $"{ElementType}[]{(IsNullable ? "?" : "")}";
     }
 
     public class DddModelType : DddType
@@ -80,8 +79,7 @@ namespace HUGs.Generator.DDD.Ddd.Models
             Kind = kind;
         }
 
-        public override string ToString() => Name + (IsNullable ? "?" : "");
-
+        public override string ToString() => $"{Name}{(IsNullable ? "?" : "")}";
     }
 
     public class DddIdType : DddType
@@ -93,8 +91,7 @@ namespace HUGs.Generator.DDD.Ddd.Models
             Name = name;
         }
 
-        public override string ToString() => Name + "Id" + (IsNullable ? "?" : "");
-
+        public override string ToString() => $"{Name}Id{(IsNullable ? "?" : "")}";
     }
 
 
@@ -107,9 +104,9 @@ namespace HUGs.Generator.DDD.Ddd.Models
             Name = name;
         }
 
-        public override string ToString() => Name + (IsNullable ? "?" : "");
+        public override string ToString() => $"{Name}{(IsNullable ? "?" : "")}";
 
-        public static readonly IReadOnlyList<string> PrimitiveTypes = new List<string>()
+        public static readonly IReadOnlyList<string> PrimitiveTypes = new List<string>
         {
             "decimal",
             "double", 
