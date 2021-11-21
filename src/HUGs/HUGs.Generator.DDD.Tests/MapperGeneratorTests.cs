@@ -6,6 +6,8 @@ using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
 using System;
+using FluentAssertions;
+using HUGs.Generator.DDD.Ddd.Exceptions;
 
 namespace HUGs.Generator.DDD.Tests
 {
@@ -32,7 +34,19 @@ namespace HUGs.Generator.DDD.Tests
             check.CheckString(actualCode, checkName: TestHelper.GetGeneratedFileClass(actualCode), fileExtension: "cs");
         }
 
-         // TODO: enum -> exception
+        [Test]
+        public void NotAllowedKind_DbEntityNotGenerated()
+        {
+            var schema = new DddObjectSchema
+            {
+                Kind = DddObjectKind.Enumeration,
+                Name = "TestClassName"
+            };
+
+            Action act = () => MapperGenerator.GenerateMapperCode(schema, generatorConfiguration);
+
+            act.Should().ThrowExactly<DddSchemaKindMapperNotSupportedException>();
+        }
 
         [Test]
         public void ComplexSchema_MapperGeneratedCorrectly()

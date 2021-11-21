@@ -12,7 +12,8 @@ namespace HUGs.DDD.Generated.DbEntity
 {
     public class CountryMapper : DbEntityMapper<Country, CountryDbEntity>
     {
-        public CountryMapper(IDbEntityMapperFactory factory): base(factory)
+        public CountryMapper(IDbEntityMapperFactory factory)
+        	: base(factory)
         {
         }
 

@@ -12,7 +12,8 @@ namespace HUGs.DDD.Generated.DbEntity
 {
     public class SimpleOptionalMapper : DbEntityMapper<SimpleOptional, SimpleOptionalDbEntity>
     {
-        public SimpleOptionalMapper(IDbEntityMapperFactory factory): base(factory)
+        public SimpleOptionalMapper(IDbEntityMapperFactory factory)
+        	: base(factory)
         {
         }
 

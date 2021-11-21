@@ -12,7 +12,8 @@ namespace HUGs.DDD.Generated.Entity
 {
     public class SimpleArrayPropertyEntityId : EntityId<SimpleArrayPropertyEntity>
     {
-        public SimpleArrayPropertyEntityId(Guid value): base(value)
+        public SimpleArrayPropertyEntityId(Guid value)
+        	: base(value)
         {
         }
     }
@@ -20,6 +21,7 @@ namespace HUGs.DDD.Generated.Entity
     public partial class SimpleArrayPropertyEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<SimpleArrayPropertyEntityId>
     {
         private List<OrderItem> _Items;
+
         public IReadOnlyList<OrderItem> Items => _Items;
         public SimpleArrayPropertyEntity(IId<SimpleArrayPropertyEntityId> id, IEnumerable<OrderItem> Items)
         {

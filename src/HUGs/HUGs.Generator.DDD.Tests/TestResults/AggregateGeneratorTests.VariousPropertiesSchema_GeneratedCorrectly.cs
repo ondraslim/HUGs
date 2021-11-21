@@ -12,7 +12,8 @@ namespace HUGs.DDD.Generated.Aggregate
 {
     public class ArrayPropertyAggregateId : EntityId<ArrayPropertyAggregate>
     {
-        public ArrayPropertyAggregateId(Guid value): base(value)
+        public ArrayPropertyAggregateId(Guid value)
+        	: base(value)
         {
         }
     }
@@ -20,6 +21,7 @@ namespace HUGs.DDD.Generated.Aggregate
     public partial class ArrayPropertyAggregate : HUGs.Generator.DDD.Framework.BaseModels.Aggregate<ArrayPropertyAggregateId>
     {
         private List<OrderItem> _Items;
+
         public string Text { get; private set; }
 
         public IReadOnlyList<OrderItem> Items => _Items;

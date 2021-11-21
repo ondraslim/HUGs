@@ -12,7 +12,8 @@ namespace HUGs.DDD.Generated.DbEntity
 {
     public class AddressMapper : DbEntityMapper<Address, AddressDbEntity>
     {
-        public AddressMapper(IDbEntityMapperFactory factory): base(factory)
+        public AddressMapper(IDbEntityMapperFactory factory)
+        	: base(factory)
         {
         }
 

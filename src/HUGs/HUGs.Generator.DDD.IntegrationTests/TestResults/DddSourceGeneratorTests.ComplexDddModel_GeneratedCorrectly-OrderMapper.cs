@@ -12,7 +12,8 @@ namespace HUGs.DDD.Generated.DbEntity
 {
     public class OrderMapper : DbEntityMapper<Order, OrderDbEntity>
     {
-        public OrderMapper(IDbEntityMapperFactory factory): base(factory)
+        public OrderMapper(IDbEntityMapperFactory factory)
+        	: base(factory)
         {
         }
 

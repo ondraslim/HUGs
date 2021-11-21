@@ -14,7 +14,8 @@ namespace My.Desired.Namespace.DbEntities
 {
     public class Simple1Mapper : DbEntityMapper<Simple1, Simple1DbEntity>
     {
-        public Simple1Mapper(IDbEntityMapperFactory factory): base(factory)
+        public Simple1Mapper(IDbEntityMapperFactory factory)
+        	: base(factory)
         {
         }
 

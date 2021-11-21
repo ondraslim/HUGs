@@ -14,7 +14,8 @@ namespace My.Desired.Namespace.Aggregates
 {
     public class SimpleAggregateId : EntityId<SimpleAggregate>
     {
-        public SimpleAggregateId(Guid value): base(value)
+        public SimpleAggregateId(Guid value)
+        	: base(value)
         {
         }
     }

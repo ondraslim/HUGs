@@ -13,10 +13,13 @@ namespace HUGs.DDD.Generated.Enumeration
     public class OrderState : HUGs.Generator.DDD.Framework.BaseModels.Enumeration
     {
         public static readonly OrderState Created = new(nameof(Created), "Created");
+
         public static readonly OrderState Canceled = new(nameof(Canceled), "Canceled");
+
         public string Name { get; }
 
-        private OrderState(string internalName, string Name): base(internalName)
+        private OrderState(string internalName, string Name)
+        	: base(internalName)
         {
             this.Name = Name;
         }

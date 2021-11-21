@@ -13,7 +13,9 @@ namespace HUGs.DDD.Generated.Enumeration
     public class EmptyEnumeration : HUGs.Generator.DDD.Framework.BaseModels.Enumeration
     {
         public static readonly EmptyEnumeration SampleEmptyEnumeration = new(nameof(SampleEmptyEnumeration));
-        private EmptyEnumeration(string internalName): base(internalName)
+
+        private EmptyEnumeration(string internalName)
+        	: base(internalName)
         {
         }
 

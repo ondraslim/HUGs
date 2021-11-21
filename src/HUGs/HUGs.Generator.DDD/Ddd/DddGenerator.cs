@@ -43,7 +43,7 @@ namespace HUGs.Generator.DDD.Ddd
             {
                 AddDddObjectSchemaSource(context, schema, configuration);
 
-                if (schema.Kind != DddObjectKind.Enumeration)
+                if (schema.Kind is not DddObjectKind.Enumeration)
                 {
                     AddDbEntitySource(context, schema, configuration);
                     AddMapperSource(context, schema, configuration);
@@ -87,7 +87,7 @@ namespace HUGs.Generator.DDD.Ddd
                 DddObjectKind.Entity => EntityGenerator.GenerateEntityCode(schema, configuration),
                 DddObjectKind.Aggregate => AggregateGenerator.GenerateAggregateCode(schema, configuration),
                 DddObjectKind.Enumeration => EnumerationGenerator.GenerateEnumerationCode(schema, configuration),
-                _ => throw new ArgumentOutOfRangeException($"Kind '{schema.Kind}' is not supported.")
+                _ => throw new NotSupportedException($"Generation for kind '{schema.Kind}' is not supported.")
             };
 
     }

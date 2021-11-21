@@ -99,8 +99,6 @@ namespace HUGs.Generator.DDD.Ddd
             classBuilder.AddMethod(method);
         }
 
-
-
         private static void AddToDddObjectMethod(ClassBuilder classBuilder, DddObjectSchema schema)
         {
             var properties = schema.Properties.Where(p => !p.Computed).ToList();
@@ -108,7 +106,7 @@ namespace HUGs.Generator.DDD.Ddd
                 SyntaxFactory.ObjectCreationExpression(
                     SyntaxFactory.ParseTypeName(schema.DddObjectClassName)
                 )
-                .WithAdditionalAnnotations(RoslynSyntaxBuilder.ObjectCreationWithNewLines)
+                .WithAdditionalAnnotations(RoslynSyntaxFormatter.ObjectCreationWithNewLines)
                 .WithArgumentList(
                     SyntaxFactory.ArgumentList(
                         SyntaxFactory.SeparatedList(

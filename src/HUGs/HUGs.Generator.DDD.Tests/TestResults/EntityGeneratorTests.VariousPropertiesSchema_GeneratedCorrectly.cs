@@ -12,7 +12,8 @@ namespace HUGs.DDD.Generated.Entity
 {
     public class ArrayPropertyEntityId : EntityId<ArrayPropertyEntity>
     {
-        public ArrayPropertyEntityId(Guid value): base(value)
+        public ArrayPropertyEntityId(Guid value)
+        	: base(value)
         {
         }
     }
@@ -20,6 +21,7 @@ namespace HUGs.DDD.Generated.Entity
     public partial class ArrayPropertyEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<ArrayPropertyEntityId>
     {
         private List<OrderItem> _Items;
+
         public string Text { get; private set; }
 
         public IReadOnlyList<OrderItem> Items => _Items;

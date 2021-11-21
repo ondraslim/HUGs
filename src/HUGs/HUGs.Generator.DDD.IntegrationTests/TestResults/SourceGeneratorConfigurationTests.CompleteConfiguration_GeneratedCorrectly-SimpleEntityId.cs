@@ -14,7 +14,8 @@ namespace My.Desired.Namespace.Entities
 {
     public class SimpleEntityId : EntityId<SimpleEntity>
     {
-        public SimpleEntityId(Guid value): base(value)
+        public SimpleEntityId(Guid value)
+        	: base(value)
         {
         }
     }

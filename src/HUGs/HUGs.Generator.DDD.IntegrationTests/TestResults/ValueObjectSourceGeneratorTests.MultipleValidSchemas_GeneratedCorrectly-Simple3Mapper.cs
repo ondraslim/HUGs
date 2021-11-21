@@ -12,7 +12,8 @@ namespace HUGs.DDD.Generated.DbEntity
 {
     public class Simple3Mapper : DbEntityMapper<Simple3, Simple3DbEntity>
     {
-        public Simple3Mapper(IDbEntityMapperFactory factory): base(factory)
+        public Simple3Mapper(IDbEntityMapperFactory factory)
+        	: base(factory)
         {
         }
 
