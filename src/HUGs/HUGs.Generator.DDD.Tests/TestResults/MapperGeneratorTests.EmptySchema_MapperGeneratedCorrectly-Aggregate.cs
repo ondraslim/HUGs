@@ -10,22 +10,22 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class SimpleAggregateMapper : DbEntityMapper<SimpleAggregateAggregate, SimpleAggregateDbEntity>
+    public class SimpleAggregateMapper : DbEntityMapper<SimpleAggregate, SimpleAggregateDbEntity>
     {
         public SimpleAggregateMapper(IDbEntityMapperFactory factory): base(factory)
         {
         }
 
-        public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
+        public override SimpleAggregateDbEntity ToDbEntity(SimpleAggregate obj)
         {
             return new SimpleAggregateDbEntity
             {
             };
         }
 
-        public SimpleAggregateDbEntity ToDbEntity(SimpleAggregateAggregate obj)
+        public override SimpleAggregate ToDddObject(SimpleAggregateDbEntity obj)
         {
-            return new SimpleAggregateDbEntity
+            return new SimpleAggregate
             (
             );
         }

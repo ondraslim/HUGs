@@ -10,26 +10,12 @@ using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
 
-namespace My.Desired.Namespace.Entities
+namespace My.Desired.Namespace.DbEntities
 {
-    public class SimpleEntityId : EntityId<SimpleEntity>
+    public class SimpleAggregateDbEntity
     {
-        public SimpleEntityId(Guid value): base(value)
-        {
-        }
-    }
+        public Guid Id { get; set; }
 
-    public partial class SimpleEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<SimpleEntityId>
-    {
-        public string Number { get; private set; }
-
-        public SimpleEntity(IId<SimpleEntityId> id, string Number)
-        {
-            Id = id;
-            this.Number = Number;
-            OnInitialized();
-        }
-
-        partial void OnInitialized();
+        public string Number { get; set; }
     }
 }

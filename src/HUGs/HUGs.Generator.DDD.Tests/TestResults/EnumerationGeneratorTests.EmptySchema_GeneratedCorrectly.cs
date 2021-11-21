@@ -16,13 +16,12 @@ namespace HUGs.DDD.Generated.Enumeration
         {
         }
 
-        public static SimpleClass1Enumeration FromString(string name)
+        public static SimpleClass1 FromString(string name)
         {
             return name switch
             {
-            _ => throw new ArgumentOutOfRangeException()}
-
-            ;
+            	_ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 }

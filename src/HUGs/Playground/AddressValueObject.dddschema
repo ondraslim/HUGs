@@ -10,5 +10,3 @@ properties:
     type: string
   - name: Zip
     type: string
-  - name: CountryId
-    type: CountryId

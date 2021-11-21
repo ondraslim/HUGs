@@ -13,7 +13,6 @@
         {
             return InternalName;
         }
-        public abstract Enumeration FromString(string @string);
 
         protected bool Equals(Enumeration other)
         {

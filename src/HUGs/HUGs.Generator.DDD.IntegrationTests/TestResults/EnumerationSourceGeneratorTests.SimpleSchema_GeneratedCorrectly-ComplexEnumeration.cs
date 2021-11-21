@@ -24,5 +24,16 @@ namespace HUGs.DDD.Generated.Enumeration
             this.Name = Name;
             this.Amount = Amount;
         }
+
+        public static ComplexEnumeration FromString(string name)
+        {
+            return name switch
+            {
+            	"SampleEnumeration1" => SampleEnumeration1,
+            	"SampleEnumeration2" => SampleEnumeration2,
+            	"SampleEnumeration3" => SampleEnumeration3,
+            	_ => throw new ArgumentOutOfRangeException()
+            };
+        }
     }
 }

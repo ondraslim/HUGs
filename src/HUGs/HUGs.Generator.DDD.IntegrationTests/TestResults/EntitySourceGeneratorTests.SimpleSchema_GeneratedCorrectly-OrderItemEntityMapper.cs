@@ -10,13 +10,13 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class CountryMapper : DbEntityMapper<CountryEntity, CountryDbEntity>
+    public class CountryMapper : DbEntityMapper<Country, CountryDbEntity>
     {
         public CountryMapper(IDbEntityMapperFactory factory): base(factory)
         {
         }
 
-        public CountryDbEntity ToDbEntity(CountryEntity obj)
+        public override CountryDbEntity ToDbEntity(Country obj)
         {
             return new CountryDbEntity
             {
@@ -24,9 +24,9 @@ namespace HUGs.DDD.Generated.DbEntity
             };
         }
 
-        public CountryDbEntity ToDbEntity(CountryEntity obj)
+        public override Country ToDddObject(CountryDbEntity obj)
         {
-            return new CountryDbEntity
+            return new Country
             (
             	obj.Name
             );

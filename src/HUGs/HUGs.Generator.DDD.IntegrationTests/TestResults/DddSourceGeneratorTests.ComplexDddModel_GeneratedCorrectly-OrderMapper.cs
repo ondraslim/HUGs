@@ -10,13 +10,13 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class OrderMapper : DbEntityMapper<OrderAggregate, OrderDbEntity>
+    public class OrderMapper : DbEntityMapper<Order, OrderDbEntity>
     {
         public OrderMapper(IDbEntityMapperFactory factory): base(factory)
         {
         }
 
-        public OrderDbEntity ToDbEntity(OrderAggregate obj)
+        public override OrderDbEntity ToDbEntity(Order obj)
         {
             return new OrderDbEntity
             {
@@ -28,15 +28,15 @@ namespace HUGs.DDD.Generated.DbEntity
             };
         }
 
-        public OrderDbEntity ToDbEntity(OrderAggregate obj)
+        public override Order ToDddObject(OrderDbEntity obj)
         {
-            return new OrderDbEntity
+            return new Order
             (
             	obj.Number,
             	obj.CreatedDate,
-            	obj.Items,
-            	obj.ShippingAddress,
-            	obj.State
+            	MapDddObjectCollection(obj.Items),
+            	MapChildDddObject(obj.ShippingAddress),
+            	MapDddObjectEnumeration(obj.State)
             );
         }
     }

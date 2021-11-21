@@ -12,13 +12,13 @@ using My.Desired.Namespace.Enumerations;
 
 namespace My.Desired.Namespace.DbEntities
 {
-    public class Simple1Mapper : DbEntityMapper<Simple1ValueObject, Simple1DbEntity>
+    public class Simple1Mapper : DbEntityMapper<Simple1, Simple1DbEntity>
     {
         public Simple1Mapper(IDbEntityMapperFactory factory): base(factory)
         {
         }
 
-        public Simple1DbEntity ToDbEntity(Simple1ValueObject obj)
+        public override Simple1DbEntity ToDbEntity(Simple1 obj)
         {
             return new Simple1DbEntity
             {
@@ -26,9 +26,9 @@ namespace My.Desired.Namespace.DbEntities
             };
         }
 
-        public Simple1DbEntity ToDbEntity(Simple1ValueObject obj)
+        public override Simple1 ToDddObject(Simple1DbEntity obj)
         {
-            return new Simple1DbEntity
+            return new Simple1
             (
             	obj.Text
             );

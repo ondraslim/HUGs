@@ -21,13 +21,14 @@ namespace HUGs.DDD.Generated.Enumeration
             this.Name = Name;
         }
 
-        public static OrderStateEnumeration FromString(string name)
+        public static OrderState FromString(string name)
         {
             return name switch
             {
-            "Created" => Created, "Canceled" => Canceled, _ => throw new ArgumentOutOfRangeException()}
-
-            ;
+            	"Created" => Created,
+            	"Canceled" => Canceled,
+            	_ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 }

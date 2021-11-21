@@ -24,7 +24,7 @@ namespace HUGs.DDD.Generated.Enumeration
             this.Count = Count;
         }
 
-        public static OrderState2Enumeration FromString(string name)
+        public static OrderState2 FromString(string name)
         {
             return name switch
             {

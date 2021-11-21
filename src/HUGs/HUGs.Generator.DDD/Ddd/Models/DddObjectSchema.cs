@@ -7,8 +7,7 @@
         public DddObjectProperty[] Properties { get; set; }
         public DddObjectValue[] Values { get; set; }
 
-        // TODO: remove Kind
-        public string DddObjectClassName => $"{Name}{Kind}";
+        public string DddObjectClassName => Name;
         public string DbEntityClassName => $"{Name}DbEntity";
         public string MapperClassName => $"{Name}Mapper";
     }
