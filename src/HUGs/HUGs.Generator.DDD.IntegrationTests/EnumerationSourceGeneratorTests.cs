@@ -1,9 +1,9 @@
 using CheckTestOutput;
 using FluentAssertions;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
+using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
 using System.IO;
-using System.Linq;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -30,7 +30,10 @@ namespace HUGs.Generator.DDD.IntegrationTests
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(1);
 
-            Check.CheckString(generatedFileTexts.First(), checkName: fileName, fileExtension: "cs");
+            foreach (var generatedFile in generatedFileTexts)
+            {
+                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
+            }
         }
     }
 }

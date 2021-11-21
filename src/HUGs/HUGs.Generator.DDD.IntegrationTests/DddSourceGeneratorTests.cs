@@ -1,9 +1,9 @@
-﻿using System.IO;
-using System.Linq;
-using CheckTestOutput;
+﻿using CheckTestOutput;
 using FluentAssertions;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
+using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
+using System.IO;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -33,8 +33,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             foreach (var generatedFile in generatedFileTexts)
             {
-                var className = generatedFile.Split(' ').SkipWhile(t => t != "class").Skip(1).First().Trim();
-                Check.CheckString(generatedFile, checkName: className, fileExtension: "cs");
+                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
             }
         }
     }

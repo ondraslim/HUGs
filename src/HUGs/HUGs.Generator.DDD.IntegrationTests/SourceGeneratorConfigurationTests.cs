@@ -3,6 +3,7 @@ using FluentAssertions;
 using HUGs.Generator.Common.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
+using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
@@ -31,9 +32,10 @@ namespace HUGs.Generator.DDD.IntegrationTests
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(3);
 
-            Check.CheckString(generatedFileTexts[0], checkName: $"{schemaFile}_{configFile}", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[1], checkName: $"{schemaFile}_{configFile}_DbEntity", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[2], checkName: $"{schemaFile}_{configFile}_Mapper", fileExtension: "cs");
+            foreach (var generatedFile in generatedFileTexts)
+            {
+                Check.CheckString(generatedFile, checkName: $"{configFile}_{TestHelper.GetGeneratedFileClass(generatedFile)}", fileExtension: "cs");
+            }
         }
 
         [Test]
@@ -49,11 +51,10 @@ namespace HUGs.Generator.DDD.IntegrationTests
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(6);
 
-            Check.CheckString(generatedFileTexts[0], checkName: "First", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[1], checkName: "FirstDbEntity", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[1], checkName: "FirstMapper", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[2], checkName: "Second", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[3], checkName: "SecondMapper", fileExtension: "cs");
+            foreach (var generatedFile in generatedFileTexts)
+            {
+                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
+            }
         }
 
         [Test]
@@ -78,12 +79,9 @@ namespace HUGs.Generator.DDD.IntegrationTests
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(expectedGeneratedFiles);
 
-            var checkName = new string(schemaFilePath.SkipWhile(c => c != '/').Skip(1).TakeWhile(c => c != '.').ToArray());
-            Check.CheckString(generatedFileTexts[0], checkName: checkName, fileExtension: "cs");
-            if (dbEntityExpectedToBeGenerated)
+            foreach (var generatedFile in generatedFileTexts)
             {
-                Check.CheckString(generatedFileTexts[1], checkName: $"{checkName}DbEntity", fileExtension: "cs");
-                Check.CheckString(generatedFileTexts[2], checkName: $"{checkName}Mapper", fileExtension: "cs");
+                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
             }
         }
 
@@ -103,10 +101,9 @@ namespace HUGs.Generator.DDD.IntegrationTests
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(10);
 
-            for (var index = 0; index < generatedFileTexts.Length; index++)
+            foreach (var generatedFile in generatedFileTexts)
             {
-                var generatedText = generatedFileTexts[index];
-                Check.CheckString(generatedText, checkName: index.ToString(), fileExtension: "cs");
+                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
             }
         }
 

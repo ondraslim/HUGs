@@ -1,6 +1,7 @@
 using CheckTestOutput;
 using FluentAssertions;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
+using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
@@ -29,9 +30,10 @@ namespace HUGs.Generator.DDD.IntegrationTests
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(3);
 
-            Check.CheckString(generatedFileTexts[0], checkName: fileName, fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[1], checkName: $"{fileName}DbEntity", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[2], checkName: $"{fileName}Mapper", fileExtension: "cs");
+            foreach (var generatedFile in generatedFileTexts)
+            {
+                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
+            }
         }
 
         [Test]
@@ -44,14 +46,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(4);
+            generatedFileTexts.Should().HaveCount(6);
 
-            Check.CheckString(generatedFileTexts[0], checkName: "SimpleValueObject1", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[1], checkName: "SimpleValueObject1DbEntity", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[2], checkName: "SimpleValueObject1Mapper", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[3], checkName: "SimpleValueObject2", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[4], checkName: "SimpleValueObject2DbEntity", fileExtension: "cs");
-            Check.CheckString(generatedFileTexts[5], checkName: "SimpleValueObject2Mapper", fileExtension: "cs");
+            foreach (var generatedFile in generatedFileTexts)
+            {
+                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
 
 namespace HUGs.Generator.DDD.Tests
@@ -29,7 +30,7 @@ namespace HUGs.Generator.DDD.Tests
 
             var actualCode = MapperGenerator.GenerateMapperCode(objectSchema, generatorConfiguration, dddModel);
             
-            check.CheckString(actualCode, fileExtension: "cs", checkName: $"{kind}");
+            check.CheckString(actualCode, checkName: TestHelper.GetGeneratedFileClass(actualCode), fileExtension: "cs");
         }
 
          // TODO: enum -> exception
