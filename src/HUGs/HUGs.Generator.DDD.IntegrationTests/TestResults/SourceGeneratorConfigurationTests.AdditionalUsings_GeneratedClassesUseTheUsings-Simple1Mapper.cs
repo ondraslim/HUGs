@@ -10,11 +10,12 @@ using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
 
-namespace HUGs.DDD.Generated.DbEntity
+namespace HUGs.DDD.Generated.Mapper
 {
     public class Simple1Mapper : DbEntityMapper<Simple1, Simple1DbEntity>
     {
-        public Simple1Mapper(IDbEntityMapperFactory factory): base(factory)
+        public Simple1Mapper(IDbEntityMapperFactory factory)
+        	: base(factory)
         {
         }
 

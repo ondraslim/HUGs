@@ -163,7 +163,6 @@ namespace HUGs.Generator.Common.Builders
         {
             var ctor = SyntaxFactory.ConstructorDeclaration(identifierText);
 
-            // TODO: refactor IFs?
             if (parameters is not null)
             {
                 ctor = ctor.AddParameterListParameters(parameters);
@@ -202,9 +201,6 @@ namespace HUGs.Generator.Common.Builders
                             baseCtorParams.Select(p => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(p.Identifier))).ToArray())
                 );
 
-            // TODO: add white space or new line
-            /*.WithLeadingTrivia(SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, " "))*/
-
             return ctor;
         }
 
@@ -216,7 +212,6 @@ namespace HUGs.Generator.Common.Builders
 
         public ClassDeclarationSyntax Build()
         {
-            // TODO: add empty line between fields and properties
             classDeclaration = classDeclaration
                 .AddMembers(fields.ToArray())
                 .AddMembers(properties.ToArray())

@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using HUGs.Generator.Common.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using HUGs.Generator.DDD.IntegrationTests.Setup;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
 using System.Text;
-using HUGs.Generator.DDD.Ddd.Models;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -14,13 +14,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
     {
         private static readonly string[] Kinds = { "Entity", "Aggregate", "ValueObject", "Enumeration" };
 
-
         [SetUp]
         public override void Setup()
         {
             base.Setup();
         }
-
 
         [Test]
         public void EmptySchemaFile_WarningReported()
@@ -32,7 +30,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             diagnostics.Should().HaveCount(1);
             diagnostics.Where(d => d.Id == Diagnostics.AdditionalFileEmptyWarningId).Should().HaveCount(1);
-            generatedFileTexts.Should().BeEmpty();
+            generatedFileTexts.Should().HaveCount(1);
         }
 
         [Test]
@@ -48,7 +46,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
                     RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
                     diagnostics.Should().BeEmpty();
-                    generatedFileTexts.Should().HaveCount(kind == "Enumeration" ? 1 : 3);
+                    generatedFileTexts.Should().HaveCount(kind == "Enumeration" ? 2 : 4);
                 }
             }
         }
@@ -72,7 +70,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
                     diagnostics.Should().BeEmpty();
 
-                    var expectedGeneratedFileCount = 6;
+                    var expectedGeneratedFileCount = 7;
                     if (kind == "Enumeration") expectedGeneratedFileCount -= 2;
                     if (kindOther == "Enumeration") expectedGeneratedFileCount -= 2;
                     generatedFileTexts.Should().HaveCount(expectedGeneratedFileCount);
@@ -124,7 +122,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             generatedFileTexts.Should().BeEmpty();
             diagnostics.Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == DddDiagnostics.SchemaInvalidValueErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id is DddDiagnostics.SchemaInvalidValueErrorId).Should().HaveCount(1);
         }
 
         [Test]
@@ -152,7 +150,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             generatedFileTexts.Should().BeEmpty();
-            diagnostics.Where(d => d.Id == DddDiagnostics.ConfigurationInvalidValueErrorId).Should().HaveCount(expectedValueErrorCount);
+            diagnostics.Where(d => d.Id is DddDiagnostics.ConfigurationInvalidValueErrorId).Should().HaveCount(expectedValueErrorCount);
             diagnostics.Should().HaveCount(expectedValueErrorCount);
         }
 
@@ -179,7 +177,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             generatedFileTexts.Should().BeEmpty();
-            diagnostics.Where(d => d.Id == DddDiagnostics.DddModelDuplicatedNamesErrorId).Should().HaveCount(expectedDuplicateCount);
+            diagnostics.Where(d => d.Id is DddDiagnostics.DddModelDuplicatedNamesErrorId).Should().HaveCount(expectedDuplicateCount);
             diagnostics.Should().HaveCount(expectedDuplicateCount);
         }
 

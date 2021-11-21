@@ -12,7 +12,8 @@ namespace HUGs.DDD.Generated.Entity
 {
     public class CountryId : EntityId<Country>
     {
-        public CountryId(Guid value): base(value)
+        public CountryId(Guid value)
+        	: base(value)
         {
         }
     }

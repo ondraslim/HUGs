@@ -28,7 +28,7 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static ClassDeclarationSyntax PrepareValueObjectClassDeclaration(DddObjectSchema schema)
         {
-            var classBuilder = CreateValueObjectClassBuilder(schema.Name);
+            var classBuilder = CreateValueObjectClassBuilder(schema.DddObjectClassName);
             DddGeneratorCommon.AddDddClassProperties(classBuilder, schema.Properties);
             AddConstructor(classBuilder, schema);
 
@@ -56,7 +56,7 @@ namespace HUGs.Generator.DDD.Ddd
                 .Append("OnInitialized();")
                 .ToArray();
 
-            classBuilder.AddConstructor(schema.Name, accessModifiers, parameters, ctorBody);
+            classBuilder.AddConstructor(schema.DddObjectClassName, accessModifiers, parameters, ctorBody);
         }
 
         private static MethodDeclarationSyntax GetGetAtomicValuesMethod(DddObjectSchema schema)
@@ -68,8 +68,7 @@ namespace HUGs.Generator.DDD.Ddd
 
             foreach (var prop in schema.Properties)
             {
-                //SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, SyntaxFactory.IdentifierName(prop.Name))
-                methodBuilder.AddBodyLine($"yield return {prop.Name};");
+                methodBuilder.AddBodyLine(SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, SyntaxFactory.IdentifierName(prop.Name)));
             }
 
             return methodBuilder.Build();

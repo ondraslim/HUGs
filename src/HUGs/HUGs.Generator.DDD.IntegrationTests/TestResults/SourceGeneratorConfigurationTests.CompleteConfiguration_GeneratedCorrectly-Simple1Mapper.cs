@@ -10,11 +10,12 @@ using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
 
-namespace My.Desired.Namespace.DbEntities
+namespace HUGs.DDD.Generated.Mapper
 {
     public class Simple1Mapper : DbEntityMapper<Simple1, Simple1DbEntity>
     {
-        public Simple1Mapper(IDbEntityMapperFactory factory): base(factory)
+        public Simple1Mapper(IDbEntityMapperFactory factory)
+        	: base(factory)
         {
         }
 

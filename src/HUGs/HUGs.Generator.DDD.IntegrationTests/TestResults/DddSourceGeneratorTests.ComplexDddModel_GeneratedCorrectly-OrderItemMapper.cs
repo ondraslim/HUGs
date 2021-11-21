@@ -8,11 +8,12 @@ using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
 
-namespace HUGs.DDD.Generated.DbEntity
+namespace HUGs.DDD.Generated.Mapper
 {
     public class OrderItemMapper : DbEntityMapper<OrderItem, OrderItemDbEntity>
     {
-        public OrderItemMapper(IDbEntityMapperFactory factory): base(factory)
+        public OrderItemMapper(IDbEntityMapperFactory factory)
+        	: base(factory)
         {
         }
 

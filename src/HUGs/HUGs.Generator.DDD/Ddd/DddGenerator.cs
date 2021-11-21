@@ -5,6 +5,7 @@ using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis;
 using System;
+using HUGs.Generator.Common.Builders;
 
 namespace HUGs.Generator.DDD.Ddd
 {
@@ -26,7 +27,8 @@ namespace HUGs.Generator.DDD.Ddd
                 var configuration = ConfigurationLoader.LoadConfiguration(context);
                 var dddModel = DddModelLoader.LoadDddModel(context);
 
-                GenerateDddModelSource(context, configuration, dddModel);
+                GenerateNamespaceDeclarationFile(context, configuration);
+                GenerateDddModelSourceCode(context, configuration, dddModel);
             }
             catch (GeneratorLoadException e)
             {
@@ -34,7 +36,20 @@ namespace HUGs.Generator.DDD.Ddd
             }
         }
 
-        private static void GenerateDddModelSource(
+        private static void GenerateNamespaceDeclarationFile(GeneratorExecutionContext context, DddGeneratorConfiguration configuration)
+        {
+            var namespaceDeclarations = RoslynSyntaxNamespacesFillerBuilder.Create();
+
+            foreach (DddObjectKind kind in Enum.GetValues(typeof(DddObjectKind)))
+            {
+                namespaceDeclarations.AddNamespaces(configuration.GetTargetNamespaceForKind(kind));
+            }
+
+            var namespacesDeclarationsSourceCode = namespaceDeclarations.Build();
+            context.AddSource("DddModelNamespaces", namespacesDeclarationsSourceCode);
+        }
+
+        private static void GenerateDddModelSourceCode(
             GeneratorExecutionContext context,
             DddGeneratorConfiguration configuration,
             DddModel dddModel)
@@ -43,10 +58,10 @@ namespace HUGs.Generator.DDD.Ddd
             {
                 AddDddObjectSchemaSource(context, schema, configuration);
 
-                if (schema.Kind != DddObjectKind.Enumeration)
+                if (schema.Kind is not DddObjectKind.Enumeration)
                 {
-                    AddDbEntitySource(context, schema, configuration, dddModel);
-                    AddMapperSource(context, schema, configuration, dddModel);
+                    AddDbEntitySource(context, schema, configuration);
+                    AddMapperSource(context, schema, configuration);
                 }
             }
         }
@@ -54,10 +69,9 @@ namespace HUGs.Generator.DDD.Ddd
         private static void AddMapperSource(
             GeneratorExecutionContext context, 
             DddObjectSchema schema, 
-            DddGeneratorConfiguration configuration,
-            DddModel dddModel)
+            DddGeneratorConfiguration configuration)
         {
-            var mapperSourceCode = MapperGenerator.GenerateMapperCode(schema, configuration, dddModel);
+            var mapperSourceCode = MapperGenerator.GenerateMapperCode(schema, configuration);
             context.AddSource(schema.MapperClassName, mapperSourceCode);
         }
 
@@ -73,10 +87,9 @@ namespace HUGs.Generator.DDD.Ddd
         private static void AddDbEntitySource(
             GeneratorExecutionContext context,
             DddObjectSchema schema, 
-            DddGeneratorConfiguration configuration,
-            DddModel dddModel)
+            DddGeneratorConfiguration configuration)
         {
-            var dbEntitySourceCode = DbEntityGenerator.GenerateDbEntity(schema, configuration, dddModel);
+            var dbEntitySourceCode = DbEntityGenerator.GenerateDbEntity(schema, configuration);
             context.AddSource(schema.DbEntityClassName, dbEntitySourceCode);
         }
 
@@ -89,7 +102,7 @@ namespace HUGs.Generator.DDD.Ddd
                 DddObjectKind.Entity => EntityGenerator.GenerateEntityCode(schema, configuration),
                 DddObjectKind.Aggregate => AggregateGenerator.GenerateAggregateCode(schema, configuration),
                 DddObjectKind.Enumeration => EnumerationGenerator.GenerateEnumerationCode(schema, configuration),
-                _ => throw new ArgumentOutOfRangeException($"Kind '{schema.Kind}' is not supported.")
+                _ => throw new NotSupportedException($"Generation for kind '{schema.Kind}' is not supported.")
             };
 
     }

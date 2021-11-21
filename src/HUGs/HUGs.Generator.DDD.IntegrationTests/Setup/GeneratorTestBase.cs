@@ -1,4 +1,5 @@
 ﻿using CheckTestOutput;
+using HUGs.Generator.Test.Utils;
 using HUGs.Generator.Tests.Tools.Mocks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

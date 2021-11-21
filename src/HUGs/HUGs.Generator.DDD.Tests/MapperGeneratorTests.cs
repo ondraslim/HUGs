@@ -2,8 +2,12 @@
 using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
+using System;
+using FluentAssertions;
+using HUGs.Generator.DDD.Ddd.Exceptions;
 
 namespace HUGs.Generator.DDD.Tests
 {
@@ -22,18 +26,27 @@ namespace HUGs.Generator.DDD.Tests
             {
                 Kind = kind,
                 Name = $"Simple{kind}",
-                Properties = new DddObjectProperty[] { }
+                Properties = Array.Empty<DddObjectProperty>()
             };
-
-            var dddModel = new DddModel();
-            dddModel.AddObjectSchema(objectSchema);
-
-            var actualCode = MapperGenerator.GenerateMapperCode(objectSchema, generatorConfiguration, dddModel);
+            
+            var actualCode = MapperGenerator.GenerateMapperCode(objectSchema, generatorConfiguration);
             
             check.CheckString(actualCode, checkName: TestHelper.GetGeneratedFileClass(actualCode), fileExtension: "cs");
         }
 
-         // TODO: enum -> exception
+        [Test]
+        public void NotAllowedKind_DbEntityNotGenerated()
+        {
+            var schema = new DddObjectSchema
+            {
+                Kind = DddObjectKind.Enumeration,
+                Name = "TestClassName"
+            };
+
+            Action act = () => MapperGenerator.GenerateMapperCode(schema, generatorConfiguration);
+
+            act.Should().ThrowExactly<DddSchemaKindMapperNotSupportedException>();
+        }
 
         [Test]
         public void ComplexSchema_MapperGeneratedCorrectly()
@@ -41,13 +54,13 @@ namespace HUGs.Generator.DDD.Tests
             var objectSchema = new DddObjectSchema
             {
                 Kind = DddObjectKind.Aggregate,
-                Name = $"SimpleAggregate",
+                Name = "SimpleAggregate",
                 Properties = new DddObjectProperty[]
                 {
                     new() { Name = "SimpleString", Type = "string", ResolvedType = new DddPrimitiveType("string") },
                     new() { Name = "SimpleNumber", Type = "int", ResolvedType = new DddPrimitiveType("int") },
                     new() { Name = "SimpleComputed", Type = "string", Computed = true, ResolvedType = new DddPrimitiveType("string") },
-                    new() { Name = "SimpleOptional", Type = "string", Optional = true, ResolvedType = new DddPrimitiveType("string") },
+                    new() { Name = "SimpleOptional", Type = "string?", ResolvedType = new DddPrimitiveType("string?") },
                     new() { Name = "SimpleCollection", Type = "int[]", ResolvedType = new DddCollectionType(new DddPrimitiveType("int")) },
                     new() { Name = "SimpleComputedCollection", Type = "int[]", Computed = true, ResolvedType = new DddCollectionType(new DddPrimitiveType("int")) },
                     new() { Name = "SimpleEntity", Type = "DddEntity", ResolvedType = new DddModelType("DddEntity", DddObjectKind.Entity) },
@@ -56,14 +69,9 @@ namespace HUGs.Generator.DDD.Tests
                 }
             };
 
-            var dddModel = new DddModel();
-            dddModel.AddObjectSchema(objectSchema);
-
-            var actualCode = MapperGenerator.GenerateMapperCode(objectSchema, generatorConfiguration, dddModel);
+            var actualCode = MapperGenerator.GenerateMapperCode(objectSchema, generatorConfiguration);
             
             check.CheckString(actualCode, fileExtension: "cs");
         }
-
-         // TODO: enum -> exception
     }
 }

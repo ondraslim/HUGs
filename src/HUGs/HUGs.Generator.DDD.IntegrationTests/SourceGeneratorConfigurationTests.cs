@@ -20,8 +20,8 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
         [Test]
         [TestCase("SimpleValueObject", "ValueObjectNamespaceConfig")]
-        [TestCase("SimpleValueObject", "CompleteNamespaceConfig")]
-        public void TargetNamespaceConfiguration_GeneratedInTheNamespace(string schemaFile, string configFile)
+        [TestCase("SimpleValueObject2", "CompleteNamespaceConfig")]
+        public void NamespaceConfiguration_GeneratedInTheNamespace(string schemaFile, string configFile)
         {
             var schema = File.ReadAllText($"../../../TestData/Schemas/ValueObjects/{schemaFile}.dddschema");
             var configuration = File.ReadAllText($"../../../TestData/Configuration/{configFile}.dddconfig");
@@ -30,11 +30,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(3);
+            generatedFileTexts.Should().HaveCount(4);
 
-            foreach (var generatedFile in generatedFileTexts)
+            foreach (var generatedFile in generatedFileTexts.Where(f => f.Contains("class ")))
             {
-                Check.CheckString(generatedFile, checkName: $"{configFile}_{TestHelper.GetGeneratedFileClass(generatedFile)}", fileExtension: "cs");
+                var checkName = TestHelper.GetGeneratedFileClass(generatedFile);
+                Check.CheckString(generatedFile, checkName: checkName, fileExtension: "cs");
             }
         }
 
@@ -49,11 +50,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(6);
+            generatedFileTexts.Should().HaveCount(7);
 
-            foreach (var generatedFile in generatedFileTexts)
+            foreach (var generatedFile in generatedFileTexts.Where(f => f.Contains("class ")))
             {
-                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
+                var checkName = TestHelper.GetGeneratedFileClass(generatedFile);
+                Check.CheckString(generatedFile, checkName: checkName, fileExtension: "cs");
             }
         }
 
@@ -70,7 +72,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
-            var expectedGeneratedFiles = 1;
+            var expectedGeneratedFiles = 2;
             if (dbEntityExpectedToBeGenerated)
             {
                 expectedGeneratedFiles += 2;
@@ -79,9 +81,10 @@ namespace HUGs.Generator.DDD.IntegrationTests
             diagnostics.Should().BeEmpty();
             generatedFileTexts.Should().HaveCount(expectedGeneratedFiles);
 
-            foreach (var generatedFile in generatedFileTexts)
+            foreach (var generatedFile in generatedFileTexts.Where(f => f.Contains("class ")))
             {
-                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
+                var checkName = TestHelper.GetGeneratedFileClass(generatedFile);
+                Check.CheckString(generatedFile, checkName: checkName, fileExtension: "cs");
             }
         }
 
@@ -99,11 +102,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(10);
+            generatedFileTexts.Should().HaveCount(11);
 
-            foreach (var generatedFile in generatedFileTexts)
+            foreach (var generatedFile in generatedFileTexts.Where(f => f.Contains("class ")))
             {
-                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
+                var checkName = TestHelper.GetGeneratedFileClass(generatedFile);
+                Check.CheckString(generatedFile, checkName: checkName, fileExtension: "cs");
             }
         }
 
@@ -118,7 +122,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == DddDiagnostics.ConfigurationMultipleErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id is DddDiagnostics.ConfigurationMultipleErrorId).Should().HaveCount(1);
             generatedFileTexts.Should().BeEmpty();
         }
 
@@ -134,7 +138,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == Diagnostics.AdditionalFileParseErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id is Diagnostics.AdditionalFileParseErrorId).Should().HaveCount(1);
             generatedFileTexts.Should().BeEmpty();
         }
     }

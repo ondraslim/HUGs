@@ -2,7 +2,9 @@
 using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using NUnit.Framework;
+using System;
 
 namespace HUGs.Generator.DDD.Tests
 {
@@ -18,7 +20,7 @@ namespace HUGs.Generator.DDD.Tests
             {
                 Kind = DddObjectKind.Entity,
                 Name = "SimpleEntity",
-                Properties = new DddObjectProperty[] { }
+                Properties = Array.Empty<DddObjectProperty>()
             };
 
             var actualCode = EntityGenerator.GenerateEntityCode(objectSchema, generatorConfiguration);
@@ -35,8 +37,8 @@ namespace HUGs.Generator.DDD.Tests
                 Name = "PropertiesEntity",
                 Properties = new DddObjectProperty[]
                 {
-                    new() { Name = "Text", Type = "string" },
-                    new() { Name = "Number", Optional = true, Type = "double" }
+                    new() { Name = "Text", Type = "string", ResolvedType = new DddPrimitiveType("string")},
+                    new() { Name = "Number", Type = "double?", ResolvedType = new DddPrimitiveType("double?") }
                 }
             };
 
@@ -54,7 +56,7 @@ namespace HUGs.Generator.DDD.Tests
                 Name = "SimpleArrayPropertyEntity",
                 Properties = new DddObjectProperty[]
                 {
-                    new() { Name = "Items", Type = "OrderItem[]" },
+                    new() { Name = "Items", Type = "OrderItem[]", ResolvedType = new DddCollectionType(new DddModelType("OrderItem", DddObjectKind.ValueObject))},
                 }
             };
 
@@ -72,9 +74,9 @@ namespace HUGs.Generator.DDD.Tests
                 Name = "ArrayPropertyEntity",
                 Properties = new DddObjectProperty[]
                 {
-                    new() { Name = "Text", Type = "string" },
-                    new() { Name = "Items", Type = "OrderItem[]" },
-                    new() { Name = "Number", Optional = true, Type = "double" }
+                    new() { Name = "Text", Type = "string", ResolvedType = new DddPrimitiveType("string") },
+                    new() { Name = "Items", Type = "OrderItem[]", ResolvedType = new DddCollectionType(new DddModelType("OrderItem", DddObjectKind.ValueObject)) },
+                    new() { Name = "Number", Type = "double?", ResolvedType = new DddPrimitiveType("double?") }
                 }
             };
 

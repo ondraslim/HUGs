@@ -6,8 +6,6 @@ Properties:
   - Name: Number
     Type: int
   - Name: TextOptional
-    Type: string
-    Optional: true
+    Type: string?
   - Name: NumberOptional
-    Type: int
-    Optional: true
+    Type: int?
