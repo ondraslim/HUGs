@@ -4,6 +4,7 @@ using HUGs.Generator.DDD.IntegrationTests.Setup;
 using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
 using System.IO;
+using System.Linq;
 
 namespace HUGs.Generator.DDD.IntegrationTests
 {
@@ -28,11 +29,12 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(1);
+            generatedFileTexts.Should().HaveCount(2);
 
-            foreach (var generatedFile in generatedFileTexts)
+            foreach (var generatedFile in generatedFileTexts.Where(f => f.Contains("class ")))
             {
-                Check.CheckString(generatedFile, checkName: TestHelper.GetGeneratedFileClass(generatedFile), fileExtension: "cs");
+                var checkName = TestHelper.GetGeneratedFileClass(generatedFile);
+                Check.CheckString(generatedFile, checkName: checkName, fileExtension: "cs");
             }
         }
     }

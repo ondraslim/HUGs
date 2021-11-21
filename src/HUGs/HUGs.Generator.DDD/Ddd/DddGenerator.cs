@@ -5,6 +5,7 @@ using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis;
 using System;
+using HUGs.Generator.Common.Builders;
 
 namespace HUGs.Generator.DDD.Ddd
 {
@@ -26,12 +27,26 @@ namespace HUGs.Generator.DDD.Ddd
                 var configuration = ConfigurationLoader.LoadConfiguration(context);
                 var dddModel = DddModelLoader.LoadDddModel(context);
 
+                GenerateNamespaceDeclarationFile(context, configuration);
                 GenerateDddModelSourceCode(context, configuration, dddModel);
             }
             catch (GeneratorLoadException e)
             {
                 _diagnosticsReporter.ReportDiagnostic(e);
             }
+        }
+
+        private static void GenerateNamespaceDeclarationFile(GeneratorExecutionContext context, DddGeneratorConfiguration configuration)
+        {
+            var namespaceDeclarations = RoslynSyntaxNamespacesFillerBuilder.Create();
+
+            foreach (DddObjectKind kind in Enum.GetValues(typeof(DddObjectKind)))
+            {
+                namespaceDeclarations.AddNamespaces(configuration.GetTargetNamespaceForKind(kind));
+            }
+
+            var namespacesDeclarationsSourceCode = namespaceDeclarations.Build();
+            context.AddSource("DddModelNamespaces", namespacesDeclarationsSourceCode);
         }
 
         private static void GenerateDddModelSourceCode(

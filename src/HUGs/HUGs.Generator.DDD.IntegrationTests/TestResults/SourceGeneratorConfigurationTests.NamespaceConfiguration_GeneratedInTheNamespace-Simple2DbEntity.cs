@@ -10,8 +10,10 @@ using My.Desired.Namespace.Enumerations;
 
 namespace My.Desired.Namespace.DbEntities
 {
-    public class Simple1DbEntity
+    public class Simple2DbEntity
     {
         public string Text { get; set; }
+
+        public int Number { get; set; }
     }
 }

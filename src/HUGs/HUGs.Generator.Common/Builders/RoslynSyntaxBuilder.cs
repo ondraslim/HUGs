@@ -9,12 +9,14 @@ namespace HUGs.Generator.Common.Builders
 {
     public class RoslynSyntaxBuilder : IAddUsingsStage, IAddClassStage
     {
-        private CompilationUnitSyntax compilationUnitSyntax = SyntaxFactory.CompilationUnit();
+        private CompilationUnitSyntax compilationUnitSyntax;
         private NamespaceDeclarationSyntax @namespace;
-        private readonly List<ClassDeclarationSyntax> classes = new();
+        private readonly List<ClassDeclarationSyntax> classes;
 
         private RoslynSyntaxBuilder()
         {
+            compilationUnitSyntax = SyntaxFactory.CompilationUnit();
+            classes = new List<ClassDeclarationSyntax>();
         }
 
         public static IAddUsingsStage Create() => new RoslynSyntaxBuilder();

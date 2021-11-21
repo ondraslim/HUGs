@@ -14,13 +14,11 @@ namespace HUGs.Generator.DDD.IntegrationTests
     {
         private static readonly string[] Kinds = { "Entity", "Aggregate", "ValueObject", "Enumeration" };
 
-
         [SetUp]
         public override void Setup()
         {
             base.Setup();
         }
-
 
         [Test]
         public void EmptySchemaFile_WarningReported()
@@ -32,7 +30,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             diagnostics.Should().HaveCount(1);
             diagnostics.Where(d => d.Id == Diagnostics.AdditionalFileEmptyWarningId).Should().HaveCount(1);
-            generatedFileTexts.Should().BeEmpty();
+            generatedFileTexts.Should().HaveCount(1);
         }
 
         [Test]
@@ -48,7 +46,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
                     RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
                     diagnostics.Should().BeEmpty();
-                    generatedFileTexts.Should().HaveCount(kind == "Enumeration" ? 1 : 3);
+                    generatedFileTexts.Should().HaveCount(kind == "Enumeration" ? 2 : 4);
                 }
             }
         }
@@ -72,7 +70,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
                     diagnostics.Should().BeEmpty();
 
-                    var expectedGeneratedFileCount = 6;
+                    var expectedGeneratedFileCount = 7;
                     if (kind == "Enumeration") expectedGeneratedFileCount -= 2;
                     if (kindOther == "Enumeration") expectedGeneratedFileCount -= 2;
                     generatedFileTexts.Should().HaveCount(expectedGeneratedFileCount);

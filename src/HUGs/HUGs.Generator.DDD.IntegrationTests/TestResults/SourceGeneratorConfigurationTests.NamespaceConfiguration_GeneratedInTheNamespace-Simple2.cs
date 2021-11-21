@@ -10,19 +10,23 @@ using My.Desired.Namespace.Enumerations;
 
 namespace My.Desired.Namespace.ValueObjects
 {
-    public partial class Simple1 : HUGs.Generator.DDD.Framework.BaseModels.ValueObject
+    public partial class Simple2 : HUGs.Generator.DDD.Framework.BaseModels.ValueObject
     {
         public string Text { get; }
 
-        public Simple1(string Text)
+        public int Number { get; }
+
+        public Simple2(string Text, int Number)
         {
             this.Text = Text;
+            this.Number = Number;
             OnInitialized();
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Text;
+            yield return Number;
         }
 
         partial void OnInitialized();

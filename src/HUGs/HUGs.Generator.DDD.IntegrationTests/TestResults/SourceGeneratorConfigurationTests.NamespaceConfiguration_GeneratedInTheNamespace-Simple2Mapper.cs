@@ -10,26 +10,28 @@ using My.Desired.Namespace.Enumerations;
 
 namespace My.Desired.Namespace.Mappers
 {
-    public class Simple1Mapper : DbEntityMapper<Simple1, Simple1DbEntity>
+    public class Simple2Mapper : DbEntityMapper<Simple2, Simple2DbEntity>
     {
-        public Simple1Mapper(IDbEntityMapperFactory factory)
+        public Simple2Mapper(IDbEntityMapperFactory factory)
         	: base(factory)
         {
         }
 
-        public override Simple1DbEntity ToDbEntity(Simple1 obj)
+        public override Simple2DbEntity ToDbEntity(Simple2 obj)
         {
-            return new Simple1DbEntity
+            return new Simple2DbEntity
             {
-            	Text = obj.Text
+            	Text = obj.Text,
+            	Number = obj.Number
             };
         }
 
-        public override Simple1 ToDddObject(Simple1DbEntity obj)
+        public override Simple2 ToDddObject(Simple2DbEntity obj)
         {
-            return new Simple1
+            return new Simple2
             (
-            	obj.Text
+            	obj.Text,
+            	obj.Number
             );
         }
     }
