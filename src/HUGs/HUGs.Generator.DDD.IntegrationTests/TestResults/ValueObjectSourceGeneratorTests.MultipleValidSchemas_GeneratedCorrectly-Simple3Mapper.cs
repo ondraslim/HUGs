@@ -8,7 +8,7 @@ using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
 
-namespace HUGs.DDD.Generated.DbEntity
+namespace HUGs.DDD.Generated.Mapper
 {
     public class Simple3Mapper : DbEntityMapper<Simple3, Simple3DbEntity>
     {

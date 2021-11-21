@@ -28,7 +28,7 @@ namespace HUGs.Generator.DDD.Ddd
             var syntaxBuilder = RoslynSyntaxBuilder.Create();
             DddGeneratorCommon.AddUsings(syntaxBuilder, configuration);
             return syntaxBuilder
-                .SetNamespace(configuration.TargetNamespaces.DbEntity)
+                .SetNamespace(configuration.TargetNamespaces.Mapper)
                 .AddClass(mapperClass)
                 .Build();
         }
