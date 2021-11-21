@@ -13,5 +13,6 @@ namespace HUGs.DDD.Generated.DbEntity
     public class Simple3DbEntity
     {
         public string Text { get; set; }
+
     }
 }

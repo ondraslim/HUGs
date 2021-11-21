@@ -21,5 +21,6 @@ namespace HUGs.DDD.Generated.DbEntity
         public string Zip { get; set; }
 
         public CountryId CountryId { get; set; }
+
     }
 }

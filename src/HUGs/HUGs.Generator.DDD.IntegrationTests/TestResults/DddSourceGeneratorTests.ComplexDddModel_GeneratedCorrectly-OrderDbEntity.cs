@@ -23,5 +23,6 @@ namespace HUGs.DDD.Generated.DbEntity
         public Address ShippingAddress { get; set; }
 
         public string State { get; set; }
+
     }
 }

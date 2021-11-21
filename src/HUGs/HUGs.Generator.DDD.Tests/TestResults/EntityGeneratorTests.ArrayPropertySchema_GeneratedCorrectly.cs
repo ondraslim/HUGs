@@ -23,6 +23,7 @@ namespace HUGs.DDD.Generated.Entity
         private List<OrderItem> _Items;
 
         public IReadOnlyList<OrderItem> Items => _Items;
+
         public SimpleArrayPropertyEntity(IId<SimpleArrayPropertyEntityId> id, IEnumerable<OrderItem> Items)
         {
             Id = id;

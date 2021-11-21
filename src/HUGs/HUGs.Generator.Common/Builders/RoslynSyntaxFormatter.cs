@@ -37,10 +37,19 @@ namespace HUGs.Generator.Common.Builders
                 GetFormattedCtorInitilizer);
 
             normalized = normalized.ReplaceNodes(
+                normalized.DescendantNodes().OfType<PropertyDeclarationSyntax>(),
+                GetFormattedPropertySyntax);
+
+            normalized = normalized.ReplaceNodes(
                 normalized.DescendantNodes().OfType<FieldDeclarationSyntax>(),
                 GetFormattedFieldSyntax);
 
             return normalized;
+        }
+
+        private static PropertyDeclarationSyntax GetFormattedPropertySyntax(PropertyDeclarationSyntax original, PropertyDeclarationSyntax rewritten)
+        {
+            return rewritten.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
         }
 
         private static SyntaxNode GetFormattedCtorInitilizer(ConstructorInitializerSyntax original, ConstructorInitializerSyntax rewritten)

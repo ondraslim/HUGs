@@ -27,5 +27,6 @@ namespace HUGs.DDD.Generated.DbEntity
         public int? OptionalProperty { get; set; }
 
         public ICollection<string> ArrayProperty { get; set; }
+
     }
 }

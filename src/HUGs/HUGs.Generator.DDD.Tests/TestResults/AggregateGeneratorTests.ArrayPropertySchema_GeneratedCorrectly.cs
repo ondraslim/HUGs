@@ -23,6 +23,7 @@ namespace HUGs.DDD.Generated.Aggregate
         private List<OrderItem> _Items;
 
         public IReadOnlyList<OrderItem> Items => _Items;
+
         public SimpleArrayPropertyAggregate(IId<SimpleArrayPropertyAggregateId> id, IEnumerable<OrderItem> Items)
         {
             Id = id;

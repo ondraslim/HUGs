@@ -19,5 +19,6 @@ namespace HUGs.DDD.Generated.DbEntity
         public decimal Price { get; set; }
 
         public uint Amount { get; set; }
+
     }
 }

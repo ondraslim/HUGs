@@ -27,6 +27,7 @@ namespace HUGs.DDD.Generated.Aggregate
         public DateTime CreatedDate { get; private set; }
 
         public IReadOnlyList<OrderItem> Items => _Items;
+
         public Address ShippingAddress { get; private set; }
 
         public decimal TotalPrice { get; private set; }

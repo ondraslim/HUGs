@@ -25,6 +25,7 @@ namespace HUGs.DDD.Generated.Aggregate
         public string Text { get; private set; }
 
         public IReadOnlyList<OrderItem> Items => _Items;
+
         public double? Number { get; private set; }
 
         public ArrayPropertyAggregate(IId<ArrayPropertyAggregateId> id, string Text, IEnumerable<OrderItem> Items, double? Number)

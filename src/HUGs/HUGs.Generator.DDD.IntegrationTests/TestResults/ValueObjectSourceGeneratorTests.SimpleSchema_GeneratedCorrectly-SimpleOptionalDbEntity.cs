@@ -19,5 +19,6 @@ namespace HUGs.DDD.Generated.DbEntity
         public string? TextOptional { get; set; }
 
         public int? NumberOptional { get; set; }
+
     }
 }
