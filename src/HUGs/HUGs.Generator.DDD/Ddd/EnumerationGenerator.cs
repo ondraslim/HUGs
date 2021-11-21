@@ -30,7 +30,7 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static ClassDeclarationSyntax PrepareEnumerationClassDeclaration(DddObjectSchema schema)
         {
-            var classBuilder = CreateEnumerationClassBuilder(schema.Name);
+            var classBuilder = CreateEnumerationClassBuilder(schema.DddObjectClassName);
             DddGeneratorCommon.AddDddClassProperties(classBuilder, schema.Properties);
             AddConstructor(classBuilder, schema);
             AddEnumerationFields(classBuilder, schema);
@@ -100,7 +100,7 @@ namespace HUGs.Generator.DDD.Ddd
             var ctorBody = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(schema.Properties);
 
             classBuilder.AddConstructor(
-                schema.Name,
+                schema.DddObjectClassName,
                 accessModifiers,
                 ctorParams,
                 ctorBody,
@@ -113,7 +113,7 @@ namespace HUGs.Generator.DDD.Ddd
             {
                 var objectCreationSyntax = PrepareEnumFieldObjectCreationSyntax(schema, value);
                 classBuilder.AddFieldWithInitialization(
-                    schema.Name, value.Name, objectCreationSyntax,
+                    schema.DddObjectClassName, value.Name, objectCreationSyntax,
                     SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword);
             }
         }

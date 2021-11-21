@@ -19,7 +19,7 @@ namespace HUGs.Generator.DDD.Ddd.Extensions
         {
             return dddModel.Schemas
                 .Where(s => s.Kind == kind)
-                .Select(s => s.Name)
+                .Select(s => s.DddObjectClassName)
                 .Contains(property.TypeWithoutArray);
         }
     }

@@ -13,11 +13,11 @@ namespace HUGs.Generator.DDD.Ddd.Models
         {
             if (dddModelTypes is null)
             {
-                dddModelTypes = Schemas.Select(s => s.Name).ToList();
+                dddModelTypes = Schemas.Select(s => s.DddObjectClassName).ToList();
                 dddModelTypes.AddRange(
                     Schemas
                         .Where(s => s.Kind is DddObjectKind.Entity or DddObjectKind.Aggregate)
-                        .Select(s => $"{s.Name}Id"));
+                        .Select(s => $"{s.DddObjectClassName}Id"));
             }
 
             return dddModelTypes;

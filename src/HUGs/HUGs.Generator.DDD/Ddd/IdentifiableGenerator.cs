@@ -19,7 +19,7 @@ namespace HUGs.Generator.DDD.Ddd
 
             DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
 
-            var entityIdClass = PrepareEntityIdClass(schema.Name);
+            var entityIdClass = PrepareEntityIdClass(schema.DddObjectClassName);
             var identifiableClass = PrepareIdentifiableClassDeclaration(schema, entityIdClass.Identifier.ValueText);
 
             return syntaxBuilder
@@ -58,7 +58,7 @@ namespace HUGs.Generator.DDD.Ddd
         private static ClassBuilder CreateIdentifiableClassBuilder(DddObjectSchema schema, string entityIdClassIdentifier)
         {
             var classBuilder = ClassBuilder.Create()
-                    .SetClassName(schema.Name)
+                    .SetClassName(schema.DddObjectClassName)
                     .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
                     .AddClassBaseTypes($"HUGs.Generator.DDD.Framework.BaseModels.{schema.Kind}<{entityIdClassIdentifier}>");
 
@@ -79,7 +79,7 @@ namespace HUGs.Generator.DDD.Ddd
                 .Append("OnInitialized();")
                 .ToArray();
 
-            classBuilder.AddConstructor(schema.Name, accessModifiers, ctorParams, ctorBody);
+            classBuilder.AddConstructor(schema.DddObjectClassName, accessModifiers, ctorParams, ctorBody);
         }
     }
 }

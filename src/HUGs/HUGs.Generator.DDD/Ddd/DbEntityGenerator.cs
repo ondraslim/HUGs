@@ -64,9 +64,11 @@ namespace HUGs.Generator.DDD.Ddd
         
         private static void AddDddTypeProperties(DddObjectSchema schema, DddModel dddModel, ClassBuilder classBuilder)
         {
-            var dddTypeProperties = schema.Properties.Where(p => !p.IsPrimitiveType());
+            var dddTypeProperties = schema.Properties.Where(p => !p.IsPrimitiveType()).ToList();
+            
             DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, dddTypeProperties.Where(p => !p.IsDddModelTypeOfKind(dddModel, DddObjectKind.Enumeration)));
-            foreach (var property in schema.Properties.Where(p => p.IsDddModelTypeOfKind(dddModel, DddObjectKind.Enumeration)))
+            
+            foreach (var property in dddTypeProperties.Where(p => p.IsDddModelTypeOfKind(dddModel, DddObjectKind.Enumeration)))
             {
                 classBuilder.AddFullProperty("string", property.Name, SyntaxKind.PublicKeyword);
             }

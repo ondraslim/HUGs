@@ -32,17 +32,17 @@ namespace HUGs.Generator.DDD.Ddd.Models
                 };
             }
 
-            if (model.Schemas.FirstOrDefault(s => s.Name == type) is DddObjectSchema schema)
+            if (model.Schemas.FirstOrDefault(s => s.DddObjectClassName == type) is DddObjectSchema schema)
             {
-                return new DddModelType(schema.Name, schema.Kind)
+                return new DddModelType(schema.DddObjectClassName, schema.Kind)
                 {
                     IsNullable = isNullable
                 };
             }
 
-            if (model.Schemas.FirstOrDefault(s => s.Name == $"{type}Id" && s.Kind == DddObjectKind.Aggregate || s.Kind == DddObjectKind.Entity) is DddObjectSchema schema2)
+            if (model.Schemas.FirstOrDefault(s => s.DddObjectClassName == $"{type}Id" && s.Kind == DddObjectKind.Aggregate || s.Kind == DddObjectKind.Entity) is DddObjectSchema schema2)
             {
-                return new DddIdType(schema2.Name)
+                return new DddIdType(schema2.DddObjectClassName)
                 {
                     IsNullable = isNullable
                 };
