@@ -21,5 +21,14 @@ namespace My.Desired.Namespace.Enumerations
         {
             this.Name = Name;
         }
+
+        public static SimpleEnumeration FromString(string name)
+        {
+            return name switch
+            {
+            	"SampleEnumeration" => SampleEnumeration,
+            	_ => throw new ArgumentOutOfRangeException()
+            };
+        }
     }
 }

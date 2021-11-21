@@ -7,7 +7,8 @@
         public DddObjectProperty[] Properties { get; set; }
         public DddObjectValue[] Values { get; set; }
 
-        public string SourceCodeFileName => $"{Name}{Kind}";
-        public string DbEntityFileName => $"{Name}DbEntity";
+        public string DddObjectClassName => Name;
+        public string DbEntityClassName => $"{Name}DbEntity";
+        public string MapperClassName => $"{Name}Mapper";
     }
 }

@@ -109,7 +109,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 
         private static bool IsValidPropertyType(DddObjectProperty property, DddModel dddModel)
         {
-            return property.IsWhitelistedType() || property.IsKnownDddModelType(dddModel);
+            return property.IsPrimitiveType() || property.IsKnownDddModelType(dddModel);
         }
 
         private static void ValidateValue(DddObjectSchema schema, DddObjectValue value)

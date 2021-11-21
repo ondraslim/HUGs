@@ -4,6 +4,7 @@ using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
 using System;
 
@@ -42,7 +43,7 @@ namespace HUGs.Generator.DDD.Tests
                 model.AddObjectSchema(schema);
 
                 var actualCode = DbEntityGenerator.GenerateDbEntity(schema, generatorConfiguration, model);
-                check.CheckString(actualCode, checkName: schema.SourceCodeFileName, fileExtension: "cs");
+                check.CheckString(actualCode, checkName: TestHelper.GetGeneratedFileClass(actualCode), fileExtension: "cs");
             }
         }
 

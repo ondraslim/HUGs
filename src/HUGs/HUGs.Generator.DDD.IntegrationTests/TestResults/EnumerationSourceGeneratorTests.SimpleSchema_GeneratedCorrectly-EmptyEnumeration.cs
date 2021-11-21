@@ -16,5 +16,14 @@ namespace HUGs.DDD.Generated.Enumeration
         private EmptyEnumeration(string internalName): base(internalName)
         {
         }
+
+        public static EmptyEnumeration FromString(string name)
+        {
+            return name switch
+            {
+            	"SampleEmptyEnumeration" => SampleEmptyEnumeration,
+            	_ => throw new ArgumentOutOfRangeException()
+            };
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static ClassDeclarationSyntax PrepareDbEntityClassDeclaration(DddObjectSchema schema, DddModel dddModel)
         {
-            var classBuilder = CreateDbEntityClassBuilder($"{schema.Name}DbEntity");
+            var classBuilder = CreateDbEntityClassBuilder(schema.DbEntityClassName);
             AddDbEntityProperties(schema, dddModel, classBuilder);
             return classBuilder.Build();
         }
@@ -58,13 +58,13 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static void AddWhitelistedProperties(DddObjectSchema schema, ClassBuilder classBuilder)
         {
-            var whitelistedProperties = schema.Properties.Where(p => p.IsWhitelistedType());
+            var whitelistedProperties = schema.Properties.Where(p => p.IsPrimitiveType());
             DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, whitelistedProperties);
         }
         
         private static void AddDddTypeProperties(DddObjectSchema schema, DddModel dddModel, ClassBuilder classBuilder)
         {
-            var dddTypeProperties = schema.Properties.Where(p => !p.IsWhitelistedType());
+            var dddTypeProperties = schema.Properties.Where(p => !p.IsPrimitiveType());
             DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, dddTypeProperties.Where(p => !p.IsDddModelTypeOfKind(dddModel, DddObjectKind.Enumeration)));
             foreach (var property in schema.Properties.Where(p => p.IsDddModelTypeOfKind(dddModel, DddObjectKind.Enumeration)))
             {

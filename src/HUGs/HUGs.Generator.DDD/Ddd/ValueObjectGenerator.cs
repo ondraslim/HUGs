@@ -68,6 +68,7 @@ namespace HUGs.Generator.DDD.Ddd
 
             foreach (var prop in schema.Properties)
             {
+                //SyntaxFactory.YieldStatement(SyntaxKind.YieldReturnStatement, SyntaxFactory.IdentifierName(prop.Name))
                 methodBuilder.AddBodyLine($"yield return {prop.Name};");
             }
 

@@ -19,5 +19,14 @@ namespace HUGs.DDD.Generated.Enumeration
         {
             this.Name = Name;
         }
+
+        public static SimpleEnumeration FromString(string name)
+        {
+            return name switch
+            {
+            	"SampleEnumeration" => SampleEnumeration,
+            	_ => throw new ArgumentOutOfRangeException()
+            };
+        }
     }
 }

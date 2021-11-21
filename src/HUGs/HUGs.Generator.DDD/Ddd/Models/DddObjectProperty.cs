@@ -10,6 +10,9 @@ namespace HUGs.Generator.DDD.Ddd.Models
         public bool Computed { get; set; }
 
         [YamlIgnore]
+        public DddType ResolvedType { get; set; }
+
+        [YamlIgnore]
         public string PrivateName => $"_{Name}";
         
         [YamlIgnore]

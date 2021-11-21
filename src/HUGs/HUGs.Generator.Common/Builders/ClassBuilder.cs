@@ -147,8 +147,7 @@ namespace HUGs.Generator.Common.Builders
         {
             var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
                 .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
-                .AddAccessorListAccessors(accessors)
-                .WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed);
+                .AddAccessorListAccessors(accessors);
 
             return propertyDeclaration;
         }

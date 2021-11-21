@@ -25,6 +25,11 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\HUGs.Generator.DDD\HUGs.Generator.DDD.csproj" />
+	  <ProjectReference Include="..\HUGs.Generator.Test.Utils\HUGs.Generator.Test.Utils.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="TestResults\" />
 	</ItemGroup>
 
 </Project>
