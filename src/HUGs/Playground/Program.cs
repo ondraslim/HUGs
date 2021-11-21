@@ -1,4 +1,5 @@
 ﻿using HUGs.DDD.Generated.Enumeration;
+using System;
 
 namespace Playground
 {
@@ -10,12 +11,8 @@ namespace Playground
             //Console.WriteLine(x);
 
             var orderState = OrderState.Created;
+            Console.WriteLine(orderState.ToString());
         }
     }
 }
-
-namespace HUGs.DDD.Generated.Entity { }
-namespace HUGs.DDD.Generated.Aggregate { }
-namespace HUGs.DDD.Generated.ValueObject { }
-namespace HUGs.DDD.Generated.Enumeration { }
 
