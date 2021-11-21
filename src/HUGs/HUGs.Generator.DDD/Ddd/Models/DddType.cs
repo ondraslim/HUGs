@@ -111,22 +111,25 @@ namespace HUGs.Generator.DDD.Ddd.Models
 
         public static readonly IReadOnlyList<string> PrimitiveTypes = new List<string>()
         {
-            "byte",
-            "sbyte",
-            "short",
-            "ushort",
-            "int",
-            "uint",
-            "long",
-            "ulong",
-            "float",
-            "double",
             "decimal",
-            "DateTime",
-            "TimeSpan",
-            "Guid",
+            "double", 
+            "float", 
+            "byte", 
+            "sbyte", 
+            "short", 
+            "ushort", 
+            "int", 
+            "uint", 
+            "long", 
+            "ulong",
             "bool",
-            "string"
+            "string", 
+            "char", 
+            "Date", 
+            "Time",
+            "DateTime", 
+            "TimeSpan",
+            "Guid"
         };
     }
 

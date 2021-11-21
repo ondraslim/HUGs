@@ -58,13 +58,13 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static void AddWhitelistedProperties(DddObjectSchema schema, ClassBuilder classBuilder)
         {
-            var whitelistedProperties = schema.Properties.Where(p => p.IsWhitelistedType());
+            var whitelistedProperties = schema.Properties.Where(p => p.IsPrimitiveType());
             DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, whitelistedProperties);
         }
         
         private static void AddDddTypeProperties(DddObjectSchema schema, DddModel dddModel, ClassBuilder classBuilder)
         {
-            var dddTypeProperties = schema.Properties.Where(p => !p.IsWhitelistedType());
+            var dddTypeProperties = schema.Properties.Where(p => !p.IsPrimitiveType());
             DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, dddTypeProperties.Where(p => !p.IsDddModelTypeOfKind(dddModel, DddObjectKind.Enumeration)));
             foreach (var property in schema.Properties.Where(p => p.IsDddModelTypeOfKind(dddModel, DddObjectKind.Enumeration)))
             {
