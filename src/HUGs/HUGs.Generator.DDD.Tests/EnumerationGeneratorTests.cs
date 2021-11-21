@@ -1,4 +1,5 @@
-﻿using CheckTestOutput;
+﻿using System;
+using CheckTestOutput;
 using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
@@ -19,11 +20,12 @@ namespace HUGs.Generator.DDD.Tests
             {
                 Kind = DddObjectKind.Enumeration,
                 Name = "SimpleClass1",
-                Properties = new DddObjectProperty[] { },
-                Values = new DddObjectValue[] { }
+                Properties = Array.Empty<DddObjectProperty>(),
+                Values = Array.Empty<DddObjectValue>()
             };
 
             var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject, generatorConfiguration);
+
             check.CheckString(actualCode, fileExtension: "cs");
         }
 
@@ -90,6 +92,7 @@ namespace HUGs.Generator.DDD.Tests
             };
 
             var actualCode = EnumerationGenerator.GenerateEnumerationCode(inputEnumerationObject, generatorConfiguration);
+
             check.CheckString(actualCode, fileExtension: "cs");
         }
     }

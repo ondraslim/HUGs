@@ -118,7 +118,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == DddDiagnostics.ConfigurationMultipleErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id is DddDiagnostics.ConfigurationMultipleErrorId).Should().HaveCount(1);
             generatedFileTexts.Should().BeEmpty();
         }
 
@@ -134,7 +134,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == Diagnostics.AdditionalFileParseErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id is Diagnostics.AdditionalFileParseErrorId).Should().HaveCount(1);
             generatedFileTexts.Should().BeEmpty();
         }
     }

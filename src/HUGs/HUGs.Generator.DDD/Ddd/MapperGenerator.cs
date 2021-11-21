@@ -15,16 +15,14 @@ namespace HUGs.Generator.DDD.Ddd
     {
         public static string GenerateMapperCode(
             DddObjectSchema schema,
-            DddGeneratorConfiguration configuration,
-            DddModel dddModel)
+            DddGeneratorConfiguration configuration)
         {
-            if (schema.Kind == DddObjectKind.Enumeration)
+            if (schema.Kind is DddObjectKind.Enumeration)
             {
-                // TODO: exception better
-                throw new DddSchemaKindToDbEntityNotSupportedException();
+                throw new DddSchemaKindMapperNotSupportedException();
             }
 
-            var mapperClass = PrepareMapperClassDeclaration(schema, configuration, dddModel);
+            var mapperClass = PrepareMapperClassDeclaration(schema, configuration);
 
             var syntaxBuilder = RoslynSyntaxBuilder.Create();
             DddGeneratorCommon.AddUsings(syntaxBuilder, configuration);
@@ -36,13 +34,12 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static ClassDeclarationSyntax PrepareMapperClassDeclaration(
             DddObjectSchema schema,
-            DddGeneratorConfiguration configuration,
-            DddModel dddModel)
+            DddGeneratorConfiguration configuration)
         {
             var classBuilder = CreateMapperClassBuilder(schema);
 
-            AddToDbEntityMethod(classBuilder, schema, dddModel);
-            AddToDddObjectMethod(classBuilder, schema, dddModel);
+            AddToDbEntityMethod(classBuilder, schema);
+            AddToDddObjectMethod(classBuilder, schema);
 
             return classBuilder.Build();
         }
@@ -50,7 +47,9 @@ namespace HUGs.Generator.DDD.Ddd
         private static ClassBuilder CreateMapperClassBuilder(DddObjectSchema schema)
         {
             var factoryParams = new[]
-                {RoslynSyntaxHelper.CreateParameterSyntax(nameof(IDbEntityMapperFactory), "factory")};
+            {
+                RoslynSyntaxHelper.CreateParameterSyntax(nameof(IDbEntityMapperFactory), "factory")
+            };
 
             return ClassBuilder.Create()
                 .SetClassName(schema.MapperClassName)
@@ -64,7 +63,7 @@ namespace HUGs.Generator.DDD.Ddd
                     factoryParams);
         }
 
-        private static void AddToDbEntityMethod(ClassBuilder classBuilder, DddObjectSchema schema, DddModel dddModel)
+        private static void AddToDbEntityMethod(ClassBuilder classBuilder, DddObjectSchema schema)
         {
             var properties = schema.Properties.Where(p => !p.Computed).ToList();
 
@@ -99,83 +98,9 @@ namespace HUGs.Generator.DDD.Ddd
             classBuilder.AddMethod(method);
         }
 
-        private static ExpressionSyntax WrapMethodCallExpresion(string methodName, ExpressionSyntax argument)
-        {
-            return SyntaxFactory.InvocationExpression(
-                SyntaxFactory.IdentifierName(methodName),
-                SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] {
-                    SyntaxFactory.Argument(argument)
-                }))
-            );
-        }
 
-        private static ExpressionSyntax GenerateDbEntityMappedValue(DddObjectProperty property)
-        {
-            var member = SyntaxFactory.MemberAccessExpression(
-                SyntaxKind.SimpleMemberAccessExpression,
-                SyntaxFactory.IdentifierName("obj"),
-                SyntaxFactory.IdentifierName(property.Name)
-            );
 
-            if (property.ResolvedType is DddCollectionType)
-            {
-                return WrapMethodCallExpresion("MapDbEntityCollection", member);
-            }
-            else if (property.ResolvedType is DddModelType modelType)
-            {
-                if (modelType.Kind == DddObjectKind.Enumeration)
-                {
-                    return WrapMethodCallExpresion("MapDbEntityEnumeration", member);
-                }
-                else
-                {
-                    return WrapMethodCallExpresion("MapChildDbEntity", member);
-                }
-            }
-            else if (property.ResolvedType is DddIdType)
-            {
-                return WrapMethodCallExpresion("MapDbEntityId", member);
-            }
-            else
-            {
-                return member;
-            }
-        }
-
-        private static ExpressionSyntax GenerateDddObjectMappedValue(DddObjectProperty property)
-        {
-            var member = SyntaxFactory.MemberAccessExpression(
-                SyntaxKind.SimpleMemberAccessExpression,
-                SyntaxFactory.IdentifierName("obj"),
-                SyntaxFactory.IdentifierName(property.Name)
-            );
-
-            if (property.ResolvedType is DddCollectionType)
-            {
-                return WrapMethodCallExpresion("MapDddObjectCollection", member);
-            }
-            else if (property.ResolvedType is DddModelType modelType)
-            {
-                if (modelType.Kind == DddObjectKind.Enumeration)
-                {
-                    return WrapMethodCallExpresion("MapDddObjectEnumeration", member);
-                }
-                else
-                {
-                    return WrapMethodCallExpresion("MapChildDddObject", member);
-                }
-            }
-            else if (property.ResolvedType is DddIdType)
-            {
-                return WrapMethodCallExpresion("MapDddObjectId", member);
-            }
-            else
-            {
-                return member;
-            }
-        }
-
-        private static void AddToDddObjectMethod(ClassBuilder classBuilder, DddObjectSchema schema, DddModel dddModel)
+        private static void AddToDddObjectMethod(ClassBuilder classBuilder, DddObjectSchema schema)
         {
             var properties = schema.Properties.Where(p => !p.Computed).ToList();
             var body = SyntaxFactory.ReturnStatement(
@@ -205,6 +130,77 @@ namespace HUGs.Generator.DDD.Ddd
                 .Build();
 
             classBuilder.AddMethod(method);
+        }
+
+        private static ExpressionSyntax GenerateDbEntityMappedValue(DddObjectProperty property)
+        {
+            var member = SyntaxFactory.MemberAccessExpression(
+                SyntaxKind.SimpleMemberAccessExpression,
+                SyntaxFactory.IdentifierName("obj"),
+                SyntaxFactory.IdentifierName(property.Name)
+            );
+
+            if (property.ResolvedType is DddCollectionType)
+            {
+                return WrapMethodCallExpression("MapDbEntityCollection", member);
+            }
+
+            if (property.ResolvedType is DddModelType modelType)
+            {
+                if (modelType.Kind is DddObjectKind.Enumeration)
+                {
+                    return WrapMethodCallExpression("MapDbEntityEnumeration", member);
+                }
+
+                return WrapMethodCallExpression("MapChildDbEntity", member);
+            }
+
+            if (property.ResolvedType is DddIdType)
+            {
+                return WrapMethodCallExpression("MapDbEntityId", member);
+            }
+            return member;
+        }
+
+        private static ExpressionSyntax GenerateDddObjectMappedValue(DddObjectProperty property)
+        {
+            var member = SyntaxFactory.MemberAccessExpression(
+                SyntaxKind.SimpleMemberAccessExpression,
+                SyntaxFactory.IdentifierName("obj"),
+                SyntaxFactory.IdentifierName(property.Name)
+            );
+
+            if (property.ResolvedType is DddCollectionType)
+            {
+                return WrapMethodCallExpression("MapDddObjectCollection", member);
+            }
+
+            if (property.ResolvedType is DddModelType modelType)
+            {
+                if (modelType.Kind is DddObjectKind.Enumeration)
+                {
+                    return WrapMethodCallExpression("MapDddObjectEnumeration", member);
+                }
+
+                return WrapMethodCallExpression("MapChildDddObject", member);
+            }
+
+            if (property.ResolvedType is DddIdType)
+            {
+                return WrapMethodCallExpression("MapDddObjectId", member);
+            }
+            return member;
+        }
+
+
+        private static ExpressionSyntax WrapMethodCallExpression(string methodName, ExpressionSyntax argument)
+        {
+            return SyntaxFactory.InvocationExpression(
+                SyntaxFactory.IdentifierName(methodName),
+                SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] {
+                    SyntaxFactory.Argument(argument)
+                }))
+            );
         }
     }
 }

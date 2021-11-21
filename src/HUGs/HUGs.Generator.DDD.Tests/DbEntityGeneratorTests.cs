@@ -60,7 +60,7 @@ namespace HUGs.Generator.DDD.Tests
             model.AddObjectSchema(schema);
             Action act = () => DbEntityGenerator.GenerateDbEntity(schema, generatorConfiguration, model);
 
-            act.Should().ThrowExactly<DddSchemaKindToDbEntityNotSupportedException>();
+            act.Should().ThrowExactly<DddSchemaKindDbEntityNotSupportedException>();
         }
     }
 }

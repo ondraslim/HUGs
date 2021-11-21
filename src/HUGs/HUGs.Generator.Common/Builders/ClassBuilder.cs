@@ -163,7 +163,6 @@ namespace HUGs.Generator.Common.Builders
         {
             var ctor = SyntaxFactory.ConstructorDeclaration(identifierText);
 
-            // TODO: refactor IFs?
             if (parameters is not null)
             {
                 ctor = ctor.AddParameterListParameters(parameters);

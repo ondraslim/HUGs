@@ -8,11 +8,6 @@ namespace HUGs.Generator.DDD.Ddd.Models
         private List<string> dddModelTypes;
 
         public IList<DddObjectSchema> Schemas { get; } = new List<DddObjectSchema>();
-        
-        public IEnumerable<DddObjectSchema> ValueObjects => Schemas.Where(s => s.Kind == DddObjectKind.ValueObject);
-        public IEnumerable<DddObjectSchema> Entities => Schemas.Where(s => s.Kind == DddObjectKind.Entity);
-        public IEnumerable<DddObjectSchema> Aggregates => Schemas.Where(s => s.Kind == DddObjectKind.Aggregate);
-        public IEnumerable<DddObjectSchema> Enumerations => Schemas.Where(s => s.Kind == DddObjectKind.Enumeration);
 
         public List<string> GetDddModelTypes()
         {

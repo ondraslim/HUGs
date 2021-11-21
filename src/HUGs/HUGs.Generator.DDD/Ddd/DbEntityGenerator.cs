@@ -16,9 +16,9 @@ namespace HUGs.Generator.DDD.Ddd
             DddGeneratorConfiguration generatorConfiguration,
             DddModel dddModel)
         {
-            if (schema.Kind == DddObjectKind.Enumeration)
+            if (schema.Kind is DddObjectKind.Enumeration)
             {
-                throw new DddSchemaKindToDbEntityNotSupportedException();
+                throw new DddSchemaKindDbEntityNotSupportedException();
             }
 
             var dbEntityClass = PrepareDbEntityClassDeclaration(schema, dddModel);

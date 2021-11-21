@@ -124,7 +124,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
 
             generatedFileTexts.Should().BeEmpty();
             diagnostics.Should().HaveCount(1);
-            diagnostics.Where(d => d.Id == DddDiagnostics.SchemaInvalidValueErrorId).Should().HaveCount(1);
+            diagnostics.Where(d => d.Id is DddDiagnostics.SchemaInvalidValueErrorId).Should().HaveCount(1);
         }
 
         [Test]
@@ -152,7 +152,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             generatedFileTexts.Should().BeEmpty();
-            diagnostics.Where(d => d.Id == DddDiagnostics.ConfigurationInvalidValueErrorId).Should().HaveCount(expectedValueErrorCount);
+            diagnostics.Where(d => d.Id is DddDiagnostics.ConfigurationInvalidValueErrorId).Should().HaveCount(expectedValueErrorCount);
             diagnostics.Should().HaveCount(expectedValueErrorCount);
         }
 
@@ -179,7 +179,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             generatedFileTexts.Should().BeEmpty();
-            diagnostics.Where(d => d.Id == DddDiagnostics.DddModelDuplicatedNamesErrorId).Should().HaveCount(expectedDuplicateCount);
+            diagnostics.Where(d => d.Id is DddDiagnostics.DddModelDuplicatedNamesErrorId).Should().HaveCount(expectedDuplicateCount);
             diagnostics.Should().HaveCount(expectedDuplicateCount);
         }
 

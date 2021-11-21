@@ -3,6 +3,7 @@ using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using NUnit.Framework;
+using System;
 
 namespace HUGs.Generator.DDD.Tests
 {
@@ -18,7 +19,7 @@ namespace HUGs.Generator.DDD.Tests
             {
                 Kind = DddObjectKind.Aggregate,
                 Name = "SimpleAggregate",
-                Properties = new DddObjectProperty[] { }
+                Properties = Array.Empty<DddObjectProperty>()
             };
 
             var actualCode = AggregateGenerator.GenerateAggregateCode(objectSchema, generatorConfiguration);

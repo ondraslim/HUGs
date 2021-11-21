@@ -46,7 +46,7 @@ namespace HUGs.Generator.DDD.Ddd
                 if (schema.Kind != DddObjectKind.Enumeration)
                 {
                     AddDbEntitySource(context, schema, configuration, dddModel);
-                    AddMapperSource(context, schema, configuration, dddModel);
+                    AddMapperSource(context, schema, configuration);
                 }
             }
         }
@@ -54,10 +54,9 @@ namespace HUGs.Generator.DDD.Ddd
         private static void AddMapperSource(
             GeneratorExecutionContext context, 
             DddObjectSchema schema, 
-            DddGeneratorConfiguration configuration,
-            DddModel dddModel)
+            DddGeneratorConfiguration configuration)
         {
-            var mapperSourceCode = MapperGenerator.GenerateMapperCode(schema, configuration, dddModel);
+            var mapperSourceCode = MapperGenerator.GenerateMapperCode(schema, configuration);
             context.AddSource(schema.MapperClassName, mapperSourceCode);
         }
 
