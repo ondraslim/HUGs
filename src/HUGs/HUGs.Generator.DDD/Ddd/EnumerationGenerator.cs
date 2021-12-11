@@ -42,6 +42,10 @@ namespace HUGs.Generator.DDD.Ddd
                 .Build();
         }
 
+        /// <summary>
+        /// Generates FromString method of an DDD Enumeration class.
+        /// Used to convert string to Enumeration of given schema.
+        /// </summary>
         private static MethodDeclarationSyntax PrepareFromStringMethod(DddObjectSchema schema)
         {
             var body = SyntaxFactory.ReturnStatement(
@@ -107,6 +111,10 @@ namespace HUGs.Generator.DDD.Ddd
                 ctorBaseParams);
         }
 
+
+        /// <summary>
+        /// Adds public immutable fields of the Enumeration values
+        /// </summary>
         private static void AddEnumerationFields(ClassBuilder classBuilder, DddObjectSchema schema)
         {
             foreach (var value in schema.Values)
@@ -118,6 +126,9 @@ namespace HUGs.Generator.DDD.Ddd
             }
         }
 
+        /// <summary>
+        /// Creates the initialization of the public Enumeration field value
+        /// </summary>
         private static ImplicitObjectCreationExpressionSyntax PrepareEnumFieldObjectCreationSyntax(
             DddObjectSchema schema,
             DddObjectValue value)

@@ -66,6 +66,7 @@ namespace HUGs.Generator.DDD.Ddd
         { 
             var dddTypeProperties = schema.Properties.Where(p => p.ResolvedType is not DddPrimitiveType).ToList();
             
+            // enum properties are added as strings to the generated DbEntity
             DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, dddTypeProperties.Where(p => p.ResolvedType is not DddModelType { Kind: DddObjectKind.Enumeration }));
             
             foreach (var property in dddTypeProperties.Where(p => p.ResolvedType is DddModelType { Kind: DddObjectKind.Enumeration }))

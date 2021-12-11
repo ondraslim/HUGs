@@ -1,11 +1,11 @@
-﻿using HUGs.Generator.Common.Exceptions;
+﻿using HUGs.Generator.Common.Builders;
+using HUGs.Generator.Common.Exceptions;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Loaders;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis;
 using System;
-using HUGs.Generator.Common.Builders;
 
 namespace HUGs.Generator.DDD.Ddd
 {
@@ -36,6 +36,9 @@ namespace HUGs.Generator.DDD.Ddd
             }
         }
 
+        /// <summary>
+        /// Generates an empty file with commonly used generated namespaces
+        /// </summary>
         private static void GenerateNamespaceDeclarationFile(GeneratorExecutionContext context, DddGeneratorConfiguration configuration)
         {
             var namespaceDeclarations = RoslynSyntaxNamespacesFillerBuilder.Create();
@@ -49,6 +52,9 @@ namespace HUGs.Generator.DDD.Ddd
             context.AddSource("DddModelNamespaces", namespacesDeclarationsSourceCode);
         }
 
+        /// <summary>
+        /// Generates source code files for schemas
+        /// </summary>
         private static void GenerateDddModelSourceCode(
             GeneratorExecutionContext context,
             DddGeneratorConfiguration configuration,

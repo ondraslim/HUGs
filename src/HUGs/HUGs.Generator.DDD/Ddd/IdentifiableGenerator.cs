@@ -39,6 +39,9 @@ namespace HUGs.Generator.DDD.Ddd
             return classBuilder.Build();
         }
 
+        /// <summary>
+        /// Creates EntityId class for Identifiable DDD object (Entity or Aggregate)
+        /// </summary>
         private static ClassDeclarationSyntax PrepareEntityIdClass(string objectName)
         {
             var className = $"{objectName}Id";

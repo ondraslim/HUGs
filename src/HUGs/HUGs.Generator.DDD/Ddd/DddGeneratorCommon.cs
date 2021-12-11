@@ -14,6 +14,9 @@ namespace HUGs.Generator.DDD.Ddd
 {
     internal static class DddGeneratorCommon
     {
+        /// <summary>
+        /// Adds common usings to given SyntaxBuilder
+        /// </summary>
         public static void AddUsings(
             IAddUsingsStage syntaxBuilder,
             DddGeneratorConfiguration generatorConfiguration)
@@ -33,6 +36,9 @@ namespace HUGs.Generator.DDD.Ddd
             }
         }
 
+        /// <summary>
+        /// Creates ParameterSyntax objects based on DDD object properties
+        /// </summary>
         public static ParameterSyntax[] CreateParametersFromProperties(DddObjectProperty[] properties)
         {
             var parameters = properties
@@ -51,6 +57,9 @@ namespace HUGs.Generator.DDD.Ddd
             return parameters;
         }
 
+        /// <summary>
+        /// Generates class field/property assignment statements for an array of DDD object properties.
+        /// </summary>
         public static string[] CreateAssignmentStatementsFromProperties(DddObjectProperty[] properties)
         {
             var linesOfCode = properties
@@ -63,6 +72,9 @@ namespace HUGs.Generator.DDD.Ddd
             return linesOfCode;
         }
 
+        /// <summary>
+        /// Adds a list of properties to a class representing a DDD object
+        /// </summary>
         public static void AddDddClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties, bool withPrivateSetter = false)
         {
             foreach (var property in properties)
@@ -88,6 +100,9 @@ namespace HUGs.Generator.DDD.Ddd
             }
         }
 
+        /// <summary>
+        /// Adds a list of properties to a class representing a DB entity
+        /// </summary>
         public static void AddDbEntityClassProperties(ClassBuilder classBuilder, IEnumerable<DddObjectProperty> properties)
         {
             foreach (var property in properties.Where(p => !p.Computed))
@@ -96,6 +111,9 @@ namespace HUGs.Generator.DDD.Ddd
             }
         }
 
+        /// <summary>
+        /// Creates a header of 'OnInitialized' method
+        /// </summary>
         public static MethodDeclarationSyntax BuildOnInitializedMethod()
         {
             return MethodBuilder.Create()
