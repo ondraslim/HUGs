@@ -1,4 +1,5 @@
 ﻿using System;
+using My.Desired.Namespace.Enumerations;
 
 namespace HUGsSample
 {
@@ -6,8 +7,7 @@ namespace HUGsSample
     {
         static void Main()
         {
-            Console.WriteLine("Hello World!");
-            //var x = new Country();
+            var x = OrderState.Created;
         }
     }
 }
