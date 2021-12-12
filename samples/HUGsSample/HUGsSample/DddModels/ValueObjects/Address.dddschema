@@ -1,0 +1,13 @@
+﻿Kind: ValueObject
+Name: Address
+Properties:
+  - Name: Street
+    Type: string
+  - Name: Street2
+    Type: string?
+  - Name: City
+    Type: string
+  - Name: Zip
+    Type: string
+  - Name: CountryId
+    Type: CountryId

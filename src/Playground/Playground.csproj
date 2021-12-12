@@ -9,7 +9,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!--<AdditionalFiles Include="AddressValueObject.dddschema" />-->
 		<AdditionalFiles Include="OrderStateEnumeration.dddschema" />
 	</ItemGroup>
 
