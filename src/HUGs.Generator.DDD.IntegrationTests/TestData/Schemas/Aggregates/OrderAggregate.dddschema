@@ -1,0 +1,16 @@
+﻿Kind: Aggregate
+Name: Order
+Properties:
+  - Name: Number
+    Type: string
+  - Name: CreatedDate
+    Type: DateTime
+  - Name: Items
+    Type: OrderItem[]
+  - Name: ShippingAddress
+    Type: Address
+  - Name: TotalPrice
+    Type: decimal
+    Computed: true
+  - Name: State
+    Type: OrderState

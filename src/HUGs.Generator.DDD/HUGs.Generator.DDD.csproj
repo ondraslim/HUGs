@@ -3,7 +3,13 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>9</LangVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
@@ -14,7 +20,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\HUGs.Generator.Common\HUGs.Generator.Common.csproj" />
-		<ProjectReference Include="..\HUGs.Generator.DDD.BaseModels\HUGs.Generator.DDD.Framework.csproj" />
+		<ProjectReference Include="..\HUGs.Generator.DDD.Framework\HUGs.Generator.DDD.Framework.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -26,7 +32,7 @@
 			<TargetPathWithTargetPlatformMoniker Include="$(PKGYamlDotNet)\lib\netstandard1.3\YamlDotNet.dll" IncludeRuntimeDependency="false" />
 			<TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Text_Json)\lib\netstandard2.0\System.Text.Json.dll" IncludeRuntimeDependency="false" />
 			<TargetPathWithTargetPlatformMoniker Include="..\HUGs.Generator.Common\bin\Debug\netstandard2.0\HUGs.Generator.Common.dll" IncludeRuntimeDependency="false" />
-			<TargetPathWithTargetPlatformMoniker Include="..\HUGs.Generator.DDD.BaseModels\bin\Debug\netstandard2.0\HUGs.Generator.DDD.Framework.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="..\HUGs.Generator.DDD.Framework\bin\Debug\netstandard2.0\HUGs.Generator.DDD.Framework.dll" IncludeRuntimeDependency="false" />
 		</ItemGroup>
 	</Target>
 </Project>
