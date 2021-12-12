@@ -5,6 +5,8 @@ An opinionated .NET Source Generator to help with the DDD boilerplate code.
 ## Description
 **HUGs** is a** Source Generator** framework that targets **DDD object classes generation**. The Source Generator uses `Additional Files` with DDD object schemas in YAML format to build the DDD model and generate the DDD object classes for **ValueObjects**, **Entities**, **Aggregates**, and **Enumerations**. Moreover, **HUGs** also generates a plain **DbEntity** class that is database-friendly, and it generates a **Mapper** that can map a DDD object to a database object and vice versa. Therefore, **HUGs** can generate up to 3 classes from a single YAML schema.
 
+## Installation
+TODO
 
 ## Usage
 
@@ -58,3 +60,5 @@ AdditionalUsings:
 Only **ONE** configuration file is expected!
 
 ### Examples
+
+TODO
