@@ -7,7 +7,7 @@ namespace HUGsSample
     {
         static void Main()
         {
-            var x = OrderState.Created;
+            //var x = OrderState.Created;
         }
     }
 }
