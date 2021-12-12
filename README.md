@@ -3,18 +3,18 @@
 An opinionated .NET Source Generator to help with the DDD boilerplate code.
 
 ## Description
-**HUGs** is a **Source Generator** framework that targets **DDD object classes generation**. The Source Generator uses *Additional Files* with DDD object schemas in YAML format to build the DDD model and generate the DDD object classes for **ValueObjects**, **Entities**, **Aggregates**, and **Enumerations**. Moreover, **HUGs** also generates a plain **DbEntity** class that is database-friendly, and it generates a **Mapper** that can map a DDD object to a database object and vice versa. Therefore, **HUGs** can generate up to 3 classes from a single YAML schema.
+**HUGs** is a **Source Generator** framework that targets **DDD object class generation**. The Source Generator based on *Additional Files* that contain the DDD object schemas in YAML format. The YAML structure is transformed the DDD object classes representing the DDD **ValueObjects**, **Entities**, **Aggregates**, and **Enumerations**. Moreover, **HUGs** also generates a plain database-friendly **DbEntity** class, and it generates a **Mapper** that can map the DDD object to a DbEntity and vice versa. **HUGs** can generate up to 3 classes from a single YAML schema!
 
 ## Installation
 TODO
 
 ## Usage
 
-**HUGs** require YAML files with file extension `.dddschema` and `.dddconfig` for the `AdditionalFiles`.
+The `AdditionalFiles` are required in YAML format with file extension `.dddschema` for a file with schema definition and `.dddconfig` for configuration file.
 
 > NOTE: JSON is also a valid YAML format.
 
-Schemas for **Entity**, **Aggregate**, and **ValueObject** DDD object expect the follow structure of the corresponding *AdditionalFile*:
+Schemas for **Entity**, **Aggregate**, and **ValueObject** DDD object expect the following YAML structure:
 
 ```
 Kind: ValueObject | Entity | Aggregate 
@@ -25,9 +25,9 @@ Properties:
     Computed: true | false
 ```
 
-The `Kind` specifies the type of DDD object. The `Kind` affects the structure of the generated code and the inherited class. The generated class name is specified by the `Name`, and the class properties can be specified as a list in `Properties`. The property requires its `Name` and `Type`. The type supports nullability `?` and `Computed` properties.
+The `Kind` specifies the type of DDD object and it affects the structure of the generated code. The `Name` specifies a name for the generated class and `Properties` shall contain a list of the class properties. A property requires its `Name` and `Type`. The type supports nullability (`?`), arrays `[]`,  and `Computed` properties.
 
-> NOTE: The computed properties are not initialized in a constructor. For this purpose, an `OnInitialized()` method is added. The model class and this method are both `partial` to add an initialization to the `Computed` properties or maybe to add a validation.
+> NOTE: The computed properties are not initialized in a constructor. For this purpose, an `OnInitialized()` method is added. The generated class and this method are both `partial` for easy extension of the class, e.g. to add an initialization if the `Computed` properties or to add a validation.
 
 DDD **Enumeration** requires the following structure:
 
@@ -43,16 +43,16 @@ Values:
       <EnumPropertyName>: <EnumPropertyValue>
 ```
 
-The `Kind`, `Name`, and `Properties` follow the same requirements as for the other DDD object kinds (except for `Computed` in a property specification - the behavior is not defined). The `Values` are used to initialize the enumeration values in the form of `public static readonly` fields. The `Values` require a name of the Enumeration value and values for all of the specified properties in the `Properties` section.
+The `Kind`, `Name`, and `Properties` follow the same requirements as for the other DDD object kinds (except for `Computed` in a property specification - this the behavior is not defined). The `Values` are used to define the enumeration values in the form of `public static readonly` fields in the class. The `Values` require a name of the Enumeration value and values for all of the specified properties in the `Properties` section. (see Enumeration example)
 
 ### Type support
 - C\# primitive types are supported
-- All of the DDD types specified in `.dddschema` files are supported; ID classes as well
-- Nullable types are supported with the standard suffix `?`, e.g. `string?`
-- Collections are represented with the standard array brackets suffix: `[]`; a string collection can be represented as `Type: string[]`
+- All of the DDD types specified in `.dddschema` files are supported; EntityId classes as well
+- Nullable types are supported via the standard suffix `?`, e.g. a nullable type: `string?`
+- Collections are represented by the standard array bracket suffix: `[]`; a type of string collectio: `string[]`
 
 ### Generation Configuration
-**HUGs** support a minor configuration for the generated classes by adding an `AdditionalFile` with file extension `.dddconfig`. You can specified namespaces of the generated files for individual DDD object kinds, and also list additional `using` statements for the generated files. The expected structure is the following:
+**HUGs** support a configuration for the generated classes by adding an `AdditionalFile` with file extension `.dddconfig`. You can specifie namespaces of the generated files for individual DDD object kinds, and also list additional `using` statements for the generated files. The expected structure is the following:
 
 ```
 TargetNamespaces:
@@ -72,8 +72,7 @@ AdditionalUsings:
 ### Examples
 
 #### ValueObject
-`Address` ValueObject schema:
-
+`Address` ValueObject YAML schema:
 ```
 Kind: ValueObject
 Name: Address
@@ -90,7 +89,9 @@ Properties:
     Type: CountryId
 ```
 
-Generates a DDD object class:
+Generates...
+
+a DDD object class:
 ```
 using System;
 using System.Linq;
@@ -140,8 +141,7 @@ namespace HUGs.DDD.Generated.ValueObject
 }
 ```
 
-A DB entity:
-
+a DB entity:
 ```
 using System;
 using System.Linq;
@@ -171,8 +171,7 @@ namespace HUGs.DDD.Generated.DbEntity
 }
 ```
 
-And a mapper:
-
+a Mapper:
 ```
 using System;
 using System.Linq;
@@ -221,8 +220,8 @@ namespace HUGs.DDD.Generated.Mapper
 ```
 
 #### Aggregate and Entitties
-Aggregates and Entities are produced similarly; an example for an `Order` Aggregate:
 
+Aggregates and Entities are produced similarly; an example YAML schema for an `Order` Aggregate:
 ```
 Kind: Aggregate
 Name: Order
@@ -242,8 +241,9 @@ Properties:
     Type: OrderState
 ```
 
-A DDD object class:
+Generates...
 
+a DDD object class:
 ```
 using System;
 using System.Linq;
@@ -301,7 +301,7 @@ namespace HUGs.DDD.Generated.Aggregate
 
 > NOTE: Notice the `TotalPrice` is not initialized from the constructor. You are expected to initialize the property in the `OnInitialized()` based on other properties, the `Items` in this case.
 
-A DB entity:
+a DB entity:
 ```
 using System;
 using System.Linq;
@@ -333,8 +333,7 @@ namespace HUGs.DDD.Generated.DbEntity
 }
 ```
 
-And a mapper:
-
+a Mapper:
 ```
 using System;
 using System.Linq;
@@ -384,7 +383,7 @@ namespace HUGs.DDD.Generated.Mapper
 
 #### Enumeration
 
-And example for OrderState enumeration:
+A YAML schema example for OrderState enumeration:
 ```
 Kind: Enumeration
 Name: OrderState
@@ -400,7 +399,9 @@ Values:
       Name: Canceled
 ```
 
-Generates the following DDD oject class:
+Generates...
+
+a DDD object class:
 ```
 using System;
 using System.Linq;
@@ -441,9 +442,12 @@ namespace HUGs.DDD.Generated.Enumeration
 }
 ```
 
-#### Configuration
-A configuration, that sets all of the namespaces and adds 2 additional usings to the generated files:
+> NOTE: `DbEntity` and  `Mapper` are not generated. Instead, the enumeration is mapped a `string` in a `DbEntity` and the enumeration class contains a `FromString(string)` method, that is used for conversion from string. The base class contains a definition for `ToString()` method, that is used for the opposite transition of an enumeration.
 
+
+#### Configuration
+
+An example for a configuration that sets all of the namespaces and adds 2 additional usings to the generated files:
 ```
 TargetNamespaces:
   ValueObject: My.Desired.Namespace.ValueObjects
@@ -457,7 +461,7 @@ AdditionalUsings:
   - My.Additional.Using2
 ```
 
-Not all of the namespaces need to be set; for instance a configuration with custom namespace for only DB entities:
+Not all of the namespaces need to be set; for instance, a configuration with custom namespace for only DB entities can look accordingly:
 
 ```
 TargetNamespaces
