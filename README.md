@@ -45,6 +45,7 @@ Values:
 
 The `Kind`, `Name`, and `Properties` follow the same requirements as for the other DDD object kinds (except for `Computed` in a property specification - this the behavior is not defined). The `Values` are used to define the enumeration values in the form of `public static readonly` fields in the class. The `Values` require a name of the Enumeration value and values for all of the specified properties in the `Properties` section. (see Enumeration example)
 
+
 ### Type support
 - C\# primitive types are supported
 - All of the DDD types specified in `.dddschema` files are supported; EntityId classes as well
@@ -68,6 +69,8 @@ AdditionalUsings:
 ```
 
 > NOTE: Only **ONE** configuration file is expected!
+
+> NOTE: The YAML files are **CASE-SENSITIVE**!
 
 ### Examples
 
