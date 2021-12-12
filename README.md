@@ -3,16 +3,18 @@
 An opinionated .NET Source Generator to help with the DDD boilerplate code.
 
 ## Description
-**HUGs** is a **Source Generator** framework that targets **DDD object classes generation**. The Source Generator uses `Additional Files` with DDD object schemas in YAML format to build the DDD model and generate the DDD object classes for **ValueObjects**, **Entities**, **Aggregates**, and **Enumerations**. Moreover, **HUGs** also generates a plain **DbEntity** class that is database-friendly, and it generates a **Mapper** that can map a DDD object to a database object and vice versa. Therefore, **HUGs** can generate up to 3 classes from a single YAML schema.
+**HUGs** is a **Source Generator** framework that targets **DDD object classes generation**. The Source Generator uses *Additional Files* with DDD object schemas in YAML format to build the DDD model and generate the DDD object classes for **ValueObjects**, **Entities**, **Aggregates**, and **Enumerations**. Moreover, **HUGs** also generates a plain **DbEntity** class that is database-friendly, and it generates a **Mapper** that can map a DDD object to a database object and vice versa. Therefore, **HUGs** can generate up to 3 classes from a single YAML schema.
 
 ## Installation
 TODO
 
 ## Usage
 
-**HUGs** require YAML files with file extension `.dddschema` and `.dddconfig` for 
+**HUGs** require YAML files with file extension `.dddschema` and `.dddconfig` for the `AdditionalFiles`.
 
-Schemas for **Entity**, **Aggregate**, and **ValueObject** DDD object expect the follow structure of the corresponding `Additional File`:
+> NOTE: JSON is also a valid YAML format.
+
+Schemas for **Entity**, **Aggregate**, and **ValueObject** DDD object expect the follow structure of the corresponding *AdditionalFile*:
 
 ```
 Kind: ValueObject | Entity | Aggregate 
@@ -23,7 +25,9 @@ Properties:
     Computed: true | false
 ```
 
-The `Kind` specifies the type of DDD object. The `Kind` affects the structure of the generated code and the inherited class. The generated class name is specified by the `Name`, and the class properties can be specified as a list in `Properties`. The property requires its `Name` and `Type`. The `Type` must be a C\# primitive type or another DDD object reference. The type also supports nullability `?` and `Computed` properties. The computed properties is not initialized in a constructor.
+The `Kind` specifies the type of DDD object. The `Kind` affects the structure of the generated code and the inherited class. The generated class name is specified by the `Name`, and the class properties can be specified as a list in `Properties`. The property requires its `Name` and `Type`. The type supports nullability `?` and `Computed` properties.
+
+> NOTE: The computed properties are not initialized in a constructor. For this purpose, an `OnInitialized()` method is added. The model class and this method are both `partial` to add an initialization to the `Computed` properties or maybe to add a validation.
 
 DDD **Enumeration** requires the following structure:
 
@@ -41,7 +45,11 @@ Values:
 
 The `Kind`, `Name`, and `Properties` follow the same requirements as for the other DDD object kinds (except for `Computed` in a property specification - the behavior is not defined). The `Values` are used to initialize the enumeration values in the form of `public static readonly` fields. The `Values` require a name of the Enumeration value and values for all of the specified properties in the `Properties` section.
 
-Collections are represented with the standard array brackets `[]`, a string collection can be represented as `Type: string[]`.
+### Type support
+- C\# primitive types are supported
+- All of the DDD types specified in `.dddschema` files are supported; ID classes as well
+- Nullable types are supported with the standard suffix `?`, e.g. `string?`
+- Collections are represented with the standard array brackets suffix: `[]`; a string collection can be represented as `Type: string[]`
 
 ### Generation Configuration
 **HUGs** support a minor configuration for the generated classes by adding an `AdditionalFile` with file extension `.dddconfig`. You can specified namespaces of the generated files for individual DDD object kinds, and also list additional `using` statements for the generated files. The expected structure is the following:
@@ -59,7 +67,7 @@ AdditionalUsings:
   - <GeneratedFileAdditionalUsing>
 ```
 
-Only **ONE** configuration file is expected!
+> NOTE: Only **ONE** configuration file is expected!
 
 ### Examples
 
@@ -287,8 +295,11 @@ namespace HUGs.DDD.Generated.Aggregate
         partial void OnInitialized();
     }
 }
-
 ```
+
+> NOTE: For Aggregates and Entites, an ID class is generated in the same file.
+
+> NOTE: Notice the `TotalPrice` is not initialized from the constructor. You are expected to initialize the property in the `OnInitialized()` based on other properties, the `Items` in this case.
 
 A DB entity:
 ```
