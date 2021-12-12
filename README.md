@@ -41,6 +41,8 @@ Values:
 
 The `Kind`, `Name`, and `Properties` follow the same requirements as for the other DDD object kinds (except for `Computed` in a property specification - the behavior is not defined). The `Values` are used to initialize the enumeration values in the form of `public static readonly` fields. The `Values` require a name of the Enumeration value and values for all of the specified properties in the `Properties` section.
 
+Collections are represented with the standard array brackets `[]`, a string collection can be represented as `Type: string[]`.
+
 ### Generation Configuration
 **HUGs** support a minor configuration for the generated classes by adding an `AdditionalFile` with file extension `.dddconfig`. You can specified namespaces of the generated files for individual DDD object kinds, and also list additional `using` statements for the generated files. The expected structure is the following:
 
@@ -80,9 +82,7 @@ Properties:
     Type: CountryId
 ```
 
-Generates:
-
-A DDD object class:
+Generates a DDD object class:
 ```
 using System;
 using System.Linq;
@@ -132,7 +132,7 @@ namespace HUGs.DDD.Generated.ValueObject
 }
 ```
 
-A DbEntity:
+A DB entity:
 
 ```
 using System;
@@ -163,7 +163,7 @@ namespace HUGs.DDD.Generated.DbEntity
 }
 ```
 
-And a Mapper:
+And a mapper:
 
 ```
 using System;
@@ -213,7 +213,7 @@ namespace HUGs.DDD.Generated.Mapper
 ```
 
 #### Aggregate and Entitties
-Aggregates and Entities are produced similarly; an example for an order Aggregate:
+Aggregates and Entities are produced similarly; an example for an `Order` Aggregate:
 
 ```
 Kind: Aggregate
@@ -235,7 +235,6 @@ Properties:
 ```
 
 A DDD object class:
-
 
 ```
 using System;
@@ -390,7 +389,7 @@ Values:
       Name: Canceled
 ```
 
-Generates the following:
+Generates the following DDD oject class:
 ```
 using System;
 using System.Linq;
@@ -431,4 +430,26 @@ namespace HUGs.DDD.Generated.Enumeration
 }
 ```
 
+#### Configuration
+A configuration, that sets all of the namespaces and adds 2 additional usings to the generated files:
+
+```
+TargetNamespaces:
+  ValueObject: My.Desired.Namespace.ValueObjects
+  Entity: My.Desired.Namespace.Entities
+  Aggregate: My.Desired.Namespace.Aggregates
+  Enumeration: My.Desired.Namespace.Enumerations
+  DbEntity: My.Desired.Namespace.DbEntities
+
+AdditionalUsings:
+  - My.Additional.Using1
+  - My.Additional.Using2
+```
+
+Not all of the namespaces need to be set; for instance a configuration with custom namespace for only DB entities:
+
+```
+TargetNamespaces
+  DbEntity: My.Desired.Namespace.DbEntities
+```
 
