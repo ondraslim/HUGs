@@ -9,6 +9,8 @@ using My.Desired.Namespace.Entities;
 using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
+using My.Desired.Namespace.DbEntities;
+using HUGs.DDD.Generated.Mapper;
 
 namespace My.Desired.Namespace.Aggregates
 {
