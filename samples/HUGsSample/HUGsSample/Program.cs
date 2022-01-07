@@ -8,9 +8,6 @@ namespace HUGsSample
         static void Main()
         {
             //var x = OrderState.Created;
-            //HelloWorldGenerated.HelloWorld.SayHello();
-
-
         }
     }
 }

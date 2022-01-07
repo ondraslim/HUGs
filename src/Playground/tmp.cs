@@ -7,6 +7,8 @@ using HUGs.DDD.Generated.Entity;
 using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
+using HUGs.DDD.Generated.DbEntity;
+using HUGs.DDD.Generated.Mapper;
 
 namespace HUGs.DDD.Generated.Enumeration
 {
@@ -19,7 +21,7 @@ namespace HUGs.DDD.Generated.Enumeration
         public string Name { get; }
 
         private OrderState(string internalName, string Name)
-        	: base(internalName)
+            : base(internalName)
         {
             this.Name = Name;
         }
@@ -28,10 +30,26 @@ namespace HUGs.DDD.Generated.Enumeration
         {
             return name switch
             {
-            	"Created" => Created,
-            	"Canceled" => Canceled,
-            	_ => throw new ArgumentOutOfRangeException()
+                "Created" => Created,
+                "Canceled" => Canceled,
+                _ => throw new ArgumentOutOfRangeException()
             };
         }
     }
+}
+
+namespace HUGs.DDD.Generated.Entity
+{
+}
+
+namespace HUGs.DDD.Generated.Aggregate
+{
+}
+
+namespace HUGs.DDD.Generated.ValueObject
+{
+}
+
+namespace HUGs.DDD.Generated.Enumeration
+{
 }

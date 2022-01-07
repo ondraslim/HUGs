@@ -7,10 +7,12 @@
 	  <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
 
+
 	<ItemGroup>
 		<AdditionalFiles Include="**\*.dddschema" />
 		<AdditionalFiles Include="**\*.dddconfig" />
 	</ItemGroup>
+
 
 	<ItemGroup>
 	  <PackageReference Include="HUGs.Generator.DDD" Version="1.0.0-pre13" />

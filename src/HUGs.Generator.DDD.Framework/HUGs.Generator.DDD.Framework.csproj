@@ -8,5 +8,8 @@
 	  <PackageVersion>1.0.0-pre13</PackageVersion>
   </PropertyGroup>
 
+	<ItemGroup>
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
 
 </Project>

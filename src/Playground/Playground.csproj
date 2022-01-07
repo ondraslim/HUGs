@@ -5,19 +5,21 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<LangVersion>9</LangVersion>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+		<!--<CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>-->
 	</PropertyGroup>
 
 	<ItemGroup>
-		<AdditionalFiles Include="**\*.dddschema" />
+		<AdditionalFiles Include="OrderStateEnumeration.dddschema" />
 	</ItemGroup>
 
-	<!--<ItemGroup>
-		<None Include="\Generated\**" />
-		<Compiler Remove="\Generated\**" />
-	</ItemGroup>-->
+	<ItemGroup>
+		<PackageReference Include="YamlDotNet" Version="11.1.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0" PrivateAssets="all" />
+	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\HUGs.Generator.DDD\HUGs.Generator.DDD.csproj" />
+		<ProjectReference Include="..\HUGs.Generator.DDD.Framework\HUGs.Generator.DDD.Framework.csproj" />
+		<ProjectReference Include="..\HUGs.Generator.DDD\HUGs.Generator.DDD.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 </Project>
