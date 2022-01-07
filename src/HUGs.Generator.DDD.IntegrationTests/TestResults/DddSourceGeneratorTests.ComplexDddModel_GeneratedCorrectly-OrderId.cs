@@ -7,8 +7,6 @@ using HUGs.DDD.Generated.Entity;
 using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
-using HUGs.DDD.Generated.DbEntity;
-using HUGs.DDD.Generated.Mapper;
 
 namespace HUGs.DDD.Generated.Aggregate
 {
@@ -20,7 +18,7 @@ namespace HUGs.DDD.Generated.Aggregate
         }
     }
 
-    public partial class Order : HUGs.Generator.DDD.Framework.BaseModels.Aggregate<OrderId>
+    public partial class Order : HUGs.Generator.DDD.Framework.BaseModels.Aggregate<Guid>
     {
         private List<OrderItem> _Items;
 
@@ -36,7 +34,7 @@ namespace HUGs.DDD.Generated.Aggregate
 
         public OrderState State { get; private set; }
 
-        public Order(IId<OrderId> id, string Number, DateTime CreatedDate, IEnumerable<OrderItem> Items, Address ShippingAddress, OrderState State)
+        public Order(OrderId id, string Number, DateTime CreatedDate, IEnumerable<OrderItem> Items, Address ShippingAddress, OrderState State)
         {
             Id = id;
             this.Number = Number;

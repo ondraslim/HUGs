@@ -34,9 +34,6 @@ namespace HUGs.Generator.DDD.Ddd
             {
                 syntaxBuilder.AddUsings(generatorConfiguration.GetTargetNamespaceForKind(kind));
             }
-
-            syntaxBuilder.AddUsings(generatorConfiguration.TargetNamespaces.DbEntity);
-            syntaxBuilder.AddUsings(generatorConfiguration.TargetNamespaces.Mapper);
         }
 
         /// <summary>

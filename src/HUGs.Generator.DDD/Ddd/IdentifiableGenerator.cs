@@ -31,7 +31,7 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static ClassDeclarationSyntax PrepareIdentifiableClassDeclaration(DddObjectSchema schema, string entityIdClassIdentifier)
         {
-            var classBuilder = CreateIdentifiableClassBuilder(schema, entityIdClassIdentifier);
+            var classBuilder = CreateIdentifiableClassBuilder(schema);
             DddGeneratorCommon.AddDddClassProperties(classBuilder, schema.Properties, withPrivateSetter: true);
             AddClassConstructor(classBuilder, schema, entityIdClassIdentifier);
             classBuilder.AddMethod(DddGeneratorCommon.BuildOnInitializedMethod());
@@ -58,12 +58,12 @@ namespace HUGs.Generator.DDD.Ddd
             return classBuilder.Build();
         }
 
-        private static ClassBuilder CreateIdentifiableClassBuilder(DddObjectSchema schema, string entityIdClassIdentifier)
+        private static ClassBuilder CreateIdentifiableClassBuilder(DddObjectSchema schema)
         {
             var classBuilder = ClassBuilder.Create()
                     .SetClassName(schema.DddObjectClassName)
                     .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
-                    .AddClassBaseTypes($"HUGs.Generator.DDD.Framework.BaseModels.{schema.Kind}<{entityIdClassIdentifier}>");
+                    .AddClassBaseTypes($"HUGs.Generator.DDD.Framework.BaseModels.{schema.Kind}<Guid>");
 
             return classBuilder;
         }
@@ -73,7 +73,7 @@ namespace HUGs.Generator.DDD.Ddd
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
 
             var propertyParams = DddGeneratorCommon.CreateParametersFromProperties(schema.Properties);
-            var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax($"IId<{entityIdClassIdentifier}>", "id") };
+            var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax(entityIdClassIdentifier, "id") };
             var ctorParams = ctorBaseParams.Concat(propertyParams).ToArray();
 
             var propertyAssignments = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(schema.Properties);

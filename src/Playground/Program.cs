@@ -1,5 +1,6 @@
 ﻿//using HUGs.DDD.Generated.Enumeration;
 using System;
+using HUGs.DDD.Generated.Entity;
 
 namespace Playground
 {
@@ -7,11 +8,7 @@ namespace Playground
     {
         private static void Main()
         {
-            //var x = HUGs.DDD.Generated.Enumeration.OrderState.Created;
-            //Console.WriteLine(x);
-            
-            //var orderState = OrderState.Created;
-            //Console.WriteLine(orderState.ToString());
+            new Country(new CountryId(Guid.Empty), "asd");
         }
     }
 }

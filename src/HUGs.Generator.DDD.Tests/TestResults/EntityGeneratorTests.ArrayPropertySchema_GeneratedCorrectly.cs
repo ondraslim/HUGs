@@ -7,8 +7,6 @@ using HUGs.DDD.Generated.Entity;
 using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
-using HUGs.DDD.Generated.DbEntity;
-using HUGs.DDD.Generated.Mapper;
 
 namespace HUGs.DDD.Generated.Entity
 {
@@ -20,13 +18,13 @@ namespace HUGs.DDD.Generated.Entity
         }
     }
 
-    public partial class SimpleArrayPropertyEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<SimpleArrayPropertyEntityId>
+    public partial class SimpleArrayPropertyEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<Guid>
     {
         private List<OrderItem> _Items;
 
         public IReadOnlyList<OrderItem> Items => _Items;
 
-        public SimpleArrayPropertyEntity(IId<SimpleArrayPropertyEntityId> id, IEnumerable<OrderItem> Items)
+        public SimpleArrayPropertyEntity(SimpleArrayPropertyEntityId id, IEnumerable<OrderItem> Items)
         {
             Id = id;
             this._Items = Items.ToList();

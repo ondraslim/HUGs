@@ -7,8 +7,6 @@ using HUGs.DDD.Generated.Entity;
 using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
-using HUGs.DDD.Generated.DbEntity;
-using HUGs.DDD.Generated.Mapper;
 
 namespace HUGs.DDD.Generated.Entity
 {
@@ -20,13 +18,13 @@ namespace HUGs.DDD.Generated.Entity
         }
     }
 
-    public partial class PropertiesEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<PropertiesEntityId>
+    public partial class PropertiesEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<Guid>
     {
         public string Text { get; private set; }
 
         public double? Number { get; private set; }
 
-        public PropertiesEntity(IId<PropertiesEntityId> id, string Text, double? Number)
+        public PropertiesEntity(PropertiesEntityId id, string Text, double? Number)
         {
             Id = id;
             this.Text = Text;

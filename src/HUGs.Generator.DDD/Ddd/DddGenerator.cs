@@ -48,6 +48,8 @@ namespace HUGs.Generator.DDD.Ddd
                 namespaceDeclarations.AddNamespaces(configuration.GetTargetNamespaceForKind(kind));
             }
 
+            namespaceDeclarations.AddNamespaces(configuration.TargetNamespaces.DbEntity);
+
             var namespacesDeclarationsSourceCode = namespaceDeclarations.Build();
             context.AddSource("DddModelNamespaces", namespacesDeclarationsSourceCode);
         }
@@ -67,7 +69,7 @@ namespace HUGs.Generator.DDD.Ddd
                 if (schema.Kind is not DddObjectKind.Enumeration)
                 {
                     AddDbEntitySource(context, schema, configuration);
-                    AddMapperSource(context, schema, configuration);
+                    //AddMapperSource(context, schema, configuration);
                 }
             }
         }

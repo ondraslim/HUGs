@@ -9,8 +9,6 @@ using My.Desired.Namespace.Entities;
 using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
-using My.Desired.Namespace.DbEntities;
-using HUGs.DDD.Generated.Mapper;
 
 namespace My.Desired.Namespace.Entities
 {
@@ -22,11 +20,11 @@ namespace My.Desired.Namespace.Entities
         }
     }
 
-    public partial class SimpleEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<SimpleEntityId>
+    public partial class SimpleEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<Guid>
     {
         public string Number { get; private set; }
 
-        public SimpleEntity(IId<SimpleEntityId> id, string Number)
+        public SimpleEntity(SimpleEntityId id, string Number)
         {
             Id = id;
             this.Number = Number;

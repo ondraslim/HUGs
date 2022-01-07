@@ -29,7 +29,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(4);
+            generatedFileTexts.Should().HaveCount(3);
 
             foreach (var generatedFile in generatedFileTexts.Where(f => f.Contains("class ")))
             {
@@ -48,7 +48,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(7);
+            generatedFileTexts.Should().HaveCount(5);
 
             foreach (var generatedFile in generatedFileTexts.Where(f => f.Contains("class ")))
             {

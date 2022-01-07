@@ -7,8 +7,6 @@ using My.Desired.Namespace.Entities;
 using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
-using My.Desired.Namespace.DbEntities;
-using My.Desired.Namespace.Mappers;
 
 namespace My.Desired.Namespace.Aggregates
 {
@@ -20,11 +18,11 @@ namespace My.Desired.Namespace.Aggregates
         }
     }
 
-    public partial class SimpleAggregate : HUGs.Generator.DDD.Framework.BaseModels.Aggregate<SimpleAggregateId>
+    public partial class SimpleAggregate : HUGs.Generator.DDD.Framework.BaseModels.Aggregate<Guid>
     {
         public string Number { get; private set; }
 
-        public SimpleAggregate(IId<SimpleAggregateId> id, string Number)
+        public SimpleAggregate(SimpleAggregateId id, string Number)
         {
             Id = id;
             this.Number = Number;

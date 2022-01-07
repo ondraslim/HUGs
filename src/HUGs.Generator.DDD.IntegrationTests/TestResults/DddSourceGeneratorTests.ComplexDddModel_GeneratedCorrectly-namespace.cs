@@ -13,3 +13,7 @@ namespace HUGs.DDD.Generated.ValueObject
 namespace HUGs.DDD.Generated.Enumeration
 {
 }
+
+namespace HUGs.DDD.Generated.DbEntity
+{
+}
