@@ -27,7 +27,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageOutputPath>..\..\packages\</PackageOutputPath>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
-		<PackageVersion>1.0.0-pre10</PackageVersion>
+		<PackageVersion>1.0.0-pre11</PackageVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>

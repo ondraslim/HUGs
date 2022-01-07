@@ -13,7 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="HUGs.Generator.DDD" Version="1.0.0-pre10" />
+	  <PackageReference Include="HUGs.Generator.DDD" Version="1.0.0-pre11" />
 	</ItemGroup>
 
 </Project>
