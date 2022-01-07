@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HUGs.Generator.DDD.IntegrationTests", "HUGs.Generator.DDD.IntegrationTests\HUGs.Generator.DDD.IntegrationTests.csproj", "{7744D07E-E1B2-4AC6-8704-AFBB8963F4CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HUGs.Generator.Test.Utils", "HUGs.Generator.Test.Utils\HUGs.Generator.Test.Utils.csproj", "{619C77A3-596D-4712-8AC2-C0C517665929}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HUGs.Generator.Test.Utils", "HUGs.Generator.Test.Utils\HUGs.Generator.Test.Utils.csproj", "{619C77A3-596D-4712-8AC2-C0C517665929}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

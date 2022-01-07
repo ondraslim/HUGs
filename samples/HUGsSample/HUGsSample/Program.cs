@@ -1,5 +1,5 @@
 ﻿using System;
-using My.Desired.Namespace.Enumerations;
+//using My.Desired.Namespace.Enumerations;
 
 namespace HUGsSample
 {
@@ -8,6 +8,9 @@ namespace HUGsSample
         static void Main()
         {
             //var x = OrderState.Created;
+            //HelloWorldGenerated.HelloWorld.SayHello();
+
+
         }
     }
 }

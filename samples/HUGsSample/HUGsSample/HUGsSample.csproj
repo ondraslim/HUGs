@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,15 +7,13 @@
 	  <CompilerGeneratedFilesOutputPath>..\Generated</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
 
-
 	<ItemGroup>
 		<AdditionalFiles Include="**\*.dddschema" />
 		<AdditionalFiles Include="**\*.dddconfig" />
 	</ItemGroup>
 
-
 	<ItemGroup>
-	  <PackageReference Include="HUGs.Generator.DDD" Version="1.0.0" />
+	  <PackageReference Include="HUGs.Generator.DDD" Version="1.0.0-pre10" />
 	</ItemGroup>
 
 </Project>
