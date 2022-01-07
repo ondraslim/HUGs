@@ -14,12 +14,12 @@
 	<ItemGroup>
 		<!--Source Generator generation-time dependencies-->
 		<PackageReference Include="YamlDotNet" Version="11.1.1" GeneratePathProperty="true" PrivateAssets="all" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" GeneratePathProperty="true" PrivateAssets="all" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.1" GeneratePathProperty="true" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\HUGs.Generator.Common\HUGs.Generator.Common.csproj" OutputItemType="Analyzer" />
-		<ProjectReference Include="..\HUGs.Generator.DDD.Framework\HUGs.Generator.DDD.Framework.csproj" OutputItemType="Analyzer" />
+		<ProjectReference Include="..\HUGs.Generator.Common\HUGs.Generator.Common.csproj" />
+		<ProjectReference Include="..\HUGs.Generator.DDD.Framework\HUGs.Generator.DDD.Framework.csproj" />
 	</ItemGroup>
 
 	<!--Source Generator packaging properties-->
@@ -27,7 +27,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageOutputPath>..\..\packages\</PackageOutputPath>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
-		<PackageVersion>1.0.0-pre11</PackageVersion>
+		<PackageVersion>1.0.0-pre13</PackageVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -43,7 +43,7 @@
 			<TargetPathWithTargetPlatformMoniker Include="$(PKGYamlDotNet)\lib\netstandard1.3\YamlDotNet.dll" IncludeRuntimeDependency="false" />
 			<TargetPathWithTargetPlatformMoniker Include="$(PKGNewtonsoft_Json)\lib\netstandard2.0\Newtonsoft.Json.dll" IncludeRuntimeDependency="false" />
 			<TargetPathWithTargetPlatformMoniker Include="..\HUGs.Generator.Common\bin\Debug\netstandard2.0\HUGs.Generator.Common.dll" IncludeRuntimeDependency="false" />
-			<TargetPathWithTargetPlatformMoniker Include="..\HUGs.Generator.DDD.Framework\bin\Debug\netstandard2.0\HUGs.Generator.DDD.Framework.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="..\HUGs.Generator.DDD.Framework\bin\Debug\netstandard2.0\HUGs.Generator.DDD.Framework.dll" IncludeRuntimeDependency="true" />
 		</ItemGroup>
 	</Target>
 </Project>
