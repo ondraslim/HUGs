@@ -30,7 +30,7 @@ namespace HUGs.Generator.DDD.IntegrationTests
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(14);
+            generatedFileTexts.Should().HaveCount(10);
 
             foreach (var generatedFile in generatedFileTexts)
             {
