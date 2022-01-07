@@ -3,12 +3,14 @@ using System.Linq;
 using System.Collections.Generic;
 using HUGs.Generator.DDD.Framework.BaseModels;
 using HUGs.Generator.DDD.Framework.Mapping;
-using HUGs.DDD.Generated.Entity;
-using HUGs.DDD.Generated.Aggregate;
-using HUGs.DDD.Generated.ValueObject;
-using HUGs.DDD.Generated.Enumeration;
+using My.Desired.Namespace.Entities;
+using My.Desired.Namespace.Aggregates;
+using My.Desired.Namespace.ValueObjects;
+using My.Desired.Namespace.Enumerations;
+using My.Desired.Namespace.DbEntities;
+using My.Desired.Namespace.Mappers;
 
-namespace HUGs.DDD.Generated.Enumeration
+namespace My.Desired.Namespace.Enumerations
 {
     public class OrderState : HUGs.Generator.DDD.Framework.BaseModels.Enumeration
     {

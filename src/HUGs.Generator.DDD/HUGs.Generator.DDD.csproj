@@ -8,14 +8,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<!--Source Generator required dependencies-->
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0" PrivateAssets="all" />
+		<!--Source Generator generation-time dependencies-->
 		<PackageReference Include="YamlDotNet" Version="11.1.1" GeneratePathProperty="true" PrivateAssets="all" />
-		<PackageReference Include="System.Text.Json" Version="5.0.2" GeneratePathProperty="true" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.1" GeneratePathProperty="true" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -23,16 +24,28 @@
 		<ProjectReference Include="..\HUGs.Generator.DDD.Framework\HUGs.Generator.DDD.Framework.csproj" />
 	</ItemGroup>
 
+	<!--Source Generator packaging properties-->
+	<PropertyGroup>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageOutputPath>..\..\packages\</PackageOutputPath>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<PackageVersion>1.0.0-pre13</PackageVersion>
+	</PropertyGroup>
+
 	<PropertyGroup>
 		<GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+
 	<Target Name="GetDependencyTargetPaths">
 		<ItemGroup>
 			<TargetPathWithTargetPlatformMoniker Include="$(PKGYamlDotNet)\lib\netstandard1.3\YamlDotNet.dll" IncludeRuntimeDependency="false" />
-			<TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Text_Json)\lib\netstandard2.0\System.Text.Json.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGNewtonsoft_Json)\lib\netstandard2.0\Newtonsoft.Json.dll" IncludeRuntimeDependency="false" />
 			<TargetPathWithTargetPlatformMoniker Include="..\HUGs.Generator.Common\bin\Debug\netstandard2.0\HUGs.Generator.Common.dll" IncludeRuntimeDependency="false" />
-			<TargetPathWithTargetPlatformMoniker Include="..\HUGs.Generator.DDD.Framework\bin\Debug\netstandard2.0\HUGs.Generator.DDD.Framework.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="..\HUGs.Generator.DDD.Framework\bin\Debug\netstandard2.0\HUGs.Generator.DDD.Framework.dll" IncludeRuntimeDependency="true" />
 		</ItemGroup>
 	</Target>
 </Project>

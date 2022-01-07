@@ -7,6 +7,8 @@ using My.Desired.Namespace.Entities;
 using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
+using My.Desired.Namespace.DbEntities;
+using My.Desired.Namespace.Mappers;
 
 namespace My.Desired.Namespace.Mappers
 {

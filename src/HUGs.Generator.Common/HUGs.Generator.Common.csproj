@@ -4,7 +4,9 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>9</LangVersion>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageOutputPath>..\..\packages\</PackageOutputPath>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<PackageVersion>1.0.0-pre13</PackageVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

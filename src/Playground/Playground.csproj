@@ -5,7 +5,7 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<LangVersion>9</LangVersion>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<CompilerGeneratedFilesOutputPath>..\Generated</CompilerGeneratedFilesOutputPath>
+		<!--<CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>-->
 	</PropertyGroup>
 
 	<ItemGroup>

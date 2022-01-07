@@ -1,5 +1,5 @@
 ﻿using System;
-using My.Desired.Namespace.Enumerations;
+//using My.Desired.Namespace.Enumerations;
 
 namespace HUGsSample
 {

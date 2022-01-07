@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	  <TargetFramework>netstandard2.0</TargetFramework>
 	  <LangVersion>9</LangVersion>
 	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	  <IncludeBuildOutput>false</IncludeBuildOutput>
+	  <PackageOutputPath>..\..\packages\</PackageOutputPath>
+	  <PackageVersion>1.0.0-pre13</PackageVersion>
   </PropertyGroup>
 
 	<ItemGroup>

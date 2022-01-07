@@ -7,6 +7,8 @@ using HUGs.DDD.Generated.Entity;
 using HUGs.DDD.Generated.Aggregate;
 using My.Desired.Namespace.ValueObjects;
 using HUGs.DDD.Generated.Enumeration;
+using HUGs.DDD.Generated.DbEntity;
+using HUGs.DDD.Generated.Mapper;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
