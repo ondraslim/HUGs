@@ -7,8 +7,6 @@ using HUGs.DDD.Generated.Entity;
 using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
-using HUGs.DDD.Generated.DbEntity;
-using HUGs.DDD.Generated.Mapper;
 
 namespace HUGs.DDD.Generated.Entity
 {
@@ -20,7 +18,7 @@ namespace HUGs.DDD.Generated.Entity
         }
     }
 
-    public partial class SimpleEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<SimpleEntityId>
+    public partial class SimpleEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<Guid>
     {
         public string Number { get; private set; }
 
