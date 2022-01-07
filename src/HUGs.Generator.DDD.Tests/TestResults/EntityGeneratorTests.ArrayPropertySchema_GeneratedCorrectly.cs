@@ -24,7 +24,7 @@ namespace HUGs.DDD.Generated.Entity
 
         public IReadOnlyList<OrderItem> Items => _Items;
 
-        public SimpleArrayPropertyEntity(IId<SimpleArrayPropertyEntityId> id, IEnumerable<OrderItem> Items)
+        public SimpleArrayPropertyEntity(SimpleArrayPropertyEntityId id, IEnumerable<OrderItem> Items)
         {
             Id = id;
             this._Items = Items.ToList();

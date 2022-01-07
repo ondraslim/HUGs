@@ -22,7 +22,7 @@ namespace HUGs.DDD.Generated.Entity
     {
         public string Number { get; private set; }
 
-        public SimpleEntity(IId<SimpleEntityId> id, string Number)
+        public SimpleEntity(SimpleEntityId id, string Number)
         {
             Id = id;
             this.Number = Number;

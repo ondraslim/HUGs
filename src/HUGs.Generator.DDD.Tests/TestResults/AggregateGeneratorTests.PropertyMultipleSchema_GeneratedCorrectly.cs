@@ -24,7 +24,7 @@ namespace HUGs.DDD.Generated.Aggregate
 
         public double? Number { get; private set; }
 
-        public PropertiesAggregate(IId<PropertiesAggregateId> id, string Text, double? Number)
+        public PropertiesAggregate(PropertiesAggregateId id, string Text, double? Number)
         {
             Id = id;
             this.Text = Text;

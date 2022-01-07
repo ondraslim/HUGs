@@ -34,7 +34,7 @@ namespace HUGs.DDD.Generated.Aggregate
 
         public OrderState State { get; private set; }
 
-        public Order(IId<OrderId> id, string Number, DateTime CreatedDate, IEnumerable<OrderItem> Items, Address ShippingAddress, OrderState State)
+        public Order(OrderId id, string Number, DateTime CreatedDate, IEnumerable<OrderItem> Items, Address ShippingAddress, OrderState State)
         {
             Id = id;
             this.Number = Number;

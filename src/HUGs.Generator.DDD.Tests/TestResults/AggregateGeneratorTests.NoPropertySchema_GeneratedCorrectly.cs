@@ -20,7 +20,7 @@ namespace HUGs.DDD.Generated.Aggregate
 
     public partial class SimpleAggregate : HUGs.Generator.DDD.Framework.BaseModels.Aggregate<Guid>
     {
-        public SimpleAggregate(IId<SimpleAggregateId> id)
+        public SimpleAggregate(SimpleAggregateId id)
         {
             Id = id;
             OnInitialized();

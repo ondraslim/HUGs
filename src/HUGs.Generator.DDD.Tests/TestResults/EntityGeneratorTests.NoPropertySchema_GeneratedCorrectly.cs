@@ -20,7 +20,7 @@ namespace HUGs.DDD.Generated.Entity
 
     public partial class SimpleEntity : HUGs.Generator.DDD.Framework.BaseModels.Entity<Guid>
     {
-        public SimpleEntity(IId<SimpleEntityId> id)
+        public SimpleEntity(SimpleEntityId id)
         {
             Id = id;
             OnInitialized();

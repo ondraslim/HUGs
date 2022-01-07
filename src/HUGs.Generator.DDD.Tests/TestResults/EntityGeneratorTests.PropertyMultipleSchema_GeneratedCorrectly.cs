@@ -24,7 +24,7 @@ namespace HUGs.DDD.Generated.Entity
 
         public double? Number { get; private set; }
 
-        public PropertiesEntity(IId<PropertiesEntityId> id, string Text, double? Number)
+        public PropertiesEntity(PropertiesEntityId id, string Text, double? Number)
         {
             Id = id;
             this.Text = Text;

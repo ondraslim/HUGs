@@ -22,7 +22,7 @@ namespace HUGs.DDD.Generated.Entity
     {
         public string Name { get; private set; }
 
-        public Country(IId<CountryId> id, string Name)
+        public Country(CountryId id, string Name)
         {
             Id = id;
             this.Name = Name;

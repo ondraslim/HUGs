@@ -28,7 +28,7 @@ namespace HUGs.DDD.Generated.Aggregate
 
         public double? Number { get; private set; }
 
-        public ArrayPropertyAggregate(IId<ArrayPropertyAggregateId> id, string Text, IEnumerable<OrderItem> Items, double? Number)
+        public ArrayPropertyAggregate(ArrayPropertyAggregateId id, string Text, IEnumerable<OrderItem> Items, double? Number)
         {
             Id = id;
             this.Text = Text;

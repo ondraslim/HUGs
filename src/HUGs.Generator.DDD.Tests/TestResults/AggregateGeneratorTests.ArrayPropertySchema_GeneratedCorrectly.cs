@@ -24,7 +24,7 @@ namespace HUGs.DDD.Generated.Aggregate
 
         public IReadOnlyList<OrderItem> Items => _Items;
 
-        public SimpleArrayPropertyAggregate(IId<SimpleArrayPropertyAggregateId> id, IEnumerable<OrderItem> Items)
+        public SimpleArrayPropertyAggregate(SimpleArrayPropertyAggregateId id, IEnumerable<OrderItem> Items)
         {
             Id = id;
             this._Items = Items.ToList();

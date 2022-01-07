@@ -28,7 +28,7 @@ namespace HUGs.DDD.Generated.Entity
 
         public double? Number { get; private set; }
 
-        public ArrayPropertyEntity(IId<ArrayPropertyEntityId> id, string Text, IEnumerable<OrderItem> Items, double? Number)
+        public ArrayPropertyEntity(ArrayPropertyEntityId id, string Text, IEnumerable<OrderItem> Items, double? Number)
         {
             Id = id;
             this.Text = Text;

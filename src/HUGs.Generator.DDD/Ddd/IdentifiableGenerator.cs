@@ -73,7 +73,7 @@ namespace HUGs.Generator.DDD.Ddd
             var accessModifiers = new[] { SyntaxKind.PublicKeyword };
 
             var propertyParams = DddGeneratorCommon.CreateParametersFromProperties(schema.Properties);
-            var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax($"IId<{entityIdClassIdentifier}>", "id") };
+            var ctorBaseParams = new[] { RoslynSyntaxHelper.CreateParameterSyntax(entityIdClassIdentifier, "id") };
             var ctorParams = ctorBaseParams.Concat(propertyParams).ToArray();
 
             var propertyAssignments = DddGeneratorCommon.CreateAssignmentStatementsFromProperties(schema.Properties);

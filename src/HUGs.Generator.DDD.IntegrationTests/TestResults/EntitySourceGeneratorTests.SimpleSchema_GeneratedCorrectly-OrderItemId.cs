@@ -26,7 +26,7 @@ namespace HUGs.DDD.Generated.Entity
 
         public uint Amount { get; private set; }
 
-        public OrderItem(IId<OrderItemId> id, string Name, decimal Price, uint Amount)
+        public OrderItem(OrderItemId id, string Name, decimal Price, uint Amount)
         {
             Id = id;
             this.Name = Name;

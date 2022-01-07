@@ -24,7 +24,7 @@ namespace My.Desired.Namespace.Aggregates
     {
         public string Number { get; private set; }
 
-        public SimpleAggregate(IId<SimpleAggregateId> id, string Number)
+        public SimpleAggregate(SimpleAggregateId id, string Number)
         {
             Id = id;
             this.Number = Number;
