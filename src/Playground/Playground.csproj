@@ -15,6 +15,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!--<AdditionalFiles Include="**\*.dddschema" />-->
+		<!--<AdditionalFiles Include="**\*.dddconfig" />-->
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\HUGs.Generator.DDD.Framework\HUGs.Generator.DDD.Framework.csproj" />
 		<ProjectReference Include="..\HUGs.Generator.DDD\HUGs.Generator.DDD.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
