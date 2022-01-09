@@ -1,5 +1,4 @@
 ﻿using CheckTestOutput;
-using HUGs.Generator.Test.Utils;
 using HUGs.Generator.Tests.Tools.Mocks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -35,10 +34,10 @@ namespace HUGs.Generator.DDD.IntegrationTests.Setup
             out ImmutableArray<Diagnostic> diagnostics, 
             out ImmutableArray<string> generatedFileTexts)
         {
-            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out diagnostics);
-
-            var generatedTrees = outputCompilation.SyntaxTrees.Where(x => !inputCompilation.SyntaxTrees.Any(y => y.Equals(x))).ToImmutableArray();
-            generatedFileTexts = generatedTrees.Select(x => x.GetText().ToString()).ToImmutableArray();
+            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out diagnostics);
+            
+            var result = driver.GetRunResult();
+            generatedFileTexts = result.GeneratedTrees.Select(t => t.GetText().ToString()).ToImmutableArray();
         }
 
         protected GeneratorDriver SetupGeneratorDriver(string schema, params string[] configurations)
