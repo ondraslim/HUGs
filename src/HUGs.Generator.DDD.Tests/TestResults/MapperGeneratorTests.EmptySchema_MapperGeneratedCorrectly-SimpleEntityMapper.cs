@@ -7,6 +7,7 @@ using HUGs.DDD.Generated.Entity;
 using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
+using HUGs.DDD.Generated.DbEntity;
 
 namespace HUGs.DDD.Generated.Mapper
 {
@@ -21,6 +22,7 @@ namespace HUGs.DDD.Generated.Mapper
         {
             return new SimpleEntityDbEntity
             {
+            	Id = ToDbEntityId(obj.Id)
             };
         }
 
@@ -28,6 +30,7 @@ namespace HUGs.DDD.Generated.Mapper
         {
             return new SimpleEntity
             (
+            	ToDddObjectId<SimpleEntityId>(obj.Id)
             );
         }
     }

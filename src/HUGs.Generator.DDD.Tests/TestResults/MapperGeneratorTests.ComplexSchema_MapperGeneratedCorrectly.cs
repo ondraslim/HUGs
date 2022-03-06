@@ -7,6 +7,7 @@ using HUGs.DDD.Generated.Entity;
 using HUGs.DDD.Generated.Aggregate;
 using HUGs.DDD.Generated.ValueObject;
 using HUGs.DDD.Generated.Enumeration;
+using HUGs.DDD.Generated.DbEntity;
 
 namespace HUGs.DDD.Generated.Mapper
 {
@@ -21,13 +22,14 @@ namespace HUGs.DDD.Generated.Mapper
         {
             return new SimpleAggregateDbEntity
             {
+            	Id = ToDbEntityId(obj.Id),
             	SimpleString = obj.SimpleString,
             	SimpleNumber = obj.SimpleNumber,
             	SimpleOptional = obj.SimpleOptional,
-            	SimpleCollection = MapDbEntityCollection(obj.SimpleCollection),
-            	SimpleEntity = MapChildDbEntity(obj.SimpleEntity),
-            	SimpleValueObject = MapChildDbEntity(obj.SimpleValueObject),
-            	SimpleEntityId = MapDbEntityId(obj.SimpleEntityId)
+            	SimpleCollection = ToDbEntityCollection<int, int>(obj.SimpleCollection),
+            	SimpleEntity = ToChildDbEntity<DddEntity, DddEntityDbEntity>(obj.SimpleEntity),
+            	SimpleValueObject = ToChildDbEntity<DddValueObject, DddValueObjectDbEntity>(obj.SimpleValueObject),
+            	SimpleEntityId = ToDbEntityId(obj.SimpleEntityId)
             };
         }
 
@@ -35,13 +37,14 @@ namespace HUGs.DDD.Generated.Mapper
         {
             return new SimpleAggregate
             (
+            	ToDddObjectId<SimpleAggregateId>(obj.Id),
             	obj.SimpleString,
             	obj.SimpleNumber,
             	obj.SimpleOptional,
-            	MapDddObjectCollection(obj.SimpleCollection),
-            	MapChildDddObject(obj.SimpleEntity),
-            	MapChildDddObject(obj.SimpleValueObject),
-            	MapDddObjectId(obj.SimpleEntityId)
+            	ToDddObjectCollection<int, int>(obj.SimpleCollection),
+            	ToChildDddObject<DddEntityDbEntity, DddEntity>(obj.SimpleEntity),
+            	ToChildDddObject<DddValueObjectDbEntity, DddValueObject>(obj.SimpleValueObject),
+            	ToDddObjectId<DddEntityId>(obj.SimpleEntityId)
             );
         }
     }

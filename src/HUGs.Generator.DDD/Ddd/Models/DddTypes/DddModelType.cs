@@ -12,5 +12,8 @@
         }
 
         public override string ToString() => $"{Name}{(IsNullable ? "?" : "")}";
+        public override string ToDbType() => Kind is DddObjectKind.Enumeration
+            ? "string"
+            : $"{Name}DbEntity";
     }
 }

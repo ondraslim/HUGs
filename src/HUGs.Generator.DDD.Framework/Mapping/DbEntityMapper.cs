@@ -36,7 +36,7 @@ namespace HUGs.Generator.DDD.Framework.Mapping
             return collection.Select(mapper.ToDbEntity).ToList();
         }
 
-        protected ICollection<TChildDddObject> ToDddObjectCollection<TChildDddObject, TChildDbEntity>(IEnumerable<TChildDbEntity> collection)
+        protected ICollection<TChildDddObject> ToDddObjectCollection<TChildDbEntity, TChildDddObject>(IEnumerable<TChildDbEntity> collection)
         {
             var mapper = factory.GetMapper<TChildDddObject, TChildDbEntity>();
             return collection.Select(mapper.ToDddObject).ToList();
@@ -48,7 +48,7 @@ namespace HUGs.Generator.DDD.Framework.Mapping
             return mapper.ToDbEntity(child);
         }
 
-        protected TChildDddObject ToChildDddObject<TChildDddObject, TChildDbEntity>(TChildDbEntity child)
+        protected TChildDddObject ToChildDddObject<TChildDbEntity, TChildDddObject>(TChildDbEntity child)
         {
             var mapper = factory.GetMapper<TChildDddObject, TChildDbEntity>();
             return mapper.ToDddObject(child);

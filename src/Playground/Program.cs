@@ -1,6 +1,6 @@
 ﻿//using HUGs.DDD.Generated.Enumeration;
 using System;
-using HUGs.DDD.Generated.Entity;
+//using HUGs.DDD.Generated.Entity;
 
 namespace Playground
 {
@@ -8,7 +8,6 @@ namespace Playground
     {
         private static void Main()
         {
-            new Country(new CountryId(Guid.Empty), "asd");
         }
     }
 }

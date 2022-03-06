@@ -1,4 +1,5 @@
-﻿using HUGs.Generator.Common.Builders;
+﻿using System.Collections.Generic;
+using HUGs.Generator.Common.Builders;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
@@ -27,6 +28,7 @@ namespace HUGs.Generator.DDD.Ddd
 
             var syntaxBuilder = RoslynSyntaxBuilder.Create();
             DddGeneratorCommon.AddUsings(syntaxBuilder, configuration);
+            syntaxBuilder.AddUsings(configuration.TargetNamespaces.DbEntity);
             return syntaxBuilder
                 .SetNamespace(configuration.TargetNamespaces.Mapper)
                 .AddClass(mapperClass)
@@ -66,26 +68,28 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static void AddToDbEntityMethod(ClassBuilder classBuilder, DddObjectSchema schema)
         {
-            var properties = schema.Properties.Where(p => !p.Computed).ToList();
+            var properties = GetMappableSchemaProperties(schema);
 
             var body = SyntaxFactory.ReturnStatement(
                 SyntaxFactory.ObjectCreationExpression(
-                    SyntaxFactory.ParseTypeName(schema.DbEntityClassName)
-                )
-                .WithInitializer(
-                    SyntaxFactory.InitializerExpression(
-                        SyntaxKind.ObjectInitializerExpression,
-                        SyntaxFactory.SeparatedList<ExpressionSyntax>(
-                            properties.Select(p =>
-                                SyntaxFactory.AssignmentExpression(
-                                    SyntaxKind.SimpleAssignmentExpression,
-                                    SyntaxFactory.IdentifierName(p.Name),
-                                    GenerateDbEntityMappedValue(p)
+                        SyntaxFactory.ParseTypeName(schema.DbEntityClassName)
+                    )
+                    .WithInitializer(
+                        SyntaxFactory.InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SyntaxFactory.SeparatedList<ExpressionSyntax>(
+                                properties.Select(p =>
+                                    SyntaxFactory.AssignmentExpression(
+                                        SyntaxKind.SimpleAssignmentExpression,
+                                        p.Name == $"{schema.DddObjectClassName}Id"
+                                            ? SyntaxFactory.IdentifierName("Id")
+                                            : SyntaxFactory.IdentifierName(p.Name),
+                                        GenerateDbEntityMappedValue(p)
+                                    )
                                 )
                             )
                         )
                     )
-                )
             );
 
             var method = MethodBuilder.Create()
@@ -101,23 +105,24 @@ namespace HUGs.Generator.DDD.Ddd
 
         private static void AddToDddObjectMethod(ClassBuilder classBuilder, DddObjectSchema schema)
         {
-            var properties = schema.Properties.Where(p => !p.Computed).ToList();
+            var properties = GetMappableSchemaProperties(schema);
+
             var body = SyntaxFactory.ReturnStatement(
                 SyntaxFactory.ObjectCreationExpression(
-                    SyntaxFactory.ParseTypeName(schema.DddObjectClassName)
-                )
-                .WithAdditionalAnnotations(RoslynSyntaxFormatter.ObjectCreationWithNewLines)
-                .WithArgumentList(
-                    SyntaxFactory.ArgumentList(
-                        SyntaxFactory.SeparatedList(
-                            properties.Select(p =>
-                                SyntaxFactory.Argument(
-                                    GenerateDddObjectMappedValue(p)
+                        SyntaxFactory.ParseTypeName(schema.DddObjectClassName)
+                    )
+                    .WithAdditionalAnnotations(RoslynSyntaxFormatter.ObjectCreationWithNewLines)
+                    .WithArgumentList(
+                        SyntaxFactory.ArgumentList(
+                            SyntaxFactory.SeparatedList(
+                                properties.Select(p =>
+                                    SyntaxFactory.Argument(
+                                        GenerateDddObjectMappedValue(p)
+                                    )
                                 )
                             )
                         )
                     )
-                )
             );
 
             var method = MethodBuilder.Create()
@@ -131,6 +136,22 @@ namespace HUGs.Generator.DDD.Ddd
             classBuilder.AddMethod(method);
         }
 
+        private static IEnumerable<DddObjectProperty> GetMappableSchemaProperties(DddObjectSchema schema)
+        {
+            var properties = new List<DddObjectProperty>();
+            if (schema.Kind is DddObjectKind.Entity or DddObjectKind.Aggregate)
+            {
+                properties.Add(new DddObjectProperty
+                {
+                    Name = "Id",
+                    ResolvedType = new DddIdType(schema.DddObjectClassName)
+                });
+            }
+
+            properties.AddRange(schema.Properties.Where(p => !p.Computed));
+            return properties;
+        }
+
         private static ExpressionSyntax GenerateDbEntityMappedValue(DddObjectProperty property)
         {
             var member = SyntaxFactory.MemberAccessExpression(
@@ -139,25 +160,27 @@ namespace HUGs.Generator.DDD.Ddd
                 SyntaxFactory.IdentifierName(property.Name)
             );
 
-            if (property.ResolvedType is DddCollectionType)
+            if (property.ResolvedType is DddCollectionType collectionType)
             {
-                return WrapMethodCallExpression("MapDbEntityCollection", member);
+                return WrapMethodCallExpression(
+                    $"ToDbEntityCollection<{collectionType.ElementType}, {collectionType.ToDbType()}>", member);
             }
 
             if (property.ResolvedType is DddModelType modelType)
             {
                 if (modelType.Kind is DddObjectKind.Enumeration)
                 {
-                    return WrapMethodCallExpression("MapDbEntityEnumeration", member);
+                    return WrapMethodCallExpression("ToDbEntityEnumeration", member);
                 }
 
-                return WrapMethodCallExpression("MapChildDbEntity", member);
+                return WrapMethodCallExpression($"ToChildDbEntity<{modelType}, {modelType.ToDbType()}>", member);
             }
 
             if (property.ResolvedType is DddIdType)
             {
-                return WrapMethodCallExpression("MapDbEntityId", member);
+                return WrapMethodCallExpression("ToDbEntityId", member);
             }
+
             return member;
         }
 
@@ -169,25 +192,27 @@ namespace HUGs.Generator.DDD.Ddd
                 SyntaxFactory.IdentifierName(property.Name)
             );
 
-            if (property.ResolvedType is DddCollectionType)
+            if (property.ResolvedType is DddCollectionType collectionType)
             {
-                return WrapMethodCallExpression("MapDddObjectCollection", member);
+                return WrapMethodCallExpression(
+                    $"ToDddObjectCollection<{collectionType.ToDbType()}, {collectionType.ElementType}>", member);
             }
 
             if (property.ResolvedType is DddModelType modelType)
             {
                 if (modelType.Kind is DddObjectKind.Enumeration)
                 {
-                    return WrapMethodCallExpression("MapDddObjectEnumeration", member);
+                    return WrapMethodCallExpression($"ToDddObjectEnumeration<{modelType}>", member);
                 }
 
-                return WrapMethodCallExpression("MapChildDddObject", member);
+                return WrapMethodCallExpression($"ToChildDddObject<{modelType.ToDbType()}, {modelType}>", member);
             }
 
-            if (property.ResolvedType is DddIdType)
+            if (property.ResolvedType is DddIdType idType)
             {
-                return WrapMethodCallExpression("MapDddObjectId", member);
+                return WrapMethodCallExpression($"ToDddObjectId<{idType}>", member);
             }
+
             return member;
         }
 
@@ -196,7 +221,8 @@ namespace HUGs.Generator.DDD.Ddd
         {
             return SyntaxFactory.InvocationExpression(
                 SyntaxFactory.IdentifierName(methodName),
-                SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] {
+                SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[]
+                {
                     SyntaxFactory.Argument(argument)
                 }))
             );
