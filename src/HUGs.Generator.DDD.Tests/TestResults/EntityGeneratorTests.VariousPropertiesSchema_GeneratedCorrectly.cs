@@ -12,7 +12,7 @@ namespace HUGs.DDD.Generated.Entity
 {
     public class ArrayPropertyEntityId : EntityId<ArrayPropertyEntity>
     {
-        public ArrayPropertyEntityId(Guid value)
+        public ArrayPropertyEntityId(Guid value) 
         	: base(value)
         {
         }

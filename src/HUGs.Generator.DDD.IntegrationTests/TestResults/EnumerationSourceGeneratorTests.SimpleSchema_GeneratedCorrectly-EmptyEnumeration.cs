@@ -14,7 +14,7 @@ namespace HUGs.DDD.Generated.Enumeration
     {
         public static readonly EmptyEnumeration SampleEmptyEnumeration = new(nameof(SampleEmptyEnumeration));
 
-        private EmptyEnumeration(string internalName)
+        private EmptyEnumeration(string internalName) 
         	: base(internalName)
         {
         }

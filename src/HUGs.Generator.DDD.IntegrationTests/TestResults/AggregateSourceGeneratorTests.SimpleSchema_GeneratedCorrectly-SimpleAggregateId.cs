@@ -12,7 +12,7 @@ namespace HUGs.DDD.Generated.Aggregate
 {
     public class SimpleAggregateId : EntityId<SimpleAggregate>
     {
-        public SimpleAggregateId(Guid value)
+        public SimpleAggregateId(Guid value) 
         	: base(value)
         {
         }

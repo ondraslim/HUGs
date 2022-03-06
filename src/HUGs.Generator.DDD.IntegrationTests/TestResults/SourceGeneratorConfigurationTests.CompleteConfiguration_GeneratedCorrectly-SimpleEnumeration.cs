@@ -18,7 +18,7 @@ namespace My.Desired.Namespace.Enumerations
 
         public string Name { get; }
 
-        private SimpleEnumeration(string internalName, string Name)
+        private SimpleEnumeration(string internalName, string Name) 
         	: base(internalName)
         {
             this.Name = Name;
