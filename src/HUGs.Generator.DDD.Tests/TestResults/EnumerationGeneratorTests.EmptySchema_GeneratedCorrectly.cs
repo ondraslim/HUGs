@@ -12,7 +12,7 @@ namespace HUGs.DDD.Generated.Enumeration
 {
     public class SimpleClass1 : HUGs.Generator.DDD.Framework.BaseModels.Enumeration
     {
-        private SimpleClass1(string internalName)
+        private SimpleClass1(string internalName) 
         	: base(internalName)
         {
         }

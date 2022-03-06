@@ -12,7 +12,7 @@ namespace HUGs.DDD.Generated.Mapper
 {
     public class SimpleAggregateMapper : DbEntityMapper<SimpleAggregate, SimpleAggregateDbEntity>
     {
-        public SimpleAggregateMapper(IDbEntityMapperFactory factory)
+        public SimpleAggregateMapper(IDbEntityMapperFactory factory) 
         	: base(factory)
         {
         }

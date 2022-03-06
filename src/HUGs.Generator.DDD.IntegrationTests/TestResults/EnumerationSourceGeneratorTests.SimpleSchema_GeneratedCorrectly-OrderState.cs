@@ -18,7 +18,7 @@ namespace HUGs.DDD.Generated.Enumeration
 
         public string Name { get; }
 
-        private OrderState(string internalName, string Name)
+        private OrderState(string internalName, string Name) 
         	: base(internalName)
         {
             this.Name = Name;

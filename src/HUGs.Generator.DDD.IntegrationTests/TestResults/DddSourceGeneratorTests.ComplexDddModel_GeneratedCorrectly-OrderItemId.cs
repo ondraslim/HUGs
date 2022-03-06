@@ -12,7 +12,7 @@ namespace HUGs.DDD.Generated.Entity
 {
     public class OrderItemId : EntityId<OrderItem>
     {
-        public OrderItemId(Guid value)
+        public OrderItemId(Guid value) 
         	: base(value)
         {
         }

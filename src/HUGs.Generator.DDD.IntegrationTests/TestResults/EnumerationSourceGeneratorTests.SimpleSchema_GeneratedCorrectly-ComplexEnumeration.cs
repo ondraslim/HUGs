@@ -22,7 +22,7 @@ namespace HUGs.DDD.Generated.Enumeration
 
         public int Amount { get; }
 
-        private ComplexEnumeration(string internalName, string Name, int Amount)
+        private ComplexEnumeration(string internalName, string Name, int Amount) 
         	: base(internalName)
         {
             this.Name = Name;

@@ -20,7 +20,7 @@ namespace HUGs.DDD.Generated.Enumeration
 
         public int Count { get; }
 
-        private OrderState2(string internalName, string Name, int Count)
+        private OrderState2(string internalName, string Name, int Count) 
         	: base(internalName)
         {
             this.Name = Name;
