@@ -1,6 +1,9 @@
-﻿//using HUGs.DDD.Generated.Enumeration;
+﻿
 using System;
-//using HUGs.DDD.Generated.Entity;
+using System.ComponentModel.Design;
+using My.Desired.Namespace.Entities;
+using HUGs.Generator.DDD.Framework.Mapping;
+using My.Desired.Namespace.Mappers;
 
 namespace Playground
 {
@@ -8,6 +11,14 @@ namespace Playground
     {
         private static void Main()
         {
+            var factory = new DbEntityMapperFactory(new ServiceContainer());
+
+            var orderItem = new OrderItem(new OrderItemId(Guid.NewGuid()), "my item", 100, 1);
+
+            var mapper = new OrderItemMapper(factory);
+
+            var entity = mapper.ToDbEntity(orderItem);
+            var dddObject = mapper.ToDddObject(entity);
         }
     }
 }

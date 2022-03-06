@@ -6,7 +6,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageOutputPath>..\..\packages\</PackageOutputPath>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
-		<PackageVersion>1.0.0-pre23</PackageVersion>
+		<PackageVersion>1.0.0-pre24</PackageVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

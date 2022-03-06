@@ -7,7 +7,7 @@ namespace HUGs.Generator.DDD.Framework.Mapping
         IDbEntityMapper<TDddObject, TDbEntity> GetMapper<TDddObject, TDbEntity>();
     }
 
-    public class DbEntityMapperFactory
+    public class DbEntityMapperFactory : IDbEntityMapperFactory
     {
         private readonly IServiceProvider serviceProvider;
 
