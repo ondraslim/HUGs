@@ -1,4 +1,8 @@
 class TestClass6
 {
-    public string TestProperty { get; set; }
+    public string TestProperty
+    {
+        get;
+        set;
+    }
 }

@@ -1,19 +1,19 @@
-namespace HUGs.DDD.Generated.Entity
+namespace My.Desired.Namespace.Entities
 {
 }
 
-namespace HUGs.DDD.Generated.Aggregate
+namespace My.Desired.Namespace.Aggregates
 {
 }
 
-namespace HUGs.DDD.Generated.ValueObject
+namespace My.Desired.Namespace.ValueObjects
 {
 }
 
-namespace HUGs.DDD.Generated.Enumeration
+namespace My.Desired.Namespace.Enumerations
 {
 }
 
-namespace HUGs.DDD.Generated.DbEntity
+namespace My.Desired.Namespace.DbEntities
 {
 }

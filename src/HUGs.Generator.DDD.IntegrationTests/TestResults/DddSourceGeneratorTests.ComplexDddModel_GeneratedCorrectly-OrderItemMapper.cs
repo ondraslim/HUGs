@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using HUGs.Generator.DDD.Framework.BaseModels;
@@ -8,13 +8,12 @@ using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
 using My.Desired.Namespace.DbEntities;
-using My.Desired.Namespace.Mappers;
 
 namespace My.Desired.Namespace.Mappers
 {
     public class OrderItemMapper : DbEntityMapper<OrderItem, OrderItemDbEntity>
     {
-        public OrderItemMapper(IDbEntityMapperFactory factory)
+        public OrderItemMapper(IDbEntityMapperFactory factory) 
         	: base(factory)
         {
         }
@@ -23,6 +22,7 @@ namespace My.Desired.Namespace.Mappers
         {
             return new OrderItemDbEntity
             {
+            	Id = ToDbEntityId(obj.Id),
             	Name = obj.Name,
             	Price = obj.Price,
             	Amount = obj.Amount
@@ -33,7 +33,7 @@ namespace My.Desired.Namespace.Mappers
         {
             return new OrderItem
             (
-                ToDddObjectId<IId<OrderItemId>>(obj.Id),
+            	ToDddObjectId<OrderItemId>(obj.Id),
             	obj.Name,
             	obj.Price,
             	obj.Amount

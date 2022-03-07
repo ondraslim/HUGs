@@ -1,4 +1,5 @@
-﻿using HUGs.Generator.Common.Builders;
+﻿using System;
+using HUGs.Generator.Common.Builders;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
@@ -23,7 +24,11 @@ namespace HUGs.Generator.DDD.Ddd
             var dbEntityClass = PrepareDbEntityClassDeclaration(schema);
 
             var syntaxBuilder = RoslynSyntaxBuilder.Create();
-            DddGeneratorCommon.AddUsings(syntaxBuilder, generatorConfiguration);
+            syntaxBuilder
+                .AddUsings(
+                    "System", 
+                    "System.Linq", 
+                    "System.Collections.Generic");
 
             return syntaxBuilder
                 .SetNamespace(generatorConfiguration.TargetNamespaces.DbEntity)
@@ -64,14 +69,21 @@ namespace HUGs.Generator.DDD.Ddd
         
         private static void AddDddTypeProperties(DddObjectSchema schema, ClassBuilder classBuilder)
         { 
-            var dddTypeProperties = schema.Properties.Where(p => p.ResolvedType is not DddPrimitiveType).ToList();
-            
-            // enum properties are added as strings to the generated DbEntity
-            DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, dddTypeProperties.Where(p => p.ResolvedType is not DddModelType { Kind: DddObjectKind.Enumeration }));
-            
-            foreach (var property in dddTypeProperties.Where(p => p.ResolvedType is DddModelType { Kind: DddObjectKind.Enumeration }))
+            var dddTypeProperties = schema.Properties.Where(p => !p.Computed && p.ResolvedType is not DddPrimitiveType);
+
+            foreach (var property in dddTypeProperties)
             {
-                classBuilder.AddFullProperty("string", property.Name, SyntaxKind.PublicKeyword);
+                string type;
+                if (property.ResolvedType is DddCollectionType collectionType)
+                {
+                    type = collectionType.ToDbType("ICollection");
+                }
+                else
+                {
+                    type = property.ResolvedType.ToDbType();
+                }
+
+                classBuilder.AddFullProperty(type, property.Name, SyntaxKind.PublicKeyword);
             }
         }
     }

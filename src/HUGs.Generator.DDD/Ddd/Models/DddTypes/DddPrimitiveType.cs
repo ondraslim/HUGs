@@ -13,6 +13,8 @@ namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
 
         public override string ToString() => $"{Name}{(IsNullable ? "?" : "")}";
 
+        public override string ToDbType() => ToString();
+
         public static readonly IReadOnlyList<string> PrimitiveTypes = new List<string>
         {
             "decimal",
@@ -35,5 +37,6 @@ namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
             "TimeSpan",
             "Guid"
         };
+
     }
 }

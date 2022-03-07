@@ -10,5 +10,6 @@
         }
 
         public override string ToString() => $"{Name}Id{(IsNullable ? "?" : "")}";
+        public override string ToDbType() => "Guid";
     }
 }

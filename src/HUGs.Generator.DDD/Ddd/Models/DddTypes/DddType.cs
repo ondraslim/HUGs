@@ -7,6 +7,9 @@ namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
     {
         public bool IsNullable { get; protected set; }
 
+        public abstract string ToDbType();
+        public virtual DddType GetRootType() => this;
+
         public static DddType Parse(string type, DddModel model)
         {
             var isNullable = type.EndsWith("?");

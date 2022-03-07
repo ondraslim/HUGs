@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using HUGs.Generator.DDD.Framework.BaseModels;
@@ -8,30 +8,29 @@ using My.Desired.Namespace.Aggregates;
 using My.Desired.Namespace.ValueObjects;
 using My.Desired.Namespace.Enumerations;
 using My.Desired.Namespace.DbEntities;
-using My.Desired.Namespace.Mappers;
 
 namespace My.Desired.Namespace.Mappers
 {
-    public class CountryMapper : DbEntityMapper<Country, CountryDbEntity>
+    public class Simple1Mapper : DbEntityMapper<Simple1, Simple1DbEntity>
     {
-        public CountryMapper(IDbEntityMapperFactory factory)
+        public Simple1Mapper(IDbEntityMapperFactory factory) 
         	: base(factory)
         {
         }
 
-        public override CountryDbEntity ToDbEntity(Country obj)
+        public override Simple1DbEntity ToDbEntity(Simple1 obj)
         {
-            return new CountryDbEntity
+            return new Simple1DbEntity
             {
-            	Name = obj.Name
+            	Text = obj.Text
             };
         }
 
-        public override Country ToDddObject(CountryDbEntity obj)
+        public override Simple1 ToDddObject(Simple1DbEntity obj)
         {
-            return new Country
+            return new Simple1
             (
-            	obj.Name
+            	obj.Text
             );
         }
     }

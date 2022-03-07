@@ -24,13 +24,14 @@ namespace HUGs.Generator.DDD.IntegrationTests
             var countrySchema = File.ReadAllText("../../../TestData/Schemas/Entities/CountryEntity.dddschema");
             var orderStateSchema = File.ReadAllText("../../../TestData/Schemas/Enumerations/OrderStateEnumeration.dddschema");
             var valueObjectSchema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/AddressValueObject.dddschema");
+            var configuration = File.ReadAllText("../../../TestData/Configuration/CompleteNamespaceConfig.dddconfig");
 
-            var driver = SetupGeneratorDriver(new[] { orderSchema, orderItemSchema, countrySchema, orderStateSchema, valueObjectSchema });
+            var driver = SetupGeneratorDriver(new[] { orderSchema, orderItemSchema, countrySchema, orderStateSchema, valueObjectSchema }, configuration);
 
             RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
 
             diagnostics.Should().BeEmpty();
-            generatedFileTexts.Should().HaveCount(10);
+            generatedFileTexts.Should().HaveCount(14);
 
             foreach (var generatedFile in generatedFileTexts)
             {
