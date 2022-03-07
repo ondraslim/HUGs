@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -14,9 +14,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="HUGs.Generator.Common" Version="1.0.0-pre24" />
-		<PackageReference Include="HUGs.Generator.DDD" Version="1.0.0-pre24" />
-		<PackageReference Include="HUGs.Generator.DDD.Framework" Version="1.0.0-pre24" />
+	  <None Remove="DddModels\Entities\City.dddschema" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="HUGs.Generator.Common" Version="1.0.0-pre25" />
+		<PackageReference Include="HUGs.Generator.DDD" Version="1.0.0-pre25" />
+		<PackageReference Include="HUGs.Generator.DDD.Framework" Version="1.0.0-pre25" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="DddModels\Aggregates\" />
 	</ItemGroup>
 
 </Project>
