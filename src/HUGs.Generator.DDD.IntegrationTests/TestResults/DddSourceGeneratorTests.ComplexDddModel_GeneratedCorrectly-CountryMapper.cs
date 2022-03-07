@@ -3,13 +3,13 @@ using System.Linq;
 using System.Collections.Generic;
 using HUGs.Generator.DDD.Framework.BaseModels;
 using HUGs.Generator.DDD.Framework.Mapping;
-using HUGs.DDD.Generated.Entity;
-using HUGs.DDD.Generated.Aggregate;
-using HUGs.DDD.Generated.ValueObject;
-using HUGs.DDD.Generated.Enumeration;
-using HUGs.DDD.Generated.DbEntity;
+using My.Desired.Namespace.Entities;
+using My.Desired.Namespace.Aggregates;
+using My.Desired.Namespace.ValueObjects;
+using My.Desired.Namespace.Enumerations;
+using My.Desired.Namespace.DbEntities;
 
-namespace HUGs.DDD.Generated.Mapper
+namespace My.Desired.Namespace.Mappers
 {
     public class CountryMapper : DbEntityMapper<Country, CountryDbEntity>
     {

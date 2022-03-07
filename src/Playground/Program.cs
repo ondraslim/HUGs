@@ -4,6 +4,7 @@ using System.ComponentModel.Design;
 using My.Desired.Namespace.Entities;
 using HUGs.Generator.DDD.Framework.Mapping;
 using My.Desired.Namespace.Mappers;
+using My.Desired.Namespace.ValueObjects;
 
 namespace Playground
 {
