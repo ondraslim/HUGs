@@ -20,7 +20,10 @@ namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
         public string ToString(string arrayType) => $"{arrayType}<{ElementType}>{(IsNullable ? "?" : "")}";
 
         public override string ToDbType() => ElementType.ToDbType();
-        public string ToDbType(string arrayType) => $"{arrayType}<{ElementType.ToDbType()}>";
+        public string ToDbType(string arrayType)
+        {
+            return $"{arrayType}<{(ElementType is DddCollectionType ct ? ct.ToDbType(arrayType) : ElementType.ToDbType())}>";
+        }
 
         public override DddType GetRootType() => ElementType.GetRootType();
     }

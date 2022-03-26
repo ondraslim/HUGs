@@ -1,5 +1,4 @@
-﻿using System;
-using HUGs.Generator.Common.Builders;
+﻿using HUGs.Generator.Common.Builders;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
@@ -58,7 +57,7 @@ namespace HUGs.Generator.DDD.Ddd
             }
 
             AddPrimitiveTypeProperties(schema, classBuilder);
-            AddDddTypeProperties(schema, classBuilder);
+            AddComplexTypeProperties(schema, classBuilder);
         }
 
         private static void AddPrimitiveTypeProperties(DddObjectSchema schema, ClassBuilder classBuilder)
@@ -67,7 +66,7 @@ namespace HUGs.Generator.DDD.Ddd
             DddGeneratorCommon.AddDbEntityClassProperties(classBuilder, primitiveProps);
         }
         
-        private static void AddDddTypeProperties(DddObjectSchema schema, ClassBuilder classBuilder)
+        private static void AddComplexTypeProperties(DddObjectSchema schema, ClassBuilder classBuilder)
         { 
             var dddTypeProperties = schema.Properties.Where(p => !p.Computed && p.ResolvedType is not DddPrimitiveType);
 
