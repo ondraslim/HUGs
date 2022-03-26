@@ -1,0 +1,7 @@
+﻿Kind: Aggregate
+Name: SimpleAggregate
+Properties:
+  - Name: Number
+    Type: string
+  - Name: NestedCollection
+    Type: int[][]
