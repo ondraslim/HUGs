@@ -120,7 +120,7 @@ namespace HUGs.Generator.DDD.Ddd
             foreach (var value in schema.Values)
             {
                 var objectCreationSyntax = PrepareEnumFieldObjectCreationSyntax(schema, value);
-                classBuilder.AddFieldWithInitialization(
+                classBuilder.AddInitializedField(
                     schema.DddObjectClassName, value.Name, objectCreationSyntax,
                     SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword);
             }

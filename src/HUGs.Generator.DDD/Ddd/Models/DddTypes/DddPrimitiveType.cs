@@ -2,6 +2,9 @@
 
 namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
 {
+    /// <summary>
+    /// Processed primitive type representation.
+    /// </summary>
     public class DddPrimitiveType : DddType
     {
         public string Name { get; }
@@ -15,6 +18,9 @@ namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
 
         public override string ToDbType() => ToString();
 
+        /// <summary>
+        /// List of known primitive types.
+        /// </summary>
         public static readonly IReadOnlyList<string> PrimitiveTypes = new List<string>
         {
             "decimal",

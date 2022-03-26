@@ -2,8 +2,14 @@
 
 namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
 {
+    /// <summary>
+    /// Processed collection type representation.
+    /// </summary>
     public class DddCollectionType : DddType
     {
+        /// <summary>
+        /// collection element type
+        /// </summary>
         public DddType ElementType { get; }
 
         public DddCollectionType(DddType elementType)
@@ -25,6 +31,9 @@ namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
             return $"{arrayType}<{(ElementType is DddCollectionType ct ? ct.ToDbType(arrayType) : ElementType.ToDbType())}>";
         }
 
+        /// <summary>
+        /// Gets the deepest type of the collection type.
+        /// </summary>
         public override DddType GetRootType() => ElementType.GetRootType();
     }
 }

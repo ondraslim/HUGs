@@ -3,11 +3,20 @@ using System.Linq;
 
 namespace HUGs.Generator.DDD.Ddd.Models
 {
+    /// <summary>
+    /// Represents complete domain knowledge and structure, holds all the schema definitions.
+    /// </summary>
     public class DddModel
     {
         private List<string> dddModelTypes;
 
         public IList<DddObjectSchema> Schemas { get; } = new List<DddObjectSchema>();
+
+        public void AddObjectSchema(DddObjectSchema objectSchema)
+        {
+            Schemas.Add(objectSchema);
+            dddModelTypes = null;
+        }
 
         public List<string> GetDddModelTypes()
         {
@@ -21,12 +30,6 @@ namespace HUGs.Generator.DDD.Ddd.Models
             }
 
             return dddModelTypes;
-        }
-
-        public void AddObjectSchema(DddObjectSchema objectSchema)
-        {
-            Schemas.Add(objectSchema);
-            dddModelTypes = null;
         }
     }
 }

@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace HUGs.Generator.Common.Exceptions
 {
+    /// <summary>
+    /// Failed to parse an additional file.
+    /// </summary>
     public class AdditionalFileParseException : GeneratorLoadException
     {
         public string FilePath { get; }

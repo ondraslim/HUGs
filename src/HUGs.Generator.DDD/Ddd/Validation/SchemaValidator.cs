@@ -16,35 +16,25 @@ namespace HUGs.Generator.DDD.Ddd.Validation
     {
         private static readonly ICollection<Diagnostic> ValidationErrors = new List<Diagnostic>();
 
+        /// <summary>
+        /// Validates schema. Assures syntax-valid schema name and property definitions. For Enumerations, also checks enum values.
+        /// </summary>
         public static void ValidateSchema(DddObjectSchema schema, DddModel dddModel)
         {
             ValidationErrors.Clear();
 
-            Action<DddObjectSchema, DddModel> validation = schema.Kind switch
-            {
-                DddObjectKind.Enumeration => ValidateEnumeration,
-                DddObjectKind.ValueObject or DddObjectKind.Entity or DddObjectKind.Aggregate => ValidateSchemaCommon,
-                _ => throw new ArgumentOutOfRangeException()
-            };
+            ValidateSchemaName(schema);
+            ValidateProperties(schema, dddModel);
 
-            validation(schema, dddModel);
+            if (schema.Kind is DddObjectKind.Enumeration)
+            {
+                ValidateValues(schema);
+            }
 
             if (ValidationErrors.Any())
             {
                 throw new DddSchemaValidationException(ValidationErrors);
             }
-        }
-
-        private static void ValidateEnumeration(DddObjectSchema schema, DddModel dddModel)
-        {
-            ValidateSchemaCommon(schema, dddModel);
-            ValidateValues(schema);
-        }
-
-        private static void ValidateSchemaCommon(DddObjectSchema schema, DddModel dddModel)
-        {
-            ValidateSchemaName(schema);
-            ValidateProperties(schema, dddModel);
         }
 
         private static void ValidateSchemaName(DddObjectSchema schema)

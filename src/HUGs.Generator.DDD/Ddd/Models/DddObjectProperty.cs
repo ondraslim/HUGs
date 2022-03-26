@@ -3,6 +3,9 @@ using YamlDotNet.Serialization;
 
 namespace HUGs.Generator.DDD.Ddd.Models
 {
+    /// <summary>
+    /// Represents a DDD object property definition.
+    /// </summary>
     public class DddObjectProperty
     {
         public string Name { get; set; }

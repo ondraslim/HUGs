@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace HUGs.Generator.Common.Exceptions
 {
+    /// <summary>
+    /// Exception that occurred during the generator load phase.
+    /// </summary>
     public abstract class GeneratorLoadException : Exception
     {
         protected GeneratorLoadException()

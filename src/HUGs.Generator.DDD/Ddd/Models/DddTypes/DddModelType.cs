@@ -1,5 +1,8 @@
 ﻿namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
 {
+    /// <summary>
+    /// Processed DDD model type representation.
+    /// </summary>
     public class DddModelType : DddType
     {
         public string Name { get; }

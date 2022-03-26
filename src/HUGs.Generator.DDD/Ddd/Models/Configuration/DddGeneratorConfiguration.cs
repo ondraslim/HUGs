@@ -2,6 +2,9 @@
 
 namespace HUGs.Generator.DDD.Ddd.Models.Configuration
 {
+    /// <summary>
+    /// Represents configuration of the DDD generator.
+    /// </summary>
     public class DddGeneratorConfiguration
     {
         public DddObjectTargetNamespaces TargetNamespaces { get; set; } = new();

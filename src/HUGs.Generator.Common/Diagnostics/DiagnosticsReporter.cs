@@ -4,6 +4,9 @@ using System;
 
 namespace HUGs.Generator.Common.Diagnostics
 {
+    /// <summary>
+    /// Reports diagnostics by adding them to the compilation of generator execution context.
+    /// </summary>
     public class DiagnosticsReporter
     {
         private readonly GeneratorExecutionContext generatorExecutionContext;

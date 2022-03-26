@@ -1,5 +1,4 @@
-﻿using System;
-using HUGs.Generator.Common.Diagnostics;
+﻿using HUGs.Generator.Common.Diagnostics;
 using HUGs.Generator.Common.Exceptions;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using Microsoft.CodeAnalysis;
@@ -14,6 +13,9 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
         {
         }
 
+        /// <summary>
+        /// Reports a diagnostic based on an exception.
+        /// </summary>
         public void ReportDiagnostic(GeneratorLoadException e)
         {
             base.ReportDiagnostic(e);

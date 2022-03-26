@@ -1,5 +1,8 @@
 ﻿namespace HUGs.Generator.DDD.Ddd.Models.Configuration
 {
+    /// <summary>
+    /// Represents configuration of namespaces for individual generated class types.
+    /// </summary>
     public class DddObjectTargetNamespaces
     {
         public const string DefaultDbEntityNamespace = "HUGs.DDD.Generated.DbEntity";

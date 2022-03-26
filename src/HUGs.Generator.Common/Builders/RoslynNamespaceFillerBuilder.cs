@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace HUGs.Generator.Common.Builders
 {
+    /// <summary>
+    /// Generates empty files with declaration of all necessary namespaces to prevent compilation failures.
+    /// </summary>
     public class RoslynSyntaxNamespacesFillerBuilder : IAddNamespacesStage
     {
         private CompilationUnitSyntax compilationUnitSyntax;

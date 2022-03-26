@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace HUGs.Generator.Common.Builders
 {
+    /// <summary>
+    /// Builder for a complete source code file.
+    /// </summary>
     public class RoslynSyntaxBuilder : IAddUsingsStage, IAddClassStage
     {
         private CompilationUnitSyntax compilationUnitSyntax;

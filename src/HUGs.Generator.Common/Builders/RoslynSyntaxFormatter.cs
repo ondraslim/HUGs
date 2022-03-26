@@ -1,11 +1,13 @@
-﻿using System;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
 namespace HUGs.Generator.Common.Builders
 {
+    /// <summary>
+    /// Assures pretty source code formatting for problematic code structures.
+    /// </summary>
     public static class RoslynSyntaxFormatter
     {
         public static readonly SyntaxAnnotation ObjectCreationWithNewLines = new(nameof(ObjectCreationWithNewLines));
@@ -34,7 +36,7 @@ namespace HUGs.Generator.Common.Builders
 
             normalized = normalized.ReplaceNodes(
                 normalized.DescendantNodes().OfType<ConstructorInitializerSyntax>(),
-                GetFormattedCtorInitilizer);
+                GetFormattedCtorInitializer);
 
             normalized = normalized.ReplaceNodes(
                 normalized.DescendantNodes().OfType<PropertyDeclarationSyntax>(),
@@ -47,22 +49,34 @@ namespace HUGs.Generator.Common.Builders
             return normalized;
         }
 
+        /// <summary>
+        /// Adds empty line after each property.
+        /// </summary>
         private static PropertyDeclarationSyntax GetFormattedPropertySyntax(PropertyDeclarationSyntax original, PropertyDeclarationSyntax rewritten)
         {
             return rewritten.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
         }
 
-        private static SyntaxNode GetFormattedCtorInitilizer(ConstructorInitializerSyntax original, ConstructorInitializerSyntax rewritten)
+        /// <summary>
+        /// Fixes lines and indentation format of a constructor initializer.
+        /// </summary>
+        private static SyntaxNode GetFormattedCtorInitializer(ConstructorInitializerSyntax original, ConstructorInitializerSyntax rewritten)
         {
             var indentation = rewritten.Ancestors().OfType<ConstructorDeclarationSyntax>().First().GetLeadingTrivia();
             return rewritten.WithLeadingTrivia(SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed).AddRange(indentation).Add(SyntaxFactory.Tab));
         }
 
+        /// <summary>
+        /// Adds empty line after a field.
+        /// </summary>
         private static SyntaxNode GetFormattedFieldSyntax(FieldDeclarationSyntax original, FieldDeclarationSyntax rewritten)
         {
             return rewritten.WithTrailingTrivia(SyntaxFactory.TriviaList(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed));
         }
 
+        /// <summary>
+        /// Fixes formatting of object creation syntax - single property per line.
+        /// </summary>
         private static SyntaxNode GetFormattedObjectInitializer(InitializerExpressionSyntax original, InitializerExpressionSyntax rewritten)
         {
             var indentation = rewritten.Ancestors().OfType<StatementSyntax>().First().GetLeadingTrivia();
@@ -81,6 +95,9 @@ namespace HUGs.Generator.Common.Builders
                 )));
         }
 
+        /// <summary>
+        /// Fixes formatting of object creation syntax - single constructor argument per line.
+        /// </summary>
         private static SyntaxNode GetFormattedObjectCreation(ObjectCreationExpressionSyntax original, ObjectCreationExpressionSyntax rewritten)
         {
             var indentation = rewritten.Ancestors().OfType<StatementSyntax>().First().GetLeadingTrivia();
@@ -101,6 +118,9 @@ namespace HUGs.Generator.Common.Builders
                 );
         }
 
+        /// <summary>
+        /// Fixes formatting of switch expressions
+        /// </summary>
         private static SyntaxNode GetFormattedSwitchExpression(SwitchExpressionSyntax original, SwitchExpressionSyntax rewritten)
         {
             var indentation = rewritten.Ancestors().OfType<StatementSyntax>().First().GetLeadingTrivia();

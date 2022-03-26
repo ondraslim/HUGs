@@ -11,6 +11,9 @@ using System.Linq;
 
 namespace HUGs.Generator.DDD.Ddd.Loaders
 {
+    /// <summary>
+    /// Takes care of loading a DDD model based on a .dddschema file.
+    /// </summary>
     public class DddModelLoader
     {
         private static DddDiagnosticsReporter _diagnosticsReporter;
@@ -20,6 +23,9 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
             _diagnosticsReporter = new DddDiagnosticsReporter(context);
         }
 
+        /// <summary>
+        /// Loads a DDD Model based on all the schema files available in the GeneratorExecutionContext
+        /// </summary>
         public static DddModel LoadDddModel(GeneratorExecutionContext context)
         {
             InitializeDependencies(context);
@@ -44,6 +50,9 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
             return model;
         }
 
+        /// <summary>
+        /// Adds resolved DDD types to each property of each schema within the model.
+        /// </summary>
         private static void ResolvePropertyTypes(DddModel model)
         {
             foreach (var schema in model.Schemas)
@@ -55,6 +64,9 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
             }
         }
 
+        /// <summary>
+        /// Transforms the .dddschema content to C# object representation.
+        /// </summary>
         private static DddModel BuildDddModel(IEnumerable<AdditionalText> schemaFiles)
         {
             var dddModel = new DddModel();
