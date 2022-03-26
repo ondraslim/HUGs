@@ -42,5 +42,33 @@ namespace HUGs.Generator.DDD.IntegrationTests
                 Check.CheckString(generatedFile, checkName: checkName, fileExtension: "cs");
             }
         }
+
+
+        [Test]
+        public void ComplexDddModel_InJson_GeneratedCorrectly()
+        {
+            var orderSchema = File.ReadAllText("../../../TestData/Schemas/Aggregates/OrderAggregate.json.dddschema");
+            var orderItemSchema = File.ReadAllText("../../../TestData/Schemas/Entities/OrderItemEntity.json.dddschema");
+            var countrySchema = File.ReadAllText("../../../TestData/Schemas/Entities/CountryEntity.json.dddschema");
+            var orderStateSchema = File.ReadAllText("../../../TestData/Schemas/Enumerations/OrderStateEnumeration.json.dddschema");
+            var valueObjectSchema = File.ReadAllText("../../../TestData/Schemas/ValueObjects/AddressValueObject.json.dddschema");
+            var configuration = File.ReadAllText("../../../TestData/Configuration/CompleteNamespaceConfig.json.dddconfig");
+
+            var driver = SetupGeneratorDriver(new[] { orderSchema, orderItemSchema, countrySchema, orderStateSchema, valueObjectSchema }, configuration);
+
+            RunGenerator(driver, EmptyInputCompilation, out var diagnostics, out var generatedFileTexts);
+
+            diagnostics.Should().BeEmpty();
+            generatedFileTexts.Should().HaveCount(14);
+
+            foreach (var generatedFile in generatedFileTexts)
+            {
+                var checkName = generatedFile.Contains("class ")
+                    ? TestHelper.GetGeneratedFileClass(generatedFile)
+                    : generatedFile.Trim().Split(" ").First();
+
+                Check.CheckString(generatedFile, checkName: checkName, fileExtension: "cs");
+            }
+        }
     }
 }

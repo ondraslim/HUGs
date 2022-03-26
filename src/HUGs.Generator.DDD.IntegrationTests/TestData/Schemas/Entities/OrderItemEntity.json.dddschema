@@ -1,0 +1,10 @@
+﻿{
+  "Kind": "Entity",
+  "Name": "Country",
+  "Properties": [
+    {
+      "Name": "Name",
+      "Type": "string"
+    }
+  ]
+}
