@@ -1,0 +1,18 @@
+﻿{
+  "Kind": "Entity",
+  "Name": "OrderItem",
+  "Properties": [
+    {
+      "Name": "Name",
+      "Type": "string"
+    },
+    {
+      "Name": "Price",
+      "Type": "decimal"
+    },
+    {
+      "Name": "Amount",
+      "Type": "uint"
+    }
+  ]
+}

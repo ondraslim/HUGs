@@ -1,0 +1,7 @@
+﻿TargetNamespaces:
+  ValueObject: My.Desired.Namespace.ValueObjects
+  Entity: My.Desired.Namespace.Entities
+  Aggregate: My.Desired.Namespace.Aggregates
+  Enumeration: My.Desired.Namespace.Enumerations
+  DbEntity: My.Desired.Namespace.DbEntities
+  Mapper: My.Desired.Namespace.Mappers
