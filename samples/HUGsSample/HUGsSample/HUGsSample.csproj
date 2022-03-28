@@ -14,10 +14,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="DddModels\Schemas\Entities\City.dddschema" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="HUGs.Generator.Common" Version="1.0.0-pre29" />
 		<PackageReference Include="HUGs.Generator.DDD" Version="1.0.0-pre29" />
 		<PackageReference Include="HUGs.Generator.DDD.Framework" Version="1.0.0-pre29" />
