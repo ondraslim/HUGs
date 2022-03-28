@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using HUGs.Generator.Common.Builders;
+﻿using HUGs.Generator.Common.Builders;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
@@ -9,12 +8,16 @@ using HUGs.Generator.DDD.Framework.Mapping;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace HUGs.Generator.DDD.Ddd
 {
     public static class MapperGenerator
     {
+        /// <summary>
+        /// Generates a Mapper model source code with methods to map a DDD model to Db model and vice versa.
+        /// </summary>
         public static string GenerateMapperCode(
             DddObjectSchema schema,
             DddGeneratorConfiguration configuration)

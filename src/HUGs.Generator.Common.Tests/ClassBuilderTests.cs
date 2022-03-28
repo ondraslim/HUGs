@@ -90,7 +90,7 @@ namespace HUGs.Generator.Common.Tests
 
             var classDeclaration = ClassBuilder.Create()
                 .SetClassName("TestClass5")
-                .AddFieldWithInitialization("System.DateTime", "TestField", objectCreationSyntax, SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword)
+                .AddInitializedField("System.DateTime", "TestField", objectCreationSyntax, SyntaxKind.PrivateKeyword, SyntaxKind.ReadOnlyKeyword)
                 .Build();
 
             var actualClass = classDeclaration.NormalizeWhitespace().ToFullString();

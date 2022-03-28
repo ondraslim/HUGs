@@ -7,6 +7,9 @@ namespace HUGs.Generator.DDD.Ddd
 {
     internal class EntityGenerator : IdentifiableGenerator
     {
+        /// <summary>
+        /// Generates an Entity model source code.
+        /// </summary>
         public static string GenerateEntityCode(
             DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)

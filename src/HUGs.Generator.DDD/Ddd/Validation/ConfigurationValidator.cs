@@ -13,6 +13,10 @@ namespace HUGs.Generator.DDD.Ddd.Validation
     {
         private static readonly ICollection<Diagnostic> ValidationErrors = new List<Diagnostic>();
 
+        /// <summary>
+        /// Validates provided configuration object -  Assures valid namespaces and usings are provided.
+        /// Otherwise, exception is thrown.
+        /// </summary>
         public static void ValidateConfiguration(DddGeneratorConfiguration configuration)
         {
             ValidationErrors.Clear();

@@ -9,14 +9,21 @@ using System.Linq;
 
 namespace HUGs.Generator.DDD.Ddd.Loaders
 {
+    /// <summary>
+    /// Takes care of loading a DDD generator configuration based on a .dddconfig file.
+    /// </summary>
     public static class ConfigurationLoader
     {
+        /// <summary>
+        /// Loads DDD generator configuration.
+        /// Only one configuration file is allowed!
+        /// </summary>
         public static DddGeneratorConfiguration LoadConfiguration(GeneratorExecutionContext context)
         {
             var configurationFile = GetDddConfiguration(context);
             return LoadConfiguration(configurationFile);
         }
-
+        
         private static AdditionalText GetDddConfiguration(GeneratorExecutionContext context)
         {
             var configurations = context

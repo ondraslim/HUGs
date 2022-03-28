@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace HUGs.Generator.Common.Builders
 {
+    /// <summary>
+    /// Class builder.
+    /// </summary>
     public class ClassBuilder : ISetNameStage
     {
         private ClassDeclarationSyntax classDeclaration;
@@ -43,14 +46,12 @@ namespace HUGs.Generator.Common.Builders
         }
 
         public ClassBuilder AddField(string type, string name, params SyntaxKind[] accessModifiers)
-        {
-            return AddFieldWithInitialization(type, name, null, accessModifiers);
-        }
+            => AddInitializedField(type, name, objectCreationExpressionSyntax: null, accessModifiers);
 
-        public ClassBuilder AddFieldWithInitialization(
-            string type, 
+        public ClassBuilder AddInitializedField(
+            string type,
             string name,
-            ImplicitObjectCreationExpressionSyntax objectCreationExpressionSyntax, 
+            ImplicitObjectCreationExpressionSyntax objectCreationExpressionSyntax,
             params SyntaxKind[] accessModifiers)
         {
             var variable = SyntaxFactory.VariableDeclarator(name);
@@ -78,7 +79,8 @@ namespace HUGs.Generator.Common.Builders
 
         public ClassBuilder AddFullProperty(string type, string name, params SyntaxKind[] accessModifiers)
         {
-            var accessors = new[] {
+            var accessors = new[]
+            {
                 SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
                     .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
                 SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
@@ -144,13 +146,9 @@ namespace HUGs.Generator.Common.Builders
             string name,
             IEnumerable<SyntaxKind> accessModifiers,
             AccessorDeclarationSyntax[] accessors)
-        {
-            var propertyDeclaration = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
+            => SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(type), name)
                 .AddModifiers(accessModifiers.Select(SyntaxFactory.Token).ToArray())
                 .AddAccessorListAccessors(accessors);
-
-            return propertyDeclaration;
-        }
 
         #endregion
 
@@ -191,18 +189,16 @@ namespace HUGs.Generator.Common.Builders
 
         private static ConstructorDeclarationSyntax AddConstructorBaseCall(
             ConstructorDeclarationSyntax ctor,
-            IEnumerable<ParameterSyntax> baseCtorParams)
-        {
-            ctor = ctor
+            IEnumerable<ParameterSyntax> baseCtorParams) 
+            => ctor
                 .WithInitializer(
                     SyntaxFactory
                         .ConstructorInitializer(SyntaxKind.BaseConstructorInitializer)
                         .AddArgumentListArguments(
-                            baseCtorParams.Select(p => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(p.Identifier))).ToArray())
+                            baseCtorParams
+                                .Select(p => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(p.Identifier)))
+                                .ToArray())
                 );
-
-            return ctor;
-        }
 
         public ClassBuilder AddMethod(MethodDeclarationSyntax method)
         {
@@ -220,6 +216,5 @@ namespace HUGs.Generator.Common.Builders
 
             return classDeclaration;
         }
-
     }
 }

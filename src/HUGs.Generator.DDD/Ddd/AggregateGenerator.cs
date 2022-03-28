@@ -7,6 +7,9 @@ namespace HUGs.Generator.DDD.Ddd
 {
     internal class AggregateGenerator : IdentifiableGenerator
     {
+        /// <summary>
+        /// Generates an Aggregate model source code.
+        /// </summary>
         public static string GenerateAggregateCode(
             DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)

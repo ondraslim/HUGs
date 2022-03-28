@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
 {
+    /// <summary>
+    /// Processed property type representation.
+    /// </summary>
     public abstract class DddType
     {
         public bool IsNullable { get; protected set; }

@@ -11,6 +11,9 @@ namespace HUGs.Generator.DDD.Ddd.Validation
     {
         private static readonly ICollection<Diagnostic> ValidationErrors = new List<Diagnostic>();
 
+        /// <summary>
+        /// Validates DDD model by validating its separate DDD object schemas and validates uniqueness of names of the object schemas (unique names are required!).
+        /// </summary>
         public static void ValidateModel(DddModel model)
         {
             ValidationErrors.Clear();

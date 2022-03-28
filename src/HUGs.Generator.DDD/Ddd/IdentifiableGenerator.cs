@@ -11,6 +11,10 @@ namespace HUGs.Generator.DDD.Ddd
 {
     internal abstract class IdentifiableGenerator
     {
+        /// <summary>
+        /// Generates an Aggregate or an Entity model source code based on the schema type.
+        /// Their functionality and generated code is similar.
+        /// </summary>
         protected static string GenerateIdentifiableObjectCode(
             DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)

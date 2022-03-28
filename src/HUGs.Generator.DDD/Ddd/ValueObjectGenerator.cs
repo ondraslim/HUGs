@@ -12,6 +12,9 @@ namespace HUGs.Generator.DDD.Ddd
 {
     internal static class ValueObjectGenerator
     {
+        /// <summary>
+        /// Generates a Value Object model source code.
+        /// </summary>
         public static string GenerateValueObjectCode(
             DddObjectSchema schema, 
             DddGeneratorConfiguration generatorConfiguration)

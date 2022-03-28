@@ -11,6 +11,9 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
 namespace HUGs.Generator.DDD.Ddd
 {
+    /// <summary>
+    /// Generates an Enumeration model source code in a Smart-Enum type fashion.
+    /// </summary>
     internal static class EnumerationGenerator
     {
         public static string GenerateEnumerationCode(
@@ -43,8 +46,7 @@ namespace HUGs.Generator.DDD.Ddd
         }
 
         /// <summary>
-        /// Generates FromString method of an DDD Enumeration class.
-        /// Used to convert string to Enumeration of given schema.
+        /// Generates FromString method used to convert string to Enumeration of given schema.
         /// </summary>
         private static MethodDeclarationSyntax PrepareFromStringMethod(DddObjectSchema schema)
         {
@@ -120,7 +122,7 @@ namespace HUGs.Generator.DDD.Ddd
             foreach (var value in schema.Values)
             {
                 var objectCreationSyntax = PrepareEnumFieldObjectCreationSyntax(schema, value);
-                classBuilder.AddFieldWithInitialization(
+                classBuilder.AddInitializedField(
                     schema.DddObjectClassName, value.Name, objectCreationSyntax,
                     SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword);
             }

@@ -1,5 +1,8 @@
 ﻿namespace HUGs.Generator.DDD.Ddd.Models
 {
+    /// <summary>
+    /// Represents a DDD model structure.
+    /// </summary>
     public class DddObjectSchema
     {
         public DddObjectKind Kind { get; set; }

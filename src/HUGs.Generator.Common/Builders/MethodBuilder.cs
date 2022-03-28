@@ -1,13 +1,16 @@
-﻿using HUGs.Generator.Common.Helpers;
+﻿using HUGs.Generator.Common.Builders.MethodBuilderStages;
+using HUGs.Generator.Common.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
-using HUGs.Generator.Common.Builders.MethodBuilderStages;
 
 namespace HUGs.Generator.Common.Builders
 {
+    /// <summary>
+    /// Method builder.
+    /// </summary>
     public class MethodBuilder : 
         ISetNameStage, 
         ISetReturnTypeStage,
