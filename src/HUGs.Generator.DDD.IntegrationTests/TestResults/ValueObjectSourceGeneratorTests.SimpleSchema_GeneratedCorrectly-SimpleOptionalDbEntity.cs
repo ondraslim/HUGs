@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class SimpleOptionalDbEntity
+    public partial class SimpleOptionalDbEntity
     {
         public string Text { get; set; }
 

@@ -11,7 +11,7 @@ using HUGs.DDD.Generated.DbEntity;
 
 namespace HUGs.DDD.Generated.Mapper
 {
-    public class Simple2Mapper : DbEntityMapper<Simple2, Simple2DbEntity>
+    public partial class Simple2Mapper : DbEntityMapper<Simple2, Simple2DbEntity>
     {
         public Simple2Mapper(IDbEntityMapperFactory factory) 
         	: base(factory)

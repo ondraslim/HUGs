@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace My.Desired.Namespace.DbEntities
 {
-    public class CountryDbEntity
+    public partial class CountryDbEntity
     {
         public Guid Id { get; set; }
 

@@ -11,7 +11,7 @@ using My.Desired.Namespace.DbEntities;
 
 namespace My.Desired.Namespace.Mappers
 {
-    public class OrderItemMapper : DbEntityMapper<OrderItem, OrderItemDbEntity>
+    public partial class OrderItemMapper : DbEntityMapper<OrderItem, OrderItemDbEntity>
     {
         public OrderItemMapper(IDbEntityMapperFactory factory) 
         	: base(factory)

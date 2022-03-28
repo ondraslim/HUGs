@@ -11,7 +11,7 @@ using HUGs.DDD.Generated.DbEntity;
 
 namespace HUGs.DDD.Generated.Mapper
 {
-    public class SimpleValueObjectMapper : DbEntityMapper<SimpleValueObject, SimpleValueObjectDbEntity>
+    public partial class SimpleValueObjectMapper : DbEntityMapper<SimpleValueObject, SimpleValueObjectDbEntity>
     {
         public SimpleValueObjectMapper(IDbEntityMapperFactory factory) 
         	: base(factory)

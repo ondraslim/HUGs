@@ -11,7 +11,7 @@ using My.Desired.Namespace.DbEntities;
 
 namespace My.Desired.Namespace.Mappers
 {
-    public class CountryMapper : DbEntityMapper<Country, CountryDbEntity>
+    public partial class CountryMapper : DbEntityMapper<Country, CountryDbEntity>
     {
         public CountryMapper(IDbEntityMapperFactory factory) 
         	: base(factory)

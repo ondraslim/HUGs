@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class AggregateTestClassDbEntity
+    public partial class AggregateTestClassDbEntity
     {
         public Guid Id { get; set; }
 

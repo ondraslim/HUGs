@@ -59,7 +59,7 @@ namespace HUGs.Generator.DDD.Ddd
 
             return ClassBuilder.Create()
                 .SetClassName(schema.MapperClassName)
-                .AddClassAccessModifiers(SyntaxKind.PublicKeyword)
+                .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword)
                 .AddClassBaseTypes($"DbEntityMapper<{schema.DddObjectClassName}, {schema.DbEntityClassName}>")
                 .AddConstructor(
                     schema.MapperClassName,
