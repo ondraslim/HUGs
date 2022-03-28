@@ -14,17 +14,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="DddModels\Entities\City.dddschema" />
+	  <None Remove="DddModels\Schemas\Entities\City.dddschema" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="HUGs.Generator.Common" Version="1.0.0-pre25" />
-		<PackageReference Include="HUGs.Generator.DDD" Version="1.0.0-pre25" />
-		<PackageReference Include="HUGs.Generator.DDD.Framework" Version="1.0.0-pre25" />
+		<PackageReference Include="HUGs.Generator.Common" Version="1.0.0-pre29" />
+		<PackageReference Include="HUGs.Generator.DDD" Version="1.0.0-pre29" />
+		<PackageReference Include="HUGs.Generator.DDD.Framework" Version="1.0.0-pre29" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="DddModels\Aggregates\" />
+	  <Folder Include="DddModels\Entities\" />
+	  <Folder Include="DddModels\Enumerations\" />
+	  <Folder Include="DddModels\DbEntities\" />
+	  <Folder Include="DddModels\ValueObjects\" />
+	  <Folder Include="DddModels\Schemas\Aggregates\" />
 	</ItemGroup>
 
 </Project>
