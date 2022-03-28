@@ -87,7 +87,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
                 }
                 catch (Exception e)
                 {
-                    throw new AdditionalFileParseException($"Error occurred while parsing file: {schemaFile.Path}", schemaFile.Path, e);
+                    throw new AdditionalFileParseException(schemaFile.Path, $"Error occurred while parsing file: {schemaFile.Path}", e);
                 }
             }
 
