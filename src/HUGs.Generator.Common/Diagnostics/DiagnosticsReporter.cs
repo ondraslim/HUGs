@@ -1,6 +1,7 @@
 ﻿using HUGs.Generator.Common.Exceptions;
 using Microsoft.CodeAnalysis;
 using System;
+using HUGs.Generator.Common.Helpers;
 
 namespace HUGs.Generator.Common.Diagnostics
 {
@@ -33,7 +34,7 @@ namespace HUGs.Generator.Common.Diagnostics
 
         protected void ReportAdditionalFileParse(AdditionalFileParseException e)
         {
-            var diagnostic = Diagnostic.Create(Diagnostics.AdditionalFileParseError, Location.None, e.FilePath, e.InnerException?.Message ?? e.Message);
+            var diagnostic = Diagnostic.Create(Diagnostics.AdditionalFileParseError, Location.None, e.FilePath, ExceptionHelper.GetCompleteExceptionMessage(e));
             ReportDiagnostic(diagnostic);
         }
 
