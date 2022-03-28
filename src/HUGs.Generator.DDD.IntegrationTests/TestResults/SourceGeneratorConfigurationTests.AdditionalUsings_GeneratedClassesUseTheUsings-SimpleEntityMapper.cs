@@ -13,7 +13,7 @@ using HUGs.DDD.Generated.DbEntity;
 
 namespace HUGs.DDD.Generated.Mapper
 {
-    public class SimpleEntityMapper : DbEntityMapper<SimpleEntity, SimpleEntityDbEntity>
+    public partial class SimpleEntityMapper : DbEntityMapper<SimpleEntity, SimpleEntityDbEntity>
     {
         public SimpleEntityMapper(IDbEntityMapperFactory factory) 
         	: base(factory)

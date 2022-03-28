@@ -11,7 +11,7 @@ using My.Desired.Namespace.DbEntities;
 
 namespace My.Desired.Namespace.Mappers
 {
-    public class Simple2Mapper : DbEntityMapper<Simple2, Simple2DbEntity>
+    public partial class Simple2Mapper : DbEntityMapper<Simple2, Simple2DbEntity>
     {
         public Simple2Mapper(IDbEntityMapperFactory factory) 
         	: base(factory)

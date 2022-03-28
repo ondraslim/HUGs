@@ -11,7 +11,7 @@ using My.Desired.Namespace.DbEntities;
 
 namespace My.Desired.Namespace.Mappers
 {
-    public class AddressMapper : DbEntityMapper<Address, AddressDbEntity>
+    public partial class AddressMapper : DbEntityMapper<Address, AddressDbEntity>
     {
         public AddressMapper(IDbEntityMapperFactory factory) 
         	: base(factory)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace My.Desired.Namespace.DbEntities
 {
-    public class SimpleAggregateDbEntity
+    public partial class SimpleAggregateDbEntity
     {
         public Guid Id { get; set; }
 

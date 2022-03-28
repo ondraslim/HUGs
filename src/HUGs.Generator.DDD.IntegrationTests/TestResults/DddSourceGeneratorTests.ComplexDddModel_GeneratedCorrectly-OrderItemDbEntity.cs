@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace My.Desired.Namespace.DbEntities
 {
-    public class OrderItemDbEntity
+    public partial class OrderItemDbEntity
     {
         public Guid Id { get; set; }
 

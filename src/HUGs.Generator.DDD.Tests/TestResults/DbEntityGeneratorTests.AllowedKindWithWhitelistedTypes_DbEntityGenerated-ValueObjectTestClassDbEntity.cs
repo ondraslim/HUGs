@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class ValueObjectTestClassDbEntity
+    public partial class ValueObjectTestClassDbEntity
     {
         public string StringProperty { get; set; }
 

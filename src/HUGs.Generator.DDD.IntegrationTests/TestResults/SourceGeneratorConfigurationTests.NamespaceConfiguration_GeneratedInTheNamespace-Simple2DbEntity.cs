@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace My.Desired.Namespace.DbEntities
 {
-    public class Simple2DbEntity
+    public partial class Simple2DbEntity
     {
         public string Text { get; set; }
 

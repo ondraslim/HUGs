@@ -46,7 +46,7 @@ namespace HUGs.Generator.DDD.Ddd
         {
             return ClassBuilder.Create()
                 .SetClassName(schemaName)
-                .AddClassAccessModifiers(SyntaxKind.PublicKeyword);
+                .AddClassAccessModifiers(SyntaxKind.PublicKeyword, SyntaxKind.PartialKeyword);
         }
 
         private static void AddDbEntityProperties(DddObjectSchema schema, ClassBuilder classBuilder)

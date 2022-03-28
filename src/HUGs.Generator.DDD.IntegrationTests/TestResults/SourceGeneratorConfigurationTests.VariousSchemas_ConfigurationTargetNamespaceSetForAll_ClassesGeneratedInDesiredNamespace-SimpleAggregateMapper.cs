@@ -11,7 +11,7 @@ using My.Desired.Namespace.DbEntities;
 
 namespace My.Desired.Namespace.Mappers
 {
-    public class SimpleAggregateMapper : DbEntityMapper<SimpleAggregate, SimpleAggregateDbEntity>
+    public partial class SimpleAggregateMapper : DbEntityMapper<SimpleAggregate, SimpleAggregateDbEntity>
     {
         public SimpleAggregateMapper(IDbEntityMapperFactory factory) 
         	: base(factory)

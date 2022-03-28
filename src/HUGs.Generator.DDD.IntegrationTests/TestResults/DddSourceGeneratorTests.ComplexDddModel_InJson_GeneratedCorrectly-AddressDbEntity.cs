@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace My.Desired.Namespace.DbEntities
 {
-    public class AddressDbEntity
+    public partial class AddressDbEntity
     {
         public string Street { get; set; }
 
