@@ -18,6 +18,10 @@ namespace HUGs.Generator.DDD.Ddd
             // not needed
         }
 
+        /// <summary>
+        /// Generator execution phase separated into to phases: Load and Generate.
+        /// </summary>
+        /// <param name="context"></param>
         public static void Execute(GeneratorExecutionContext context)
         {
             _diagnosticsReporter = new DddDiagnosticsReporter(context);
@@ -55,7 +59,8 @@ namespace HUGs.Generator.DDD.Ddd
         }
 
         /// <summary>
-        /// Generates source code files for schemas
+        /// Generates source code files for schemas based on schema type.
+        /// Aggregates, Value Objects, and Entities also get Db entity and a mapper source code generated.
         /// </summary>
         private static void GenerateDddModelSourceCode(
             GeneratorExecutionContext context,

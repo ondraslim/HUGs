@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace HUGs.Generator.DDD.Framework.Mapping
 {
+    /// <summary>
+    /// Base mapper with the common mapping logic.
+    /// </summary>
     public abstract class DbEntityMapper<TDddObject, TDbEntity> : IDbEntityMapper<TDddObject, TDbEntity>
     {
         private readonly IDbEntityMapperFactory factory;

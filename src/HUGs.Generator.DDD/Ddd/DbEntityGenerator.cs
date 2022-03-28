@@ -11,6 +11,13 @@ namespace HUGs.Generator.DDD.Ddd
 {
     internal static class DbEntityGenerator
     {
+        /// <summary>
+        /// Generates Db entity source code. 
+        /// </summary>
+        /// <param name="schema"></param>
+        /// <param name="generatorConfiguration"></param>
+        /// <returns></returns>
+        /// <exception cref="DddSchemaKindDbEntityNotSupportedException"></exception>
         public static string GenerateDbEntity(
             DddObjectSchema schema,
             DddGeneratorConfiguration generatorConfiguration)
