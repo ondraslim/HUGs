@@ -6,7 +6,12 @@ An opinionated .NET Source Generator to help with the DDD boilerplate code.
 **HUGs** is a **Source Generator** framework that targets **DDD object class generation**. The Source Generator based on *Additional Files* that contain the DDD object schemas in YAML format. The YAML structure is transformed the DDD object classes representing the DDD **ValueObjects**, **Entities**, **Aggregates**, and **Enumerations**. Moreover, **HUGs** also generates a plain database-friendly **DbEntity** class, and it generates a **Mapper** that can map the DDD object to a DbEntity and vice versa. **HUGs** can generate up to 3 classes from a single YAML schema!
 
 ## Installation
-TODO
+
+Instalation via available NuGet packages in the `packages/` folder. Reference all 3 packages in the project, add DDD schemas and configuration in desired format and during build-time, the source code is generated.
+
+### Requirements
+
+The newest version of Visual Studio, .NET and C\# is recommended.
 
 ## Usage
 
@@ -158,7 +163,7 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class AddressDbEntity
+    public partial class AddressDbEntity
     {
         public string Street { get; set; }
 
@@ -188,9 +193,9 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.Mapper
 {
-    public class AddressMapper : DbEntityMapper<Address, AddressDbEntity>
+    public partial class AddressMapper : DbEntityMapper<Address, AddressDbEntity>
     {
-        public AddressMapper(IDbEntityMapperFactory factory)
+        public AddressMapper(IDbEntityMapperFactory factory) 
         	: base(factory)
         {
         }
@@ -203,7 +208,7 @@ namespace HUGs.DDD.Generated.Mapper
             	Street2 = obj.Street2,
             	City = obj.City,
             	Zip = obj.Zip,
-            	CountryId = MapDbEntityId(obj.CountryId)
+            	CountryId = ToDbEntityId(obj.CountryId)
             };
         }
 
@@ -215,7 +220,7 @@ namespace HUGs.DDD.Generated.Mapper
             	obj.Street2,
             	obj.City,
             	obj.Zip,
-            	MapDddObjectId(obj.CountryId)
+            	ToDddObjectId<OrderItemId>(obj.CountryId)
             );
         }
     }
@@ -262,13 +267,13 @@ namespace HUGs.DDD.Generated.Aggregate
 {
     public class OrderId : EntityId<Order>
     {
-        public OrderId(Guid value)
+        public OrderId(Guid value) 
         	: base(value)
         {
         }
     }
 
-    public partial class Order : HUGs.Generator.DDD.Framework.BaseModels.Aggregate<OrderId>
+    public partial class Order : HUGs.Generator.DDD.Framework.BaseModels.Aggregate<Guid>
     {
         private List<OrderItem> _Items;
 
@@ -284,7 +289,7 @@ namespace HUGs.DDD.Generated.Aggregate
 
         public OrderState State { get; private set; }
 
-        public Order(IId<OrderId> id, string Number, DateTime CreatedDate, IEnumerable<OrderItem> Items, Address ShippingAddress, OrderState State)
+        public Order(OrderId id, string Number, DateTime CreatedDate, IEnumerable<OrderItem> Items, Address ShippingAddress, OrderState State)
         {
             Id = id;
             this.Number = Number;
@@ -318,7 +323,7 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.DbEntity
 {
-    public class OrderDbEntity
+	public partial class OrderDbEntity
     {
         public Guid Id { get; set; }
 
@@ -326,9 +331,9 @@ namespace HUGs.DDD.Generated.DbEntity
 
         public DateTime CreatedDate { get; set; }
 
-        public ICollection<OrderItem> Items { get; set; }
+        public ICollection<OrderItemDbEntity> Items { get; set; }
 
-        public Address ShippingAddress { get; set; }
+        public AddressDbEntity ShippingAddress { get; set; }
 
         public string State { get; set; }
 
@@ -350,9 +355,9 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.Mapper
 {
-    public class OrderMapper : DbEntityMapper<Order, OrderDbEntity>
+    public partial class OrderMapper : DbEntityMapper<Order, OrderDbEntity>
     {
-        public OrderMapper(IDbEntityMapperFactory factory)
+        public OrderMapper(IDbEntityMapperFactory factory) 
         	: base(factory)
         {
         }
@@ -361,11 +366,12 @@ namespace HUGs.DDD.Generated.Mapper
         {
             return new OrderDbEntity
             {
+            	Id = ToDbEntityId(obj.Id),
             	Number = obj.Number,
             	CreatedDate = obj.CreatedDate,
-            	Items = MapDbEntityCollection(obj.Items),
-            	ShippingAddress = MapChildDbEntity(obj.ShippingAddress),
-            	State = MapDbEntityEnumeration(obj.State)
+            	Items = ToDbEntityCollection<OrderItem, OrderItemDbEntity>(obj.Items),
+            	ShippingAddress = ToChildDbEntity<Address, AddressDbEntity>(obj.ShippingAddress),
+            	State = ToDbEntityEnumeration(obj.State)
             };
         }
 
@@ -373,14 +379,14 @@ namespace HUGs.DDD.Generated.Mapper
         {
             return new Order
             (
+            	ToDddObjectId<OrderId>(obj.Id),
             	obj.Number,
             	obj.CreatedDate,
-            	MapDddObjectCollection(obj.Items),
-            	MapChildDddObject(obj.ShippingAddress),
-            	MapDddObjectEnumeration(obj.State)
+            	ToDddObjectCollection<OrderItemDbEntity, OrderItem>(obj.Items),
+            	ToChildDddObject<AddressDbEntity, Address>(obj.ShippingAddress),
+            	ToDddObjectEnumeration<OrderState>(obj.State)
             );
         }
-    }
 }
 ```
 
@@ -418,7 +424,7 @@ using HUGs.DDD.Generated.Enumeration;
 
 namespace HUGs.DDD.Generated.Enumeration
 {
-    public class OrderState : HUGs.Generator.DDD.Framework.BaseModels.Enumeration
+	public class OrderState : HUGs.Generator.DDD.Framework.BaseModels.Enumeration
     {
         public static readonly OrderState Created = new(nameof(Created), "Created");
 
@@ -426,7 +432,7 @@ namespace HUGs.DDD.Generated.Enumeration
 
         public string Name { get; }
 
-        private OrderState(string internalName, string Name)
+        private OrderState(string internalName, string Name) 
         	: base(internalName)
         {
             this.Name = Name;
@@ -464,7 +470,7 @@ AdditionalUsings:
   - My.Additional.Using2
 ```
 
-Not all of the namespaces need to be set; for instance, a configuration with custom namespace for only DB entities can look accordingly:
+Not all of the namespaces need to be set; for instance, a configuration with custom namespace for only DB entities may look accordingly:
 
 ```
 TargetNamespaces
