@@ -29,10 +29,10 @@ namespace HUGs.Generator.DDD.Ddd
             try
             {
                 var configuration = ConfigurationLoader.LoadConfiguration(context);
-                var dddModel = DddModelLoader.LoadDddModel(context);
+                var domainModel = DomainModelLoader.LoadDomainModel(context);
 
                 GenerateNamespaceDeclarationFile(context, configuration);
-                GenerateDddModelSourceCode(context, configuration, dddModel);
+                GenerateDomainModelSourceCode(context, configuration, domainModel);
             }
             catch (GeneratorLoadException e)
             {
@@ -55,19 +55,19 @@ namespace HUGs.Generator.DDD.Ddd
             namespaceDeclarations.AddNamespaces(configuration.TargetNamespaces.DbEntity);
 
             var namespacesDeclarationsSourceCode = namespaceDeclarations.Build();
-            context.AddSource("DddModelNamespaces", namespacesDeclarationsSourceCode);
+            context.AddSource("DomainModelNamespaces", namespacesDeclarationsSourceCode);
         }
 
         /// <summary>
         /// Generates source code files for schemas based on schema type.
         /// Aggregates, Value Objects, and Entities also get Db entity and a mapper source code generated.
         /// </summary>
-        private static void GenerateDddModelSourceCode(
+        private static void GenerateDomainModelSourceCode(
             GeneratorExecutionContext context,
             DddGeneratorConfiguration configuration,
-            DddModel dddModel)
+            DomainModel domainModel)
         {
-            foreach (var schema in dddModel.Schemas)
+            foreach (var schema in domainModel.Schemas)
             {
                 AddDddObjectSchemaSource(context, schema, configuration);
 

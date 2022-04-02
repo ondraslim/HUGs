@@ -169,7 +169,7 @@ namespace HUGs.Generator.DDD.Ddd
                     $"ToDbEntityCollection<{collectionType.ElementType}, {collectionType.ToDbType()}>", member);
             }
 
-            if (property.ResolvedType is DddModelType modelType)
+            if (property.ResolvedType is DomainModelType modelType)
             {
                 if (modelType.Kind is DddObjectKind.Enumeration)
                 {
@@ -201,7 +201,7 @@ namespace HUGs.Generator.DDD.Ddd
                     $"ToDddObjectCollection<{collectionType.ToDbType()}, {collectionType.ElementType}>", member);
             }
 
-            if (property.ResolvedType is DddModelType modelType)
+            if (property.ResolvedType is DomainModelType modelType)
             {
                 if (modelType.Kind is DddObjectKind.Enumeration)
                 {

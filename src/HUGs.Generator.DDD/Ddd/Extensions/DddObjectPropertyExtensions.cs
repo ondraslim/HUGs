@@ -11,9 +11,9 @@ namespace HUGs.Generator.DDD.Ddd.Extensions
             return DddPrimitiveType.PrimitiveTypes.Contains(property.CleanType);
         }
 
-        public static bool IsKnownDddModelType(this DddObjectProperty property, DddModel dddModel)
+        public static bool IsKnownDomainType(this DddObjectProperty property, DomainModel domainModel)
         {
-            return dddModel.GetDddModelTypes().Contains(property.CleanType);
+            return domainModel.GetDomainTypes().Contains(property.CleanType);
         }
     }
 }

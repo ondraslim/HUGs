@@ -63,8 +63,8 @@ namespace HUGs.Generator.DDD.Tests
                     new() { Name = "SimpleOptional", Type = "string?", ResolvedType = new DddPrimitiveType("string?") },
                     new() { Name = "SimpleCollection", Type = "int[]", ResolvedType = new DddCollectionType(new DddPrimitiveType("int")) },
                     new() { Name = "SimpleComputedCollection", Type = "int[]", Computed = true, ResolvedType = new DddCollectionType(new DddPrimitiveType("int")) },
-                    new() { Name = "SimpleEntity", Type = "DddEntity", ResolvedType = new DddModelType("DddEntity", DddObjectKind.Entity) },
-                    new() { Name = "SimpleValueObject", Type = "DddValueObject", ResolvedType = new DddModelType("DddValueObject", DddObjectKind.ValueObject) },
+                    new() { Name = "SimpleEntity", Type = "DddEntity", ResolvedType = new DomainModelType("DddEntity", DddObjectKind.Entity) },
+                    new() { Name = "SimpleValueObject", Type = "DddValueObject", ResolvedType = new DomainModelType("DddValueObject", DddObjectKind.ValueObject) },
                     new() { Name = "SimpleEntityId", Type = "DddEntityId", ResolvedType = new DddIdType("DddEntity") },
                 }
             };
