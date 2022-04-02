@@ -32,7 +32,7 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
                     ReportSchemaInvalid(ex);
                     break;
                 case DomainModelValidationException ex:
-                    ReportDddModelInvalid(ex);
+                    ReportDomainModelInvalid(ex);
                     break;
             }
         }
@@ -60,7 +60,7 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             }
         }
 
-        private void ReportDddModelInvalid(DomainModelValidationException e)
+        private void ReportDomainModelInvalid(DomainModelValidationException e)
         {
             foreach (var diagnostic in e.ErrorDiagnostics)
             {
