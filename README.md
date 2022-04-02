@@ -67,6 +67,7 @@ TargetNamespaces:
   Aggregate: <NamespaceForGeneratedAggregates>
   Enumeration: <NamespaceForGeneratedEnumerations>
   DbEntity: <NamespaceForGeneratedDbEntities>
+  Mapper: <NamespaceForGeneratedMappers>
 
 AdditionalUsings:
   - <GeneratedFileAdditionalUsing>
