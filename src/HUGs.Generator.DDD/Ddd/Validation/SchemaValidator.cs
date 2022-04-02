@@ -18,12 +18,12 @@ namespace HUGs.Generator.DDD.Ddd.Validation
         /// <summary>
         /// Validates schema. Assures syntax-valid schema name and property definitions. For Enumerations, also checks enum values.
         /// </summary>
-        public static void ValidateSchema(DddObjectSchema schema, DddModel dddModel)
+        public static void ValidateSchema(DddObjectSchema schema, DomainModel domainModel)
         {
             ValidationErrors.Clear();
 
             ValidateSchemaName(schema);
-            ValidateProperties(schema, dddModel);
+            ValidateProperties(schema, domainModel);
 
             if (schema.Kind is DddObjectKind.Enumeration)
             {
@@ -45,7 +45,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             }
         }
 
-        private static void ValidateProperties(DddObjectSchema schema, DddModel dddModel)
+        private static void ValidateProperties(DddObjectSchema schema, DomainModel domainModel)
         {
             schema.Properties ??= new DddObjectProperty[] { };
             
@@ -60,7 +60,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
                     ValidationErrors.Add(diagnostic);
                 }
 
-                if (!IsValidPropertyType(property, dddModel))
+                if (!IsValidPropertyType(property, domainModel))
                 {
                     var diagnostic = DddDiagnostics.GetSchemaInvalidValueDiagnostic(
                         property.Type,$"{nameof(DddObjectProperty)}_{nameof(DddObjectProperty.Type)}", schema.Name);
@@ -96,9 +96,9 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             }
         }
 
-        private static bool IsValidPropertyType(DddObjectProperty property, DddModel dddModel)
+        private static bool IsValidPropertyType(DddObjectProperty property, DomainModel domainModel)
         {
-            return property.IsPrimitiveType() || property.IsKnownDddModelType(dddModel);
+            return property.IsPrimitiveType() || property.IsKnownDomainType(domainModel);
         }
 
         private static void ValidateValue(DddObjectSchema schema, DddObjectValue value)

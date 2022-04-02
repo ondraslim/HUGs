@@ -6,30 +6,30 @@ namespace HUGs.Generator.DDD.Ddd.Models
     /// <summary>
     /// Represents complete domain knowledge and structure, holds all the schema definitions.
     /// </summary>
-    public class DddModel
+    public class DomainModel
     {
-        private List<string> dddModelTypes;
+        private List<string> domainTypes;
 
         public IList<DddObjectSchema> Schemas { get; } = new List<DddObjectSchema>();
 
         public void AddObjectSchema(DddObjectSchema objectSchema)
         {
             Schemas.Add(objectSchema);
-            dddModelTypes = null;
+            domainTypes = null;
         }
 
-        public List<string> GetDddModelTypes()
+        public List<string> GetDomainTypes()
         {
-            if (dddModelTypes is null)
+            if (domainTypes is null)
             {
-                dddModelTypes = Schemas.Select(s => s.DddObjectClassName).ToList();
-                dddModelTypes.AddRange(
+                domainTypes = Schemas.Select(s => s.DddObjectClassName).ToList();
+                domainTypes.AddRange(
                     Schemas
                         .Where(s => s.Kind is DddObjectKind.Entity or DddObjectKind.Aggregate)
                         .Select(s => $"{s.DddObjectClassName}Id"));
             }
 
-            return dddModelTypes;
+            return domainTypes;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
     /// <summary>
     /// Takes care of loading a DDD model based on a .dddschema file.
     /// </summary>
-    public class DddModelLoader
+    public class DomainModelLoader
     {
         private static DddDiagnosticsReporter _diagnosticsReporter;
 
@@ -24,14 +24,14 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
         }
 
         /// <summary>
-        /// Loads a DDD Model based on all the schema files available in the GeneratorExecutionContext
+        /// Loads a domain model based on all the schema files available in the GeneratorExecutionContext
         /// </summary>
-        public static DddModel LoadDddModel(GeneratorExecutionContext context)
+        public static DomainModel LoadDomainModel(GeneratorExecutionContext context)
         {
             InitializeDependencies(context);
 
             var schemas = GetDddSchemaFiles(context);
-            return LoadDddModel(schemas);
+            return LoadDomainModel(schemas);
         }
 
         private static IEnumerable<AdditionalText> GetDddSchemaFiles(GeneratorExecutionContext context)
@@ -42,10 +42,10 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
                 .ToList();
         }
 
-        private static DddModel LoadDddModel(IEnumerable<AdditionalText> dddSchemas)
+        private static DomainModel LoadDomainModel(IEnumerable<AdditionalText> dddSchemas)
         {
-            var model = BuildDddModel(dddSchemas);
-            DddModelValidator.ValidateModel(model);
+            var model = BuildDomainModel(dddSchemas);
+            DomainModelValidator.ValidateDomainModel(model);
             ResolvePropertyTypes(model);
             return model;
         }
@@ -53,7 +53,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
         /// <summary>
         /// Adds resolved DDD types to each property of each schema within the model.
         /// </summary>
-        private static void ResolvePropertyTypes(DddModel model)
+        private static void ResolvePropertyTypes(DomainModel model)
         {
             foreach (var schema in model.Schemas)
             {
@@ -67,9 +67,9 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
         /// <summary>
         /// Transforms the .dddschema content to C# object representation.
         /// </summary>
-        private static DddModel BuildDddModel(IEnumerable<AdditionalText> schemaFiles)
+        private static DomainModel BuildDomainModel(IEnumerable<AdditionalText> schemaFiles)
         {
-            var dddModel = new DddModel();
+            var dddModel = new DomainModel();
             foreach (var schemaFile in schemaFiles)
             {
                 var schemaText = schemaFile.GetText()?.ToString();

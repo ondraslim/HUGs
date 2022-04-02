@@ -1,14 +1,14 @@
 ﻿namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
 {
     /// <summary>
-    /// Processed DDD model type representation.
+    /// Processed domain model type representation.
     /// </summary>
-    public class DddModelType : DddType
+    public class DomainModelType : DddType
     {
         public string Name { get; }
         public DddObjectKind Kind { get; }
 
-        public DddModelType(string name, DddObjectKind kind)
+        public DomainModelType(string name, DddObjectKind kind)
         {
             Name = name;
             Kind = kind;

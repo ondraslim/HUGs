@@ -56,7 +56,7 @@ namespace HUGs.Generator.DDD.Tests
                 Name = "SimpleArrayPropertyEntity",
                 Properties = new DddObjectProperty[]
                 {
-                    new() { Name = "Items", Type = "OrderItem[]", ResolvedType = new DddCollectionType(new DddModelType("OrderItem", DddObjectKind.ValueObject))},
+                    new() { Name = "Items", Type = "OrderItem[]", ResolvedType = new DddCollectionType(new DomainModelType("OrderItem", DddObjectKind.ValueObject))},
                 }
             };
 
@@ -75,7 +75,7 @@ namespace HUGs.Generator.DDD.Tests
                 Properties = new DddObjectProperty[]
                 {
                     new() { Name = "Text", Type = "string", ResolvedType = new DddPrimitiveType("string") },
-                    new() { Name = "Items", Type = "OrderItem[]", ResolvedType = new DddCollectionType(new DddModelType("OrderItem", DddObjectKind.ValueObject)) },
+                    new() { Name = "Items", Type = "OrderItem[]", ResolvedType = new DddCollectionType(new DomainModelType("OrderItem", DddObjectKind.ValueObject)) },
                     new() { Name = "Number", Type = "double?", ResolvedType = new DddPrimitiveType("double?") }
                 }
             };

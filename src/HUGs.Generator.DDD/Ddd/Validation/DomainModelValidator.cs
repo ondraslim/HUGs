@@ -7,14 +7,14 @@ using System.Linq;
 
 namespace HUGs.Generator.DDD.Ddd.Validation
 {
-    internal static class DddModelValidator
+    internal static class DomainModelValidator
     {
         private static readonly ICollection<Diagnostic> ValidationErrors = new List<Diagnostic>();
 
         /// <summary>
-        /// Validates DDD model by validating its separate DDD object schemas and validates uniqueness of names of the object schemas (unique names are required!).
+        /// Validates domain model by validating its separate DDD object schemas and validates uniqueness of names of the object schemas (unique names are required!).
         /// </summary>
-        public static void ValidateModel(DddModel model)
+        public static void ValidateDomainModel(DomainModel model)
         {
             ValidationErrors.Clear();
 
@@ -23,11 +23,11 @@ namespace HUGs.Generator.DDD.Ddd.Validation
 
             if (ValidationErrors.Any())
             {
-                throw new DddModelValidationException(ValidationErrors);
+                throw new DomainModelValidationException(ValidationErrors);
             }
         }
 
-        private static void ValidateIndividualSchemas(DddModel model)
+        private static void ValidateIndividualSchemas(DomainModel model)
         {
             foreach (var schema in model.Schemas)
             {
@@ -35,7 +35,7 @@ namespace HUGs.Generator.DDD.Ddd.Validation
             }
         }
 
-        private static void ValidateObjectNameUniqueness(DddModel model)
+        private static void ValidateObjectNameUniqueness(DomainModel model)
         {
             var names = model.Schemas.Select(e => e.Name);
             var duplicatedNames = names.GroupBy(n => n).Where(g => g.Count() > 1).Select(d => d.Key).ToArray();

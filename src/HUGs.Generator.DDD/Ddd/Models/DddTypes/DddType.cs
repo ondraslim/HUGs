@@ -13,7 +13,7 @@ namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
         public abstract string ToDbType();
         public virtual DddType GetRootType() => this;
 
-        public static DddType Parse(string type, DddModel model)
+        public static DddType Parse(string type, DomainModel model)
         {
             var isNullable = type.EndsWith("?");
             if (isNullable)
@@ -39,7 +39,7 @@ namespace HUGs.Generator.DDD.Ddd.Models.DddTypes
 
             if (model.Schemas.FirstOrDefault(s => s.DddObjectClassName == type) is DddObjectSchema schema)
             {
-                return new DddModelType(schema.DddObjectClassName, schema.Kind)
+                return new DomainModelType(schema.DddObjectClassName, schema.Kind)
                 {
                     IsNullable = isNullable
                 };

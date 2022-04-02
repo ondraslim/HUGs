@@ -13,7 +13,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
             .Build();
 
         /// <summary>
-        /// Deserializers text to type with the common deserializer instance.
+        /// Deserializers YAML text to type with the common deserializer instance.
         /// </summary>
         public static T Deserialize<T>(string text)
         {
