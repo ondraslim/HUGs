@@ -44,10 +44,6 @@
 		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Ddd\" />
-	</ItemGroup>
-
 	<Target Name="GetDependencyTargetPaths">
 		<ItemGroup>
 			<TargetPathWithTargetPlatformMoniker Include="$(PKGYamlDotNet)\lib\netstandard1.3\YamlDotNet.dll" IncludeRuntimeDependency="false" />
