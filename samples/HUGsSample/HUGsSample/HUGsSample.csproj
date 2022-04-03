@@ -14,9 +14,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="HUGs.Generator.Common" Version="1.0.0-pre30" />
-		<PackageReference Include="HUGs.Generator.DDD" Version="1.0.0-pre30" />
-		<PackageReference Include="HUGs.Generator.DDD.Framework" Version="1.0.0-pre30" />
+		<PackageReference Include="HUGs.Generator.Common" Version="1.0.0" />
+		<PackageReference Include="HUGs.Generator.DDD" Version="1.0.0" />
+		<PackageReference Include="HUGs.Generator.DDD.Framework" Version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
