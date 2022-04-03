@@ -18,7 +18,7 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             title: "DDD Generator load failed",
             messageFormat: "DDD generator failed to load additional files",
             category: "DddGenerator",
-            DiagnosticSeverity.Error,
+            DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
         internal static readonly DiagnosticDescriptor ConfigurationMultipleError = new(
@@ -26,7 +26,7 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             title: "Multiple configurations found",
             messageFormat: "Expected only 1 configuration file, but found multiple files: {0}",
             category: "DddGenerator",
-            DiagnosticSeverity.Error,
+            DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
         internal static readonly DiagnosticDescriptor SchemaInvalidError = new(
@@ -34,7 +34,7 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             title: "Invalid Schema",
             messageFormat: "Schema '{0}' is not valid, DDD generator failed",
             category: "DddGenerator",
-            DiagnosticSeverity.Error,
+            DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
         internal static readonly DiagnosticDescriptor SchemaInvalidValueError = new(
@@ -42,7 +42,7 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             title: "Invalid schema value",
             messageFormat: "Schema contains invalid value '{0}' for property '{1}' in schema '{2}'",
             category: "DddGenerator",
-            DiagnosticSeverity.Error,
+            DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
         internal static readonly DiagnosticDescriptor ConfigurationInvalidError = new(
@@ -50,7 +50,7 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             title: "Invalid configuration",
             messageFormat: "Configuration '{0}' is not valid, DDD generator failed",
             category: "DddGenerator",
-            DiagnosticSeverity.Error,
+            DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
         internal static readonly DiagnosticDescriptor ConfigurationInvalidValueError = new(
@@ -58,7 +58,7 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             title: "Invalid configuration value",
             messageFormat: "Configuration contains invalid value '{0}' for property '{1}' in configuration",
             category: "DddGenerator",
-            DiagnosticSeverity.Error,
+            DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
         internal static readonly DiagnosticDescriptor DddModelInvalidError = new(
@@ -66,7 +66,7 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             title: "Invalid DDD model",
             messageFormat: "DDD model is invalid",
             category: "DddGenerator",
-            DiagnosticSeverity.Error,
+            DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
         internal static readonly DiagnosticDescriptor DddModelDuplicatedNamesError = new(
@@ -74,7 +74,7 @@ namespace HUGs.Generator.DDD.Ddd.Diagnostics
             title: "DDD model duplicates found",
             messageFormat: "DDD model contains duplicated objects with name '{0}'",
             category: "DddGenerator",
-            DiagnosticSeverity.Error,
+            DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
 

@@ -1,4 +1,5 @@
 ﻿using HUGs.Generator.DDD.Ddd;
+using HUGs.Generator.DDD.Generators;
 using Microsoft.CodeAnalysis;
 
 namespace HUGs.Generator.DDD

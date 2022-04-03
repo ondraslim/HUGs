@@ -8,6 +8,7 @@ using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using HUGs.Generator.Test.Utils;
 using NUnit.Framework;
 using System;
+using HUGs.Generator.DDD.Generators;
 
 namespace HUGs.Generator.DDD.Tests
 {

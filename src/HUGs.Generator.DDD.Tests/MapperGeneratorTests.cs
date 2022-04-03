@@ -8,6 +8,7 @@ using NUnit.Framework;
 using System;
 using FluentAssertions;
 using HUGs.Generator.DDD.Ddd.Exceptions;
+using HUGs.Generator.DDD.Generators;
 
 namespace HUGs.Generator.DDD.Tests
 {

@@ -6,6 +6,7 @@ using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using HUGs.Generator.DDD.Generators;
 
 namespace HUGs.Generator.DDD.Tests
 {

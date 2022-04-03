@@ -20,7 +20,7 @@ namespace HUGs.Generator.Common.Diagnostics
             title: "AdditionalFile parse fail",
             messageFormat: "Could not parse AdditionalFile '{0}' with error: {1}",
             category: "Generator",
-            DiagnosticSeverity.Error,
+            DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
     }
 }

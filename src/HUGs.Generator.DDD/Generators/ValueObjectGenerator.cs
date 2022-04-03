@@ -1,14 +1,14 @@
-﻿using HUGs.Generator.Common.Builders;
+﻿using System.Linq;
+using System.Runtime.CompilerServices;
+using HUGs.Generator.Common.Builders;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using HUGs.Generator.DDD.Framework.BaseModels;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
-namespace HUGs.Generator.DDD.Ddd
+namespace HUGs.Generator.DDD.Generators
 {
     internal static class ValueObjectGenerator
     {

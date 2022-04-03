@@ -1,4 +1,6 @@
-﻿using HUGs.Generator.Common.Builders;
+﻿using System.Collections.Generic;
+using System.Linq;
+using HUGs.Generator.Common.Builders;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
@@ -8,10 +10,8 @@ using HUGs.Generator.DDD.Framework.Mapping;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace HUGs.Generator.DDD.Ddd
+namespace HUGs.Generator.DDD.Generators
 {
     public static class MapperGenerator
     {
