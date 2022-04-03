@@ -1,5 +1,5 @@
 <Project>
 	<PropertyGroup>
-		<HugsPackageVersion>1.0.0</HugsPackageVersion>
+		<HugsPackageVersion>1.0.0-pre30</HugsPackageVersion>
 	</PropertyGroup>
 </Project>
