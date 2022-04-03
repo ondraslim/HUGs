@@ -1,4 +1,7 @@
-﻿using HUGs.Generator.Common.Builders;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using HUGs.Generator.Common.Builders;
 using HUGs.Generator.Common.Builders.RoslynSyntaxBuilderStages;
 using HUGs.Generator.Common.Helpers;
 using HUGs.Generator.DDD.Ddd.Models;
@@ -6,11 +9,8 @@ using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using HUGs.Generator.DDD.Ddd.Models.DddTypes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace HUGs.Generator.DDD.Ddd
+namespace HUGs.Generator.DDD.Generators
 {
     internal static class DddGeneratorCommon
     {

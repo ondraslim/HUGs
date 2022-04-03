@@ -1,13 +1,13 @@
-﻿using HUGs.Generator.Common.Builders;
+﻿using System;
+using HUGs.Generator.Common.Builders;
 using HUGs.Generator.Common.Exceptions;
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Loaders;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis;
-using System;
 
-namespace HUGs.Generator.DDD.Ddd
+namespace HUGs.Generator.DDD.Generators
 {
     public static class DddGenerator
     {

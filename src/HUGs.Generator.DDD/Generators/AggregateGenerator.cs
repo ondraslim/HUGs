@@ -1,9 +1,9 @@
-﻿using HUGs.Generator.DDD.Ddd.Models;
+﻿using System.Runtime.CompilerServices;
+using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
-using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.Tests")]
-namespace HUGs.Generator.DDD.Ddd
+namespace HUGs.Generator.DDD.Generators
 {
     internal class AggregateGenerator : IdentifiableGenerator
     {
