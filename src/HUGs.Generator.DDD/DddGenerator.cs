@@ -5,9 +5,10 @@ using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Loaders;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
+using HUGs.Generator.DDD.Generators;
 using Microsoft.CodeAnalysis;
 
-namespace HUGs.Generator.DDD.Generators
+namespace HUGs.Generator.DDD
 {
     public static class DddGenerator
     {
