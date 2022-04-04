@@ -1,15 +1,15 @@
-﻿using HUGs.Generator.DDD.Ddd.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Extensions;
 using HUGs.Generator.DDD.Ddd.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("HUGs.Generator.DDD.IntegrationTests")]
-namespace HUGs.Generator.DDD.Ddd.Validation
+namespace HUGs.Generator.DDD.Validators
 {
     internal static class SchemaValidator
     {

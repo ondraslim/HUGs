@@ -1,13 +1,12 @@
-﻿using HUGs.Generator.DDD.Ddd.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Linq;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using System.Collections.Generic;
-using System.Linq;
 
-
-namespace HUGs.Generator.DDD.Ddd.Validation
+namespace HUGs.Generator.DDD.Validators
 {
     internal static class ConfigurationValidator
     {

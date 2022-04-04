@@ -2,12 +2,12 @@
 using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.DddTypes;
-using HUGs.Generator.DDD.Ddd.Validation;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using HUGs.Generator.DDD.Validators;
 
 namespace HUGs.Generator.DDD.Ddd.Loaders
 {

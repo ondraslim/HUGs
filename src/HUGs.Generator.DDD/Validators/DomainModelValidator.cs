@@ -1,11 +1,11 @@
-﻿using HUGs.Generator.DDD.Ddd.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Linq;
+using HUGs.Generator.DDD.Ddd.Diagnostics;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models;
 using Microsoft.CodeAnalysis;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace HUGs.Generator.DDD.Ddd.Validation
+namespace HUGs.Generator.DDD.Validators
 {
     internal static class DomainModelValidator
     {

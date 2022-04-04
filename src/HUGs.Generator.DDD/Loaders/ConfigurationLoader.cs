@@ -1,11 +1,11 @@
 ﻿using HUGs.Generator.Common.Exceptions;
 using HUGs.Generator.DDD.Ddd.Exceptions;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
-using HUGs.Generator.DDD.Ddd.Validation;
 using Microsoft.CodeAnalysis;
 using System;
 using System.IO;
 using System.Linq;
+using HUGs.Generator.DDD.Validators;
 
 namespace HUGs.Generator.DDD.Ddd.Loaders
 {
