@@ -17,3 +17,7 @@ namespace My.Desired.Namespace.Enumerations
 namespace My.Desired.Namespace.DbEntities
 {
 }
+
+namespace My.Desired.Namespace.Mappers
+{
+}

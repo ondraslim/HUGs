@@ -1,11 +1,11 @@
 ﻿using CheckTestOutput;
-using HUGs.Generator.Tests.Tools.Mocks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+using HUGs.Generator.DDD.IntegrationTests.Setup.Mocks;
 
 namespace HUGs.Generator.DDD.IntegrationTests.Setup
 {

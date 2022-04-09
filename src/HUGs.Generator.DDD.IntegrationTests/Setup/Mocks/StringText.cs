@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using Microsoft.CodeAnalysis.Text;
 
-namespace HUGs.Generator.Tests.Tools.Mocks
+namespace HUGs.Generator.DDD.IntegrationTests.Setup.Mocks
 {
     internal sealed class StringText : SourceText
     {

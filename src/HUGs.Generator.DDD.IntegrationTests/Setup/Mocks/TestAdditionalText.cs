@@ -3,7 +3,7 @@ using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
-namespace HUGs.Generator.Tests.Tools.Mocks
+namespace HUGs.Generator.DDD.IntegrationTests.Setup.Mocks
 {
     public sealed class TestAdditionalText : AdditionalText
     {

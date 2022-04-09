@@ -54,6 +54,7 @@ namespace HUGs.Generator.DDD
             }
 
             namespaceDeclarations.AddNamespaces(configuration.TargetNamespaces.DbEntity);
+            namespaceDeclarations.AddNamespaces(configuration.TargetNamespaces.Mapper);
 
             var namespacesDeclarationsSourceCode = namespaceDeclarations.Build();
             context.AddSource("DomainModelNamespaces", namespacesDeclarationsSourceCode);

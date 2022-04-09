@@ -1,11 +1,10 @@
 ﻿using CheckTestOutput;
-using HUGs.Generator.DDD.Ddd;
 using HUGs.Generator.DDD.Ddd.Models;
 using HUGs.Generator.DDD.Ddd.Models.Configuration;
 using HUGs.Generator.DDD.Ddd.Models.DddTypes;
+using HUGs.Generator.DDD.Generators;
 using NUnit.Framework;
 using System;
-using HUGs.Generator.DDD.Generators;
 
 namespace HUGs.Generator.DDD.Tests
 {
