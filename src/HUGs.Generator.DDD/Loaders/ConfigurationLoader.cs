@@ -62,7 +62,7 @@ namespace HUGs.Generator.DDD.Ddd.Loaders
             }
             catch (Exception e)
             {
-                throw new AdditionalFileParseException(configurationFile.Path, $"{e}", e);
+                throw new AdditionalFileParseException(configurationFile.Path, $"Error occurred while parsing file: {configurationFile.Path}", e);
             }
         }
 
