@@ -3,7 +3,7 @@
   <PropertyGroup>
 	  <TargetFramework>netstandard2.0</TargetFramework>
 	  <LangVersion>9</LangVersion>
-	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	  <PackageOutputPath>..\..\packages\</PackageOutputPath>
 	  <PackageVersion>$(HugsPackageVersion)</PackageVersion>
   </PropertyGroup>

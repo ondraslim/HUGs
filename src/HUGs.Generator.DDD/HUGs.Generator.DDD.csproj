@@ -4,7 +4,6 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>9</LangVersion>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<IncludeBuildOutput>false</IncludeBuildOutput>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -26,7 +25,7 @@
 
 	<!--Source Generator packaging properties-->
 	<PropertyGroup>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<PackageOutputPath>..\..\packages\</PackageOutputPath>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
 		<PackageVersion>$(HugsPackageVersion)</PackageVersion>
@@ -42,6 +41,10 @@
 
 	<ItemGroup>
 		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(PKGYamlDotNet)\lib\netstandard1.3\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(PKGNewtonsoft_Json)\lib\netstandard2.0\Newtonsoft.Json.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="..\HUGs.Generator.Common\bin\Debug\netstandard2.0\HUGs.Generator.Common.dll" IncludeRuntimeDependency="false" />
+		<None Include="..\HUGs.Generator.DDD.Framework\bin\Debug\netstandard2.0\HUGs.Generator.DDD.Framework.dll" IncludeRuntimeDependency="true" />
 	</ItemGroup>
 
 	<Target Name="GetDependencyTargetPaths">

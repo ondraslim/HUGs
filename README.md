@@ -465,6 +465,7 @@ TargetNamespaces:
   Aggregate: My.Desired.Namespace.Aggregates
   Enumeration: My.Desired.Namespace.Enumerations
   DbEntity: My.Desired.Namespace.DbEntities
+  Mapper: My.Desired.Namespace.Mappers
 
 AdditionalUsings:
   - My.Additional.Using1
