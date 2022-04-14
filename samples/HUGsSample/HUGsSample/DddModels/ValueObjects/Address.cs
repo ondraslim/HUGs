@@ -1,9 +1,10 @@
-﻿namespace My.Desired.Namespace.ValueObjects;
-
-public partial class Address
+﻿namespace My.Desired.Namespace.ValueObjects
 {
-    public override string ToString()
+    public partial class Address
     {
-        return $"{Street}, {Street2}, {City}, {Zip}, {CountryId.Value}";
+        public override string ToString()
+        {
+            return $"{Street}, {Street2}, {City}, {Zip}, {CountryId.Value}";
+        }
     }
 }

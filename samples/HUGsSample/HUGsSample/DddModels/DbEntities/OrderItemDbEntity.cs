@@ -1,9 +1,10 @@
-﻿namespace My.Desired.Namespace.DbEntities;
-
-public partial class OrderItemDbEntity
+﻿namespace My.Desired.Namespace.DbEntities
 {
-    public override string ToString()
+    public partial class OrderItemDbEntity
     {
-        return $"{Id}, {Name}, {Amount}, {Price}";
+        public override string ToString()
+        {
+            return $"{Id}, {Name}, {Amount}, {Price}";
+        }
     }
 }

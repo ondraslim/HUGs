@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System;
 using HUGs.Generator.DDD.Framework.Mapping;
 using My.Desired.Namespace.Mappers;
 using My.Desired.Namespace.ValueObjects;

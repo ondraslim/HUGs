@@ -1,9 +1,10 @@
-﻿namespace My.Desired.Namespace.DbEntities;
-
-public partial class AddressDbEntity
+﻿namespace My.Desired.Namespace.DbEntities
 {
-    public override string ToString()
+    public partial class AddressDbEntity
     {
-        return $"{Street}, {Street2}, {City}, {Zip}, {CountryId}";
+        public override string ToString()
+        {
+            return $"{Street}, {Street2}, {City}, {Zip}, {CountryId}";
+        }
     }
 }

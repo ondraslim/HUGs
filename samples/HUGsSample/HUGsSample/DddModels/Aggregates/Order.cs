@@ -1,9 +1,12 @@
-﻿namespace My.Desired.Namespace.Aggregates;
+﻿using System.Linq;
 
-public partial class Order
+namespace My.Desired.Namespace.Aggregates
 {
-    partial void OnInitialized()
+    public partial class Order
     {
-        TotalPrice = _Items.Sum(i => i.Price);
+        partial void OnInitialized()
+        {
+            TotalPrice = _Items.Sum(i => i.Price);
+        }
     }
 }
