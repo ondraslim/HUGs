@@ -7,11 +7,11 @@ An opinionated .NET Source Generator to help with the DDD boilerplate code.
 
 ## Installation
 
-Instalation via available NuGet packages in the `packages/` folder. Reference all 3 packages in the project, add DDD schemas and configuration in desired format and during build-time, the source code is generated.
+Instalation via available NuGet packages in the `packages/` folder, which you should **add to your NuGet Package sources in NuGet Package Manager**. Reference all 3 packages in the project, add DDD schemas and configuration in desired format and during build-time, the source code is generated.
 
 ### Requirements
 
-The newest version of Visual Studio, .NET and C\# is recommended.
+Visual Studio 2022 is required for the framework; additionally, the sample project requires .NET 6.
 
 ## Usage
 
