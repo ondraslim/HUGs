@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HUGsSample", "HUGsSample\HUGsSample.csproj", "{5A98878F-49FA-4AF9-961D-830B954D4F7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HUGsSample", "HUGsSample\HUGsSample.csproj", "{5A98878F-49FA-4AF9-961D-830B954D4F7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1AF09228-45A6-4A54-AF09-79C7C35EB337}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
